@@ -35,6 +35,7 @@ function slash(tool)
 	end
 end
 while true do
+	local npchrp
 	if Configs.AutoPlayerLock then
 		local lplrchar = lplr.Character
 		if lplrchar then
@@ -86,5 +87,8 @@ while true do
 		end
 	end
 	task.wait()
-	npchrp.Size = Vector3.new(2,2,1)
+	if npchrp then
+		npchrp.Size = Vector3.new(2,2,1)
+		npchrp = nil
+	end
 end
