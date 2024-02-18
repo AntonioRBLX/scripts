@@ -59,7 +59,7 @@ while true do
 					local char = i:FindFirstAncestorOfClass("Model")
 					if char and char ~= lplrchar then
 						local npchum = char:FindFirstChildOfClass("Humanoid")
-						local npchrp = char:FindFirstChild("HumanoidRootPart")
+						npchrp = char:FindFirstChild("HumanoidRootPart")
 						local npctorso = char:FindFirstChild("Torso")
 						if npchum and npchrp and npctorso then
 							local distance = (npctorso.Position - hrp.Position).Magnitude
