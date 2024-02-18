@@ -1,6 +1,6 @@
 local HttpService = game:GetService("HttpService")
 local Configs = {
-	AutoPlayerLock = true;
+	AutoPlayerLock = false;
 	LockRange = 16;
 	AttackRange = 12;
 }
