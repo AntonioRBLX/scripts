@@ -55,7 +55,7 @@ while true do
 		if closest then
 			local npchum = closest[1].Humanoid
 			local npchrp = closest[1].HumanoidRootPart
-			hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + CFrame.new(att.WorldPosition,npchrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0)).LookVector)
+			hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + CFrame.new(att.WorldPosition,(npchrp.Position + (npchrp.MoveDirection * npchrp.WalkSpeed) * lplr:GetNetworkPing()) * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0)).LookVector)
 		end
 		att:Destroy()
 	end
