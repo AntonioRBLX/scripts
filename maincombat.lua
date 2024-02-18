@@ -76,8 +76,7 @@ while true do
 					local npctorso = closest[1].Torso
 					if (npctorso.Position - hrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
 						hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + CFrame.new(att.WorldPosition,(npctorso.Position + npchum.MoveDirection * npchum.WalkSpeed * lplr:GetNetworkPing()) * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0)).LookVector)
-						npchrp:BreakJoints()
-						npchrp.Position = att.WorldPosition
+						npchrp.Size = Vector3.new(100,100,100)
 						coroutine.wrap(slash)(Tool)
 					end
 				end
@@ -87,4 +86,5 @@ while true do
 		end
 	end
 	task.wait()
+	npchrp.Size = Vector3.new(2,2,1)
 end
