@@ -73,7 +73,7 @@ while true do
 					local npchum = closest[1].Humanoid
 					local npchrp = closest[1].HumanoidRootPart
 					if (npchrp.Position - hrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
-						hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + CFrame.new(att.WorldPosition,(npchrp.Position + (npchum.MoveDirection * npchum.WalkSpeed) * lplr:GetNetworkPing() + 0.1) * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0)).LookVector)
+						hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + CFrame.new(att.WorldPosition,(npchrp.Position + (npchum.MoveDirection * npchum.WalkSpeed) * (lplr:GetNetworkPing() + 0.1)) * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0)).LookVector)
 						coroutine.wrap(slash)(Tool)
 					end
 				end
