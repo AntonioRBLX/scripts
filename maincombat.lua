@@ -59,7 +59,7 @@ while true do
 					local char = i:FindFirstAncestorOfClass("Model")
 					if char and char ~= lplrchar then
 						local npchum = char:FindFirstChildOfClass("Humanoid")
-						npchrp = char:FindFirstChild("HumanoidRootPart")
+						local npchrp = char:FindFirstChild("HumanoidRootPart")
 						local npctorso = char:FindFirstChild("Torso")
 						if npchum and npchrp and npctorso then
 							local distance = (npctorso.Position - hrp.Position).Magnitude
@@ -72,7 +72,7 @@ while true do
 
 				if closest then
 					local npchum = closest[1].Humanoid
-					local npchrp = closest[1].HumanoidRootPart
+					npchrp = closest[1].HumanoidRootPart
 					local npctorso = closest[1].Torso
 					if (npctorso.Position - hrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
 						hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + CFrame.new(att.WorldPosition,(npctorso.Position + npchum.MoveDirection * npchum.WalkSpeed * lplr:GetNetworkPing()) * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0)).LookVector)
