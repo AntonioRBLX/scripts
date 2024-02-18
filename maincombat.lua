@@ -51,7 +51,7 @@ while true do
 		if closest then
 			local npchum = closest[1].Humanoid
 			local npchrp = closest[1].HumanoidRootPart
-			hrp.CFrame = CFrame.new(hrp.Position + Vector3.new(math.random(-100,100)/1000,0,math.random(-100,100)/1000),(npchrp.Position + Vector3.new(math.random(-100,100)/1000,0,math.random(-100,100)/1000) + npchum.MoveDirection * npchum.WalkSpeed * 0.2) * Vector3.new(1,0,1) + hrp.Position * Vector3.new(0,1,0)) * CFrame.Angles(0,math.rad(15),0)
+			hrp.CFrame = CFrame.new(hrp.Position + Vector3.new(math.random(-100,100)/1000,0,math.random(-100,100)/1000),(npchrp.Position + Vector3.new(math.random(-100,100)/1000,0,math.random(-100,100)/1000) + npchum.MoveDirection * npchum.WalkSpeed * 0.2) * Vector3.new(1,0,1) + hrp.Position * Vector3.new(0,1,0)) * CFrame.Angles(0,math.rad(12.5),0)
 		end
 	end
 	task.wait()
