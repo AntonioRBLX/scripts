@@ -60,8 +60,9 @@ while true do
 					if char and char ~= lplrchar then
 						local npchum = char:FindFirstChildOfClass("Humanoid")
 						local npchrp = char:FindFirstChild("HumanoidRootPart")
-						if npchum and npchrp then
-							local distance = (npchrp.Position - hrp.Position).Magnitude
+						local npctorso = char:FindFirstChild("Torso")
+						if npchum and npchrp and npctorso then
+							local distance = (npctorso.Position - hrp.Position).Magnitude
 							if (not closest or distance < closest[2]) and distance >= 0.5 then
 								closest = {char,distance}
 							end
@@ -72,8 +73,8 @@ while true do
 				if closest then
 					local npchum = closest[1].Humanoid
 					local npchrp = closest[1].HumanoidRootPart
-					local npctorso = closest[1]:FindFirstChild("Torso")
-					if npctorso and (npctorso.Position - hrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
+					local npctorso = closest[1].Torso
+					if (npctorso.Position - hrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
 						hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + CFrame.new(att.WorldPosition,(npctorso.Position + npchum.MoveDirection * npchum.WalkSpeed * lplr:GetNetworkPing()) * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0)).LookVector)
 						npchrp.Position = att.WorldPosition
 						coroutine.wrap(slash)(Tool)
