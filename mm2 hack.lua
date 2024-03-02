@@ -59,8 +59,7 @@ function GetClosestPlayer(FOV,maxdist)
 	
 	for _, i in pairs(workspace:GetChildren()) do
 		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") and i:FindFirstChild("HumanoidRootPart") then
-			local player = game.Players:GetPlayerFromCharacter(i)
-			if player ~= LocalPlayer then
+			if i ~= LocalPlayer.Character then
 				local viewportpoint, onscreen = camera:WorldToScreenPoint(i.HumanoidRootPart.Position)
 				local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
 				local distancefromplayer = (i.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
@@ -106,9 +105,9 @@ Main:CreateToggle("Show FOV Circle", function(value)
 end)
 
 LocalPlayer:CreateButton("Remove Lag", function()
-	for _, player in pairs(game.Players:GetPlayers()) do
-		if player.Character then
-			if not configs.IncludeLocalPlayer and player ~= LocalPlayer then return end
+	for _, i in pairs(workspace:GetChildren()) do
+		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") then
+			if not configs.IncludeLocalPlayer and LocalPlayer.Character and i == LocalPlayer.Character then return end
 			RemoveDisplays(player.Character)
 		end
 	end
@@ -130,7 +129,7 @@ LocalPlayer:CreateSlider("JumpPower", 0, 100, 16, false, function(value)
 end)
 
 workspace.ChildAdded:Connect(function(character)
-	if configs.AutoRemoveLag and character.ClassName == "Model" and game.Players:GetPlayerFromCharacter(character) then
+	if configs.AutoRemoveLag and character.ClassName == "Model" then
 		if not configs.IncludeLocalPlayer and LocalPlayer.Character and character == LocalPlayer.Character then return end
 		RemoveDisplays(character)
 	end
