@@ -25,12 +25,14 @@ Drawing1.Color = Color3.fromRGB(255, 89, 89)
 Drawing1.Thickness = 2
 Drawing1.Visible = false
 Drawing1.Radius = configs.FOV
+Drawing1.Filled = false
 
 local Drawing2 = Drawing.new("Circle")
 Drawing2.Thickness = 4
 Drawing2.Visible = false
 Drawing2.Radius = configs.FOV
 Drawing2.ZIndex = -1
+Drawing2.Filled = false
 
 function RemoveDisplays(character)
 	local KnifeDisplay = character:WaitForChild("KnifeDisplay", 5)
