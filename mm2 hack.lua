@@ -77,8 +77,8 @@ function GetClosestPlayer(FOV,maxdist)
 	end
 	return nil
 end
-local Library = loadstring(HttpService:GetAsync("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
-local Aimbot = loadstring(HttpService:GetAsync("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
 local PhantomForcesWindow = Library:NewWindow("Combat")
 
