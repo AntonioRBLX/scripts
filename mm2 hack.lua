@@ -1,7 +1,6 @@
 if _G.AlreadyExecuted then return end
 _G.AlreadyExecuted = true
 
-local HttpService = game:GetService("HttpService")
 local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = game.Players.LocalPlayer
 local mouse = LocalPlayer:GetMouse()
