@@ -161,7 +161,7 @@ mt.__namecall = newcclosure(function(self,...)
 				attachment:Destroy()
 				
 				if aimpos then
-					args[1] = CFrame.new(aimpos,aimpos)
+					args[2] = aimpos
 					return self.InvokeServer(self,table.unpack(args))
 				end
 			end
@@ -175,7 +175,7 @@ mt.__namecall = newcclosure(function(self,...)
 				attachment:Destroy()
 				
 				if aimpos then
-					args[2] = aimpos
+					args[1] = CFrame.new(aimpos,aimpos)
 					return self.FireServer(self,table.unpack(args))
 				end
 			end
