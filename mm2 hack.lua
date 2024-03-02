@@ -150,7 +150,7 @@ mt.__namecall = newcclosure(function(self,...)
 	local method = getnamecallmethod()
 	
 	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-		local Humanoid =  LocalPlayer.Character.HumanoidRootPart
+		local HumanoidRootPart =  LocalPlayer.Character.HumanoidRootPart
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
