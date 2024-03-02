@@ -154,7 +154,7 @@ mt.__namecall = newcclosure(function(self,...)
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
-				attachment.Position = Vector3.new(1.5, 2, 1.5)
+				attachment.Position = Vector3.new(1.6, 1.2, -3)
 				
 				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,50,0,nil,true,configs.Prediction,nil,true)
 				attachment:Destroy()
@@ -168,7 +168,7 @@ mt.__namecall = newcclosure(function(self,...)
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
-				attachment.Position = Vector3.new(1.5, 2, 1.5)
+				attachment.Position = Vector3.new(1.5, 1.9, 1)
 				
 				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,50,0,nil,true,configs.Prediction,nil,false)
 				attachment:Destroy()
