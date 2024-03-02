@@ -182,6 +182,7 @@ mt.__namecall = newcclosure(function(self,...)
 	end
 	return namecall(self,...)
 end)
+setreadonly(mt,true)
 
 while true do
 	local character = LocalPlayer.Character
