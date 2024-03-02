@@ -108,7 +108,7 @@ LocalPlayer:CreateButton("Remove Lag", function()
 	for _, i in pairs(workspace:GetChildren()) do
 		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") then
 			if not configs.IncludeLocalPlayer and LocalPlayer.Character and i == LocalPlayer.Character then return end
-			RemoveDisplays(player.Character)
+			RemoveDisplays(i)
 		end
 	end
 end)
