@@ -118,16 +118,17 @@ end)
 Main:CreateSlider("Prediction", 0, 1000, 50, false, function(value)
 	configs.Prediction = value
 end)
-Main:CreateSlider("FOV", 0, 1000, 350, false, function(value)
-	configs.FOV = value
-	Drawing1.Radius = configs.FOV
-	Drawing2.Radius = configs.FOV
-end)
-Main:CreateToggle("Show FOV Circle", function(value)
-	Drawing1.Visible = value
-	Drawing2.Visible = value
-end)
-
+if Drawing then
+	Main:CreateSlider("FOV", 0, 1000, 350, false, function(value)
+		configs.FOV = value
+		Drawing1.Radius = configs.FOV
+		Drawing2.Radius = configs.FOV
+	end)
+	Main:CreateToggle("Show FOV Circle", function(value)
+		Drawing1.Visible = value
+		Drawing2.Visible = value
+	end)
+end
 LocalPlayerTab:CreateButton("Remove Lag", function()
 	for _, i in pairs(workspace:GetChildren()) do
 		print(LocalPlayer.Name)
