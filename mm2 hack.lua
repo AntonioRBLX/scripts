@@ -87,7 +87,7 @@ local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY51
 local PhantomForcesWindow = Library:NewWindow("Combat")
 
 local Main = PhantomForcesWindow:NewSection("Main")
-local LocalPlayer = PhantomForcesWindow:NewSection("LocalPlayer")
+local LocalPlayerTab = PhantomForcesWindow:NewSection("LocalPlayer")
 local Others = PhantomForcesWindow:NewSection("Others")
 
 Main:CreateToggle("Gun Aimbot", function(value)
@@ -109,7 +109,7 @@ Main:CreateToggle("Show FOV Circle", function(value)
 	Drawing2.Visible = value
 end)
 
-LocalPlayer:CreateButton("Remove Lag", function()
+LocalPlayerTab:CreateButton("Remove Lag", function()
 	for _, i in pairs(workspace:GetChildren()) do
 		print(LocalPlayer.Name)
 		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") and (configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name) then
@@ -117,19 +117,19 @@ LocalPlayer:CreateButton("Remove Lag", function()
 		end
 	end
 end)
-LocalPlayer:CreateToggle("Auto Remove Lag", function(value)
+LocalPlayerTab:CreateToggle("Auto Remove Lag", function(value)
 	configs.AutoRemoveLag = value
 end)
-LocalPlayer:CreateToggle("Include Accessories", function(value)
+LocalPlayerTab:CreateToggle("Include Accessories", function(value)
 	configs.IncludeAccessories = value
 end)
-LocalPlayer:CreateToggle("Include LocalPlayer", function(value)
+LocalPlayerTab:CreateToggle("Include LocalPlayer", function(value)
 	configs.IncludeLocalPlayer = value
 end)
-LocalPlayer:CreateSlider("WalkSpeed", 0, 100, 16, false, function(value)
+LocalPlayerTab:CreateSlider("WalkSpeed", 0, 100, 16, false, function(value)
 	configs.WalkSpeed = value
 end)
-LocalPlayer:CreateSlider("JumpPower", 0, 100, 50, false, function(value)
+LocalPlayerTab:CreateSlider("JumpPower", 0, 100, 50, false, function(value)
 	configs.JumpPower = value
 end)
 
@@ -203,10 +203,10 @@ setreadonly(mt,true)
 while true do
 	if not scriptactivated then break end
 	
-	local character = LocalPlayer.Character
-	if character then
-		local humanoid = character:FindFirstChildOfClass("Humanoid")
-		if humanoid then
+	local Character = LocalPlayer.Character
+	if Character then
+		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
+		if Humanoid then
 			humanoid.WalkSpeed = configs.WalkSpeed
 			humanoid.JumpPower = configs.JumpPower
 		end
