@@ -36,13 +36,8 @@ Drawing2.ZIndex = -1
 Drawing2.Filled = false
 
 function RemoveDisplays(character)
-	local KnifeDisplay = character:WaitForChild("KnifeDisplay", 1)
-	local GunDisplay = character:WaitForChild("GunDisplay", 1)
-
-	if not KnifeDisplay or not GunDisplay then return end
-
-	KnifeDisplay:Destroy()
-	GunDisplay:Destroy()
+	local KnifeDisplay = character:FindFirstChild("KnifeDisplay")
+	local GunDisplay = character:FindFirstChild("GunDisplay")
 
 	if configs.IncludeAccessories then
 		for _, i in pairs(character:GetChildren()) do
@@ -51,6 +46,11 @@ function RemoveDisplays(character)
 			end
 		end
 	end
+	
+	if not KnifeDisplay then return end
+	KnifeDisplay:Destroy()
+	if not GunDisplay then return end
+	GunDisplay:Destroy()
 end
 function GetClosestPlayer(FOV,maxdist)
 	if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
@@ -139,7 +139,7 @@ Others:CreateButton("Unload", function()
 end)
 
 workspace.ChildAdded:Connect(function(character)
-	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" and character:WaitForChild("Humanoid", 1) then
+	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" and character:WaitForChild("Humanoid", 1) and (configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name) and character:WaitForChild("KnifeDisplay", 1) and character:WaitForChild("GunDisplay", 1) then
 		if configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name then
 			RemoveDisplays(character)
 		end
