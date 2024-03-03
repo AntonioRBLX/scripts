@@ -8,11 +8,12 @@ _G.Loaded = true
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 -- check for supported commands
-if not getrawmetatable or not setreadonly or not newcclosure or not HttpGet then
+if not getrawmetatable or not setreadonly or not newcclosure then
 	StarterGui:SetCore("SendNotification" ,{
 		Title = "Error";
 		Text = "Incompatible Executor!: Certain functions are not supported for this to work";
 	})
+	return
 end
 
 local LocalPlayer = Players.LocalPlayer
