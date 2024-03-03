@@ -8,7 +8,7 @@ _G.Loaded = true
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 -- check for supported commands
-if not getrawmetatable or not setreadonly or not checkcaller or not newcclosure then
+if not getrawmetatable or not setreadonly or not checkcaller or not newcclosure or not getnamecallmethod then
 	StarterGui:SetCore("SendNotification" ,{
 		Title = "Error";
 		Text = "Incompatible Executor!: Certain functions are not supported for this to work";
@@ -185,13 +185,13 @@ local mt = getrawmetatable(game)
 local old = mt.__namecall
 setreadonly(mt,false)
 
-mt.__namecall = newcclosure(function(caller,...)
+mt.__namecall = newcclosure(function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
 
 	if scriptactivated and not checkcaller() and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-		if configs.GunAimbot and tostring(caller) == "ShootGun" and tostring(method) == "InvokeServer" then
+		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
@@ -205,7 +205,7 @@ mt.__namecall = newcclosure(function(caller,...)
 				end
 			end
 			return self.InvokeServer(self,table.unpack(args))
-		elseif configs.KnifeAimbot and tostring(caller) == "Throw" and tostring(method) == "FireServer" then
+		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
@@ -218,7 +218,7 @@ mt.__namecall = newcclosure(function(caller,...)
 					args[1] = CFrame.new(aimpos,aimpos)
 				end
 			end
-			return caller.FireServer(self,table.unpack(args))
+			return self.FireServer(self,table.unpack(args))
 		end
 	end
 	return old(self,...)
