@@ -1,4 +1,3 @@
-
 if _G.Loaded then return end -- update
 _G.Loaded = true
 
@@ -50,7 +49,7 @@ function RemoveDisplays(character)
 			end
 		end
 	end
-	
+
 	if not KnifeDisplay then return end
 	KnifeDisplay:Destroy()
 	if not GunDisplay then return end
@@ -58,10 +57,10 @@ function RemoveDisplays(character)
 end
 function GetClosestPlayer(FOV,maxdist)
 	if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
-	
+
 	local camera = workspace.CurrentCamera
 	local closest
-	
+
 	for _, i in pairs(workspace:GetChildren()) do
 		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") and i:FindFirstChild("HumanoidRootPart") then
 			if i ~= LocalPlayer.Character then
@@ -164,7 +163,7 @@ setreadonly(mt,false)
 mt.__namecall = newcclosure(function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
-	
+
 	if scriptactivated and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
@@ -172,14 +171,13 @@ mt.__namecall = newcclosure(function(self,...)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
 				attachment.Position = Vector3.new(1.6, 1.2, -3)
-				
+
 				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,50,0,nil,true,configs.Prediction,nil,true)
 				attachment:Destroy()
-				
+
 				if aimpos then
 					args[2] = aimpos
 					return self.InvokeServer(self,table.unpack(args))
-					return namecall(self,...)
 				end
 				return namecall(self,...)
 			end
@@ -189,14 +187,13 @@ mt.__namecall = newcclosure(function(self,...)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
 				attachment.Position = Vector3.new(1.5, 1.9, 1)
-				
+
 				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,50,0,nil,true,configs.Prediction,nil,false)
 				attachment:Destroy()
-				
+
 				if aimpos then
 					args[1] = CFrame.new(aimpos,aimpos)
 					return self.FireServer(self,table.unpack(args))
-					return namecall(self,...)
 				end
 				return namecall(self,...)
 			end
@@ -210,7 +207,7 @@ setreadonly(mt,true)
 
 while true do
 	if not scriptactivated then break end
-	
+
 	local Character = LocalPlayer.Character
 	if Character then
 		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
