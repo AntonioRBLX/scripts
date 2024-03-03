@@ -11,7 +11,7 @@ if not game:IsLoaded() then game.Loaded:Wait() end
 if not getrawmetatable or not setreadonly or not checkcaller or not newcclosure or not getnamecallmethod then
 	StarterGui:SetCore("SendNotification" ,{
 		Title = "Error";
-		Text = "Incompatible Executor!: Certain functions are not supported for this to work";
+		Text = "Incompatible Executor!: Certain functions are not supported by this executor!";
 	})
 	return
 end
