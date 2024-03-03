@@ -1,4 +1,4 @@
-if _G.Loaded then return end
+if _G.Loaded then return end -- update
 _G.Loaded = true
 
 if not game:IsLoaded() then game.Loaded:Wait() end
