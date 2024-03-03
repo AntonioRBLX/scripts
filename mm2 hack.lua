@@ -1,10 +1,20 @@
+local UserInputService = game:GetService("UserInputService")
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+
 if _G.Loaded then return end
 _G.Loaded = true
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
-local UserInputService = game:GetService("UserInputService")
-local Players = game:GetService("Players")
+-- check for supported commands
+if not getrawmetatable or setreadonly or newcclosure or HttpGet then
+	StarterGui:SetCore("SendNotification" ,{
+		Title = "Error";
+		Text = "This executor is not supported!";
+	})
+end
+
 local LocalPlayer = Players.LocalPlayer
 local mouse = LocalPlayer:GetMouse()
 
@@ -21,7 +31,6 @@ local configs = {
 	WalkSpeed = 16;
 	JumpPower = 50;
 }
-
 
 
 local Drawing1 = Drawing.new("Circle")
@@ -158,15 +167,15 @@ UserInputService.InputChanged:Connect(function(input)
 end)
 
 local mt = getrawmetatable(game)
-local namecall = mt.__namecall
+local old = mt.__namecall
 setreadonly(mt,false)
-mt.__namecall = newcclosure(function(self,...)
+mt.__namecall = newcclosure(function(caller,...)
 	local args = {...}
 	local method = getnamecallmethod()
 
-	if scriptactivated and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (configs.GunAimbot or configs.KnifeAimbot) then
+	if scriptactivated and not checkcaller() and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-		if tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
+		if configs.GunAimbot and caller == ShootGun and method == "InvokeServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
@@ -180,7 +189,7 @@ mt.__namecall = newcclosure(function(self,...)
 				end
 			end
 			return self.InvokeServer(self,table.unpack(args))
-		elseif tostring(self) == "Throw" and tostring(method) == "FireServer" then
+		elseif configs.KnifeAimbot and caller == "Throw" and method == "FireServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
@@ -193,10 +202,10 @@ mt.__namecall = newcclosure(function(self,...)
 					args[1] = CFrame.new(aimpos,aimpos)
 				end
 			end
-			return self.FireServer(self,table.unpack(args))
+			return caller.FireServer(self,table.unpack(args))
 		end
 	end
-	return namecall(self,...)
+	return old(self,...)
 end)
 setreadonly(mt,true)
 
