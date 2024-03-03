@@ -191,7 +191,7 @@ mt.__namecall = newcclosure(function(caller,...)
 
 	if scriptactivated and not checkcaller() and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-		if configs.GunAimbot and caller == ShootGun and method == "InvokeServer" then
+		if configs.GunAimbot and tostring(caller) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
@@ -205,7 +205,7 @@ mt.__namecall = newcclosure(function(caller,...)
 				end
 			end
 			return self.InvokeServer(self,table.unpack(args))
-		elseif configs.KnifeAimbot and caller == "Throw" and method == "FireServer" then
+		elseif configs.KnifeAimbot and tostring(caller) == "Throw" and tostring(method) == "FireServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
