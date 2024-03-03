@@ -36,8 +36,8 @@ Drawing2.ZIndex = -1
 Drawing2.Filled = false
 
 function RemoveDisplays(character)
-	local KnifeDisplay = character:FindFirstChild("KnifeDisplay")
-	local GunDisplay = character:FindFirstChild("GunDisplay")
+	local KnifeDisplay = character:WaitForChild("KnifeDisplay", 5)
+	local GunDisplay = character:WaitForChild("GunDisplay", 5)
 
 	if not KnifeDisplay or not GunDisplay then return end
 
@@ -108,8 +108,7 @@ end)
 
 LocalPlayer:CreateButton("Remove Lag", function()
 	for _, i in pairs(workspace:GetChildren()) do
-		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") then
-			if not configs.IncludeLocalPlayer and LocalPlayer.Character and i == LocalPlayer.Character then return end
+		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") and (configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name) then
 			RemoveDisplays(i)
 		end
 	end
@@ -139,9 +138,10 @@ Others:CreateButton("Unload", function()
 end)
 
 workspace.ChildAdded:Connect(function(character)
-	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" then
-		if not configs.IncludeLocalPlayer and LocalPlayer.Character and character == LocalPlayer.Character then return end
-		RemoveDisplays(character)
+	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" and character:FindFirstChildOfClass("Humanoid") then
+		if configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name then
+			RemoveDisplays(character)
+		end
 	end
 end)
 
