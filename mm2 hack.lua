@@ -120,8 +120,10 @@ Main:CreateSlider("Prediction", 0, 1000, 50, false, function(value)
 end)
 Main:CreateSlider("FOV", 0, 1000, 350, false, function(value)
 	configs.FOV = value
-	Drawing1.Radius = configs.FOV
-	Drawing2.Radius = configs.FOV
+	if Drawing then
+		Drawing1.Radius = configs.FOV
+		Drawing2.Radius = configs.FOV
+	end
 end)
 if Drawing then
 	Main:CreateToggle("Show FOV Circle", function(value)
