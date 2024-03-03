@@ -151,8 +151,9 @@ end)
 
 UserInputService.InputChanged:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		Drawing1.Position = UserInputService:GetMouseLocation()
-		Drawing2.Position = UserInputService:GetMouseLocation()
+		local mouselocation = UserInputService:GetMouseLocation()
+		Drawing1.Position = mouselocation
+		Drawing2.Position = mouselocation
 	end
 end)
 
