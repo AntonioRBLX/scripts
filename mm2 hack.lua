@@ -35,8 +35,8 @@ Drawing2.ZIndex = -1
 Drawing2.Filled = false
 
 function RemoveDisplays(character)
-	local KnifeDisplay = character:WaitForChild("KnifeDisplay", 5)
-	local GunDisplay = character:WaitForChild("GunDisplay", 5)
+	local KnifeDisplay = character:FindFirstChild("KnifeDisplay")
+	local GunDisplay = character:FindFirstChild("GunDisplay")
 
 	if not KnifeDisplay or not GunDisplay then return end
 
