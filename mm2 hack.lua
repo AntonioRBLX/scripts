@@ -8,7 +8,7 @@ _G.Loaded = true
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 -- check for supported commands
-if not getrawmetatable or not setreadonly or not checkcaller then
+if not getrawmetatable or not setreadonly or not checkcaller or not newcclosure then
 	StarterGui:SetCore("SendNotification" ,{
 		Title = "Error";
 		Text = "Incompatible Executor!: Certain functions are not supported for this to work";
@@ -182,7 +182,7 @@ end
 local mt = getrawmetatable(game)
 local old = mt.__namecall
 setreadonly(mt,false)
-mt.__namecall = function(caller,...)
+mt.__namecall = newcclosure(function(caller,...)
 	local args = {...}
 	local method = getnamecallmethod()
 
@@ -219,7 +219,7 @@ mt.__namecall = function(caller,...)
 		end
 	end
 	return old(self,...)
-end
+end)
 setreadonly(mt,true)
 
 StarterGui:SetCore("SendNotification" ,{
