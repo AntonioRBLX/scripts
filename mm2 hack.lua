@@ -8,7 +8,7 @@ _G.Loaded = true
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 -- check for supported commands
-if not getrawmetatable or setreadonly or newcclosure or HttpGet then
+if not getrawmetatable or not setreadonly or not newcclosure or not HttpGet then
 	StarterGui:SetCore("SendNotification" ,{
 		Title = "Error";
 		Text = "This executor is not supported!";
@@ -32,20 +32,29 @@ local configs = {
 	JumpPower = 50;
 }
 
+local Drawing1
+local Drawing2
 
-local Drawing1 = Drawing.new("Circle")
-Drawing1.Color = Color3.fromRGB(255, 89, 89)
-Drawing1.Thickness = 2
-Drawing1.Visible = false
-Drawing1.Radius = configs.FOV
-Drawing1.Filled = false
-
-local Drawing2 = Drawing.new("Circle")
-Drawing2.Thickness = 4
-Drawing2.Visible = false
-Drawing2.Radius = configs.FOV
-Drawing2.ZIndex = -1
-Drawing2.Filled = false
+if Drawing then
+	Drawing1 = Drawing.new("Circle")
+	Drawing1.Color = Color3.fromRGB(255, 89, 89)
+	Drawing1.Thickness = 2
+	Drawing1.Visible = false
+	Drawing1.Radius = configs.FOV
+	Drawing1.Filled = false
+	
+	Drawing2 = Drawing.new("Circle")
+	Drawing2.Thickness = 4
+	Drawing2.Visible = false
+	Drawing2.Radius = configs.FOV
+	Drawing2.ZIndex = -1
+	Drawing2.Filled = false
+else
+	StarterGui:SetCore("SendNotification" ,{
+		Title = "Info";
+		Text = "Drawing is not supported on this executor, ShowFOVCircle will not work.";
+	})
+end
 
 function RemoveDisplays(character)
 	local KnifeDisplay = character:FindFirstChild("KnifeDisplay")
@@ -158,13 +167,15 @@ workspace.ChildAdded:Connect(function(character)
 	end
 end)
 
-UserInputService.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement then
-		local mouselocation = UserInputService:GetMouseLocation()
-		Drawing1.Position = mouselocation
-		Drawing2.Position = mouselocation
-	end
-end)
+if Drawing then
+	UserInputService.InputChanged:Connect(function(input)
+		if scriptactivated and input.UserInputType == Enum.UserInputType.MouseMovement then
+			local mouselocation = UserInputService:GetMouseLocation()
+			Drawing1.Position = mouselocation
+			Drawing2.Position = mouselocation
+		end
+	end)
+end
 
 local mt = getrawmetatable(game)
 local old = mt.__namecall
