@@ -139,7 +139,7 @@ Others:CreateButton("Unload", function()
 end)
 
 workspace.ChildAdded:Connect(function(character)
-	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" and character:FindFirstChildOfClass("Humanoid") then
+	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" and character:WaitForChild("Humanoid", 1) then
 		if configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name then
 			RemoveDisplays(character)
 		end
