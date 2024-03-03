@@ -1,5 +1,5 @@
-if _G.AlreadyExecuted then return end
-_G.AlreadyExecuted = true
+if _G.Loaded then return end
+_G.Loaded = true
 
 local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = game.Players.LocalPlayer
@@ -84,6 +84,7 @@ local PhantomForcesWindow = Library:NewWindow("Combat")
 
 local Main = PhantomForcesWindow:NewSection("Main")
 local LocalPlayer = PhantomForcesWindow:NewSection("LocalPlayer")
+local Others = PhantomForcesWindow:NewSection("Others")
 
 Main:CreateToggle("Gun Aimbot", function(value)
 	configs.GunAimbot = value
@@ -126,6 +127,13 @@ LocalPlayer:CreateSlider("WalkSpeed", 0, 100, 16, false, function(value)
 end)
 LocalPlayer:CreateSlider("JumpPower", 0, 100, 50, false, function(value)
 	configs.JumpPower = value
+end)
+
+Others:CreateButton("Rejoin", function()
+	game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
+end)
+Others:CreateButton("Unload", function()
+	_G.Loaded = false
 end)
 
 workspace.ChildAdded:Connect(function(character)
