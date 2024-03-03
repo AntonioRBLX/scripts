@@ -220,6 +220,11 @@ mt.__namecall = newcclosure(function(caller,...)
 end)
 setreadonly(mt,true)
 
+StarterGui:SetCore("SendNotification" ,{
+	Title = "Info";
+	Text = "Successfully Loaded!";
+})
+
 while true do
 	if not scriptactivated then break end
 
