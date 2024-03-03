@@ -184,6 +184,7 @@ end
 local mt = getrawmetatable(game)
 local old = mt.__namecall
 setreadonly(mt,false)
+
 mt.__namecall = newcclosure(function(caller,...)
 	local args = {...}
 	local method = getnamecallmethod()
@@ -222,6 +223,7 @@ mt.__namecall = newcclosure(function(caller,...)
 	end
 	return old(self,...)
 end)
+
 setreadonly(mt,true)
 
 StarterGui:SetCore("SendNotification" ,{
