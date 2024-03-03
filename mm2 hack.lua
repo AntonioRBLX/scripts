@@ -91,10 +91,10 @@ end)
 Main:CreateToggle("Knife Aimbot", function(value)
 	configs.KnifeAimbot = value
 end)
-Main:CreateSlider("Prediction", 0, 1000, 0, false, function(value)
+Main:CreateSlider("Prediction", 0, 1000, 50, false, function(value)
 	configs.Prediction = value
 end)
-Main:CreateSlider("FOV", 0, 1000, 0, false, function(value)
+Main:CreateSlider("FOV", 0, 1000, 350, false, function(value)
 	configs.FOV = value
 	Drawing1.Radius = configs.FOV
 	Drawing2.Radius = configs.FOV
@@ -124,7 +124,7 @@ end)
 LocalPlayer:CreateSlider("WalkSpeed", 0, 100, 16, false, function(value)
 	configs.WalkSpeed = value
 end)
-LocalPlayer:CreateSlider("JumpPower", 0, 100, 16, false, function(value)
+LocalPlayer:CreateSlider("JumpPower", 0, 100, 50, false, function(value)
 	configs.JumpPower = value
 end)
 
