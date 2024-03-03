@@ -5,6 +5,7 @@ local UserInputService = game:GetService("UserInputService")
 local LocalPlayer = game.Players.LocalPlayer
 local mouse = LocalPlayer:GetMouse()
 
+local scriptactivated = true
 local configs = {
 	GunAimbot = false;
 	KnifeAimbot = false;
@@ -134,10 +135,11 @@ Others:CreateButton("Rejoin", function()
 end)
 Others:CreateButton("Unload", function()
 	_G.Loaded = false
+	scriptactivated = false
 end)
 
 workspace.ChildAdded:Connect(function(character)
-	if configs.AutoRemoveLag and character.ClassName == "Model" then
+	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" then
 		if not configs.IncludeLocalPlayer and LocalPlayer.Character and character == LocalPlayer.Character then return end
 		RemoveDisplays(character)
 	end
@@ -157,7 +159,7 @@ mt.__namecall = newcclosure(function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
 	
-	if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+	if scriptactivated and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 		local HumanoidRootPart =  LocalPlayer.Character.HumanoidRootPart
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
@@ -194,6 +196,8 @@ end)
 setreadonly(mt,true)
 
 while true do
+	if not scriptactivated then break end
+	
 	local character = LocalPlayer.Character
 	if character then
 		local humanoid = character:FindFirstChildOfClass("Humanoid")
