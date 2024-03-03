@@ -1,8 +1,11 @@
 if _G.Loaded then return end
 _G.Loaded = true
 
+if not game:IsLoaded() then game.Loaded:Wait() end
+
 local UserInputService = game:GetService("UserInputService")
-local LocalPlayer = game.Players.LocalPlayer
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
 local mouse = LocalPlayer:GetMouse()
 
 local scriptactivated = true
@@ -131,7 +134,7 @@ LocalPlayer:CreateSlider("JumpPower", 0, 100, 50, false, function(value)
 end)
 
 Others:CreateButton("Rejoin", function()
-	game:GetService("TeleportService"):Teleport(game.PlaceId, game:GetService("Players").LocalPlayer)
+	game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
 end)
 Others:CreateButton("Unload", function()
 	_G.Loaded = false
