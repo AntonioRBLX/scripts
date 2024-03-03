@@ -164,9 +164,9 @@ mt.__namecall = newcclosure(function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
 
-	if scriptactivated and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+	if scriptactivated and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") and (configs.GunAimbot or configs.KnifeAimbot) then
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
+		if tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
@@ -180,7 +180,7 @@ mt.__namecall = newcclosure(function(self,...)
 				end
 			end
 			return self.InvokeServer(self,table.unpack(args))
-		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
+		elseif tostring(self) == "Throw" and tostring(method) == "FireServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
