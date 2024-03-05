@@ -189,37 +189,33 @@ mt.__namecall = newcclosure(function(self,...)
 	local method = getnamecallmethod()
 	if scriptactivated and LocalPlayer.Character then
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
-			if LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-				local closest = GetClosestPlayer(configs.FOV,500)
-				if closest then
-					local attachment = Instance.new("Attachment", HumanoidRootPart)
-					attachment.Position = Vector3.new(1.6, 1.2, -3)
-	
-					local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,50,0,nil,true,configs.Prediction,nil,true)
-					attachment:Destroy()
-	
-					if aimpos then
-						args[2] = aimpos
-						return self.InvokeServer(self,table.unpack(args))
-					end
+			local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+			local closest = GetClosestPlayer(configs.FOV,500)
+			if closest then
+				local attachment = Instance.new("Attachment", HumanoidRootPart)
+				attachment.Position = Vector3.new(1.6, 1.2, -3)
+
+				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,50,0,nil,true,configs.Prediction,nil,true)
+				attachment:Destroy()
+
+				if aimpos then
+					args[2] = aimpos
+					return self.InvokeServer(self,table.unpack(args))
 				end
 			end
 		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
-			if LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-				local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-				local closest = GetClosestPlayer(configs.FOV,500)
-				if closest then
-					local attachment = Instance.new("Attachment", HumanoidRootPart)
-					attachment.Position = Vector3.new(1.5, 1.9, 1)
-	
-					local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,50,0,nil,true,configs.Prediction,nil,false)
-					attachment:Destroy()
-	
-					if aimpos then
-						args[1] = CFrame.new(aimpos,aimpos)
-						return self.FireServer(self,table.unpack(args))
-					end
+			local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+			local closest = GetClosestPlayer(configs.FOV,500)
+			if closest then
+				local attachment = Instance.new("Attachment", HumanoidRootPart)
+				attachment.Position = Vector3.new(1.5, 1.9, 1)
+
+				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,50,0,nil,true,configs.Prediction,nil,false)
+				attachment:Destroy()
+
+				if aimpos then
+					args[1] = CFrame.new(aimpos,aimpos)
+					return self.FireServer(self,table.unpack(args))
 				end
 			end
 		end
