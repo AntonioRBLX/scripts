@@ -185,7 +185,7 @@ Others:CreateButton("Unload", function()
 end)
 
 workspace.ChildAdded:Connect(function(child)
-	if scriptactivated and Players:GetPlayerFromCharacter(child) then
+	if scriptactivated and Players:FindFirstChild(child.Name) then
 		if configs.ESP and child ~= LocalPlayer.Character then
 			AddESP(child,Color3.new(255,255,255))
 		end
