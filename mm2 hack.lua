@@ -239,8 +239,8 @@ while true do
 	if Character then
 		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
 		if Humanoid then
-			humanoid.WalkSpeed = configs.WalkSpeed
-			humanoid.JumpPower = configs.JumpPower
+			Humanoid.WalkSpeed = configs.WalkSpeed
+			Humanoid.JumpPower = configs.JumpPower
 		end
 	end
 	task.wait()
