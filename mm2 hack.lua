@@ -182,7 +182,7 @@ if Drawing then
 end
 
 local mt = getrawmetatable(game)
-local old = mt.__namecall
+local namecall = mt.__namecall
 setreadonly(mt,false)
 
 mt.__namecall = newcclosure(function(self,...)
@@ -220,7 +220,7 @@ mt.__namecall = newcclosure(function(self,...)
 			return self.FireServer(self,table.unpack(args))
 		end
 	end
-	return old(self,...)
+	return namecall(self,...)
 end)
 
 setreadonly(mt,true)
