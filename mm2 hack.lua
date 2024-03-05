@@ -163,7 +163,7 @@ Others:CreateButton("Unload", function()
 end)
 
 workspace.ChildAdded:Connect(function(character)
-	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" and character:WaitForChild("Humanoid", 1) and (configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name) and character:WaitForChild("KnifeDisplay", 1) and character:WaitForChild("GunDisplay", 1) then
+	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" and character:WaitForChild("Humanoid", 1) and character:WaitForChild("KnifeDisplay", 5) and character:WaitForChild("GunDisplay", 5) then
 		if configs.IncludeLocalPlayer or character ~= LocalPlayer.Character then
 			RemoveDisplays(character)
 		end
