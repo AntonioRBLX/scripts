@@ -188,7 +188,7 @@ setreadonly(mt,false)
 mt.__namecall = newcclosure(function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
-
+	--[[
 	if scriptactivated and not checkcaller() and LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
@@ -221,6 +221,7 @@ mt.__namecall = newcclosure(function(self,...)
 			return self.FireServer(self,table.unpack(args))
 		end
 	end
+	--]]
 	return old(self,...)
 end)
 
