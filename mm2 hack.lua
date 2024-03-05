@@ -31,6 +31,8 @@ local configs = {
 	IncludeLocalPlayer = false;
 	WalkSpeed = 16;
 	JumpPower = 50;
+
+	ESP = false;
 }
 
 local Drawing1
@@ -56,7 +58,13 @@ else
 		Text = "Drawing is not supported on this executor, ShowFOVCircle will not work.";
 	})
 end
-
+function AddESP(character,color)
+	local Highlight = Instance.new("Highlight", character)
+	Highlight.FillColor = color
+	Highlight.FillTransparency = 0.25
+	Highlight.OutlineColor = color
+	Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+end
 function RemoveDisplays(character)
 	local KnifeDisplay = character:FindFirstChild("KnifeDisplay")
 	local GunDisplay = character:FindFirstChild("GunDisplay")
@@ -107,6 +115,7 @@ local PhantomForcesWindow = Library:NewWindow("Combat")
 
 local Main = PhantomForcesWindow:NewSection("Main")
 local LocalPlayerTab = PhantomForcesWindow:NewSection("LocalPlayer")
+local Visuals = PhantomForcesWindow:NewSection("Visuals")
 local Others = PhantomForcesWindow:NewSection("Others")
 
 Main:CreateToggle("Gun Aimbot", function(value)
@@ -152,6 +161,10 @@ LocalPlayerTab:CreateSlider("WalkSpeed", 0, 100, 16, false, function(value)
 end)
 LocalPlayerTab:CreateSlider("JumpPower", 0, 100, 50, false, function(value)
 	configs.JumpPower = value
+end)
+
+Visuals:CreateToggle("ESP", function(value)
+	configs.ESP = value
 end)
 
 Others:CreateButton("Rejoin", function()
