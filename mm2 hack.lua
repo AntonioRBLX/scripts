@@ -165,6 +165,11 @@ end)
 
 Visuals:CreateToggle("ESP", function(value)
 	configs.ESP = value
+	for _, i in pairs(workspace:GetChildren()) do
+		if i.ClassName == "Model" and Players:GetPlayerFromCharacter(i) then
+			
+		end
+	end
 end)
 
 Others:CreateButton("Rejoin", function()
@@ -179,6 +184,9 @@ workspace.ChildAdded:Connect(function(character)
 	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" and character:WaitForChild("Humanoid", 1) and character:WaitForChild("KnifeDisplay", 5) and character:WaitForChild("GunDisplay", 5) then
 		if configs.IncludeLocalPlayer or character ~= LocalPlayer.Character then
 			RemoveDisplays(character)
+		end
+		if configs.ESP and character ~= LocalPlayer.Character then
+			AddESP(character,Color3.new(255,255,255))
 		end
 	end
 end)
