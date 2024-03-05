@@ -133,7 +133,7 @@ if Drawing then
 end
 LocalPlayerTab:CreateButton("Remove Lag", function()
 	for _, i in pairs(workspace:GetChildren()) do
-		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") and (configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name) then
+		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") and (configs.IncludeLocalPlayer or i ~= LocalPlayer.Character) then
 			RemoveDisplays(i)
 		end
 	end
@@ -164,7 +164,7 @@ end)
 
 workspace.ChildAdded:Connect(function(character)
 	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" and character:WaitForChild("Humanoid", 1) and (configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name) and character:WaitForChild("KnifeDisplay", 1) and character:WaitForChild("GunDisplay", 1) then
-		if configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name then
+		if configs.IncludeLocalPlayer or character ~= LocalPlayer.Character then
 			RemoveDisplays(character)
 		end
 	end
