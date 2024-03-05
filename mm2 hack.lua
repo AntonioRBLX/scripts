@@ -133,7 +133,6 @@ if Drawing then
 end
 LocalPlayerTab:CreateButton("Remove Lag", function()
 	for _, i in pairs(workspace:GetChildren()) do
-		print(LocalPlayer.Name)
 		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") and (configs.IncludeLocalPlayer or i.Name ~= LocalPlayer.Name) then
 			RemoveDisplays(i)
 		end
