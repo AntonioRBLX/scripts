@@ -1,9 +1,9 @@
+if _G.mm2hacksalreadyloadedbyCITY512 then return end
+_G.mm2hacksalreadyloadedbyCITY512 = true
+
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
-
-if _G.Loaded then return end
-_G.Loaded = true
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
@@ -180,7 +180,7 @@ Others:CreateButton("Rejoin", function()
 	game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
 end)
 Others:CreateButton("Unload", function()
-	_G.Loaded = false
+	_G.mm2hacksalreadyloadedbyCITY512 = false
 	scriptactivated = false
 end)
 
