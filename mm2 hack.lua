@@ -221,7 +221,7 @@ mt.__namecall = newcclosure(function(self,...)
 				return self.FireServer(self,table.unpack(args))
 			end
 		end
-	end
+	end)
 	if err then
 		print(err)
 	end
