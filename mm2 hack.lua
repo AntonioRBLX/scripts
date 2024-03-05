@@ -167,7 +167,7 @@ Visuals:CreateToggle("ESP", function(value)
 	configs.ESP = value
 	for _, child in pairs(workspace:GetChildren()) do
 		if configs.ESP then
-			if Players:GetPlayerFromCharacter(child) then
+			if Players:GetPlayerFromCharacter(child) and child ~= LocalPlayer.Character then
 				AddESP(child,Color3.new(255,255,255))
 			end
 		elseif child:FindFirstChildOfClass("Highlight") then
@@ -185,8 +185,10 @@ Others:CreateButton("Unload", function()
 end)
 
 workspace.ChildAdded:Connect(function(child)
-	if scriptactivated and configs.AutoRemoveLag and Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
-		RemoveDisplays(child)
+	if scriptactivated and configs.AutoRemoveLag and Players:GetPlayerFromCharacter(child) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
+		if configs.IncludeLocalPlayer or child ~= LocalPlayer.Character then
+			RemoveDisplays(child)
+		end
 		if configs.ESP and child ~= LocalPlayer.Character then
 			AddESP(child,Color3.new(255,255,255))
 		end
