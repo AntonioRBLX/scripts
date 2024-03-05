@@ -166,8 +166,12 @@ end)
 Visuals:CreateToggle("ESP", function(value)
 	configs.ESP = value
 	for _, child in pairs(workspace:GetChildren()) do
-		if Players:GetPlayerFromCharacter(child) then
-			AddESP(child,Color3.new(255,255,255))
+		if configs.ESP then
+			if Players:GetPlayerFromCharacter(child) then
+				AddESP(child,Color3.new(255,255,255))
+			end
+		elseif child:FindFirstChildOfClass("Highlight") then
+			child:FindFirstChildOfClass("Highlight"):Destroy()
 		end
 	end
 end)
