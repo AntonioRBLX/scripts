@@ -95,7 +95,7 @@ function GetClosestPlayer(FOV,maxdist)
 				local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
 				local distancefromplayer = (child.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
 	
-				if onscreen and distance <= FOV / 2 then
+				if onscreen and distance <= FOV then
 					if (not closest or distance < closest[2]) and distancefromplayer <= maxdist then
 						closest = {child,distance}
 					end
