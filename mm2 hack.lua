@@ -70,9 +70,9 @@ function RemoveDisplays(character)
 	local GunDisplay = character:FindFirstChild("GunDisplay")
 
 	if configs.IncludeAccessories then
-		for _, i in pairs(character:GetChildren()) do
-			if i:IsA("Accessory") or i.Name == "Radio" or i.Name == "Pet" then
-				i:Destroy()
+		for _, child in pairs(character:GetChildren()) do
+			if child:IsA("Accessory") or child.Name == "Radio" or child.Name == "Pet" then
+				child:Destroy()
 			end
 		end
 	end
@@ -87,24 +87,24 @@ function GetClosestPlayer(FOV,maxdist)
 
 	local camera = workspace.CurrentCamera
 	local closest
-
-	for _, i in pairs(workspace:GetChildren()) do
-		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") and i:FindFirstChild("HumanoidRootPart") then
-			if i ~= LocalPlayer.Character then
-				local viewportpoint, onscreen = camera:WorldToScreenPoint(i.HumanoidRootPart.Position)
+	
+	if camera then
+		for _, child in pairs(workspace:GetChildren()) do
+			if Players:GetPlayerFromCharacter(child) and child ~= LocalPlayer.Character and child:FindFirstChild("HumanoidRootPart") then
+				local viewportpoint, onscreen = camera:WorldToScreenPoint(child.HumanoidRootPart.Position)
 				local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
-				local distancefromplayer = (i.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-
+				local distancefromplayer = (child.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+	
 				if onscreen and distance <= FOV / 2 then
 					if (not closest or distance < closest[2]) and distancefromplayer <= maxdist then
-						closest = {i,distance}
+						closest = {child,distance}
 					end
 				end
 			end
 		end
-	end
-	if closest then
-		return closest[1]
+		if closest then
+			return closest[1]
+		end
 	end
 	return nil
 end
@@ -141,9 +141,9 @@ if Drawing then
 	end)
 end
 LocalPlayerTab:CreateButton("Remove Lag", function()
-	for _, i in pairs(workspace:GetChildren()) do
-		if i.ClassName == "Model" and i:FindFirstChildOfClass("Humanoid") and (configs.IncludeLocalPlayer or i ~= LocalPlayer.Character) then
-			RemoveDisplays(i)
+	for _, child in pairs(workspace:GetChildren()) do
+		if Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) then
+			RemoveDisplays(child)
 		end
 	end
 end)
@@ -165,9 +165,9 @@ end)
 
 Visuals:CreateToggle("ESP", function(value)
 	configs.ESP = value
-	for _, i in pairs(workspace:GetChildren()) do
-		if i.ClassName == "Model" and Players:GetPlayerFromCharacter(i) then
-			
+	for _, child in pairs(workspace:GetChildren()) do
+		if Players:GetPlayerFromCharacter(child) then
+			AddESP(child,Color3.new(255,255,255))
 		end
 	end
 end)
@@ -180,13 +180,11 @@ Others:CreateButton("Unload", function()
 	scriptactivated = false
 end)
 
-workspace.ChildAdded:Connect(function(character)
-	if scriptactivated and configs.AutoRemoveLag and character.ClassName == "Model" and character:WaitForChild("Humanoid", 1) and character:WaitForChild("KnifeDisplay", 5) and character:WaitForChild("GunDisplay", 5) then
-		if configs.IncludeLocalPlayer or character ~= LocalPlayer.Character then
-			RemoveDisplays(character)
-		end
-		if configs.ESP and character ~= LocalPlayer.Character then
-			AddESP(character,Color3.new(255,255,255))
+workspace.ChildAdded:Connect(function(child)
+	if scriptactivated and configs.AutoRemoveLag and Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
+		RemoveDisplays(child)
+		if configs.ESP and child ~= LocalPlayer.Character then
+			AddESP(child,Color3.new(255,255,255))
 		end
 	end
 end)
