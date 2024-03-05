@@ -185,12 +185,12 @@ Others:CreateButton("Unload", function()
 end)
 
 workspace.ChildAdded:Connect(function(child)
-	if scriptactivated and configs.AutoRemoveLag and Players:GetPlayerFromCharacter(child) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
-		if configs.IncludeLocalPlayer or child ~= LocalPlayer.Character then
-			RemoveDisplays(child)
-		end
+	if scriptactivated and Players:GetPlayerFromCharacter(child) then
 		if configs.ESP and child ~= LocalPlayer.Character then
 			AddESP(child,Color3.new(255,255,255))
+		end
+		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
+			RemoveDisplays(child)
 		end
 	end
 end)
