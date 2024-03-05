@@ -90,7 +90,7 @@ function GetClosestPlayer(FOV,maxdist)
 	
 	if camera then
 		for _, child in pairs(workspace:GetChildren()) do
-			if Players:GetPlayerFromCharacter(child) and child ~= LocalPlayer.Character and child:FindFirstChild("HumanoidRootPart") then
+			if Players:FindFirstChild(child.Name) and child ~= LocalPlayer.Character and child:FindFirstChild("HumanoidRootPart") then
 				local viewportpoint, onscreen = camera:WorldToScreenPoint(child.HumanoidRootPart.Position)
 				local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
 				local distancefromplayer = (child.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
@@ -142,7 +142,7 @@ if Drawing then
 end
 LocalPlayerTab:CreateButton("Remove Lag", function()
 	for _, child in pairs(workspace:GetChildren()) do
-		if Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) then
+		if Players:FindFirstChild(child.Name) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) then
 			RemoveDisplays(child)
 		end
 	end
@@ -167,7 +167,7 @@ Visuals:CreateToggle("ESP", function(value)
 	configs.ESP = value
 	for _, child in pairs(workspace:GetChildren()) do
 		if configs.ESP then
-			if Players:GetPlayerFromCharacter(child) and child ~= LocalPlayer.Character then
+			if Players:FindFirstChild(child.Name) and child ~= LocalPlayer.Character then
 				AddESP(child,Color3.new(255,255,255))
 			end
 		elseif child:FindFirstChildOfClass("Highlight") then
