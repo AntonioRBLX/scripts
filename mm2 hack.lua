@@ -202,9 +202,9 @@ mt.__namecall = newcclosure(function(self,...)
 
 				if aimpos then
 					args[2] = aimpos
+					return self.InvokeServer(self,table.unpack(args))
 				end
 			end
-			return self.InvokeServer(self,table.unpack(args))
 		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 			if closest then
@@ -216,9 +216,9 @@ mt.__namecall = newcclosure(function(self,...)
 
 				if aimpos then
 					args[1] = CFrame.new(aimpos,aimpos)
+					return self.FireServer(self,table.unpack(args))
 				end
 			end
-			return self.FireServer(self,table.unpack(args))
 		end
 		--]]
 	end
