@@ -8,7 +8,7 @@ local Players = game:GetService("Players")
 if not game:IsLoaded() then game.Loaded:Wait() end
 
 -- check for supported commands
-if not getrawmetatable or not setreadonly or not newcclosure or not getnamecallmethod then
+if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod then
 	StarterGui:SetCore("SendNotification" ,{
 		Title = "Error";
 		Text = "Incompatible Executor!: Certain functions are not supported by this executor.";
@@ -205,14 +205,11 @@ if Drawing then
 	end)
 end
 
-local mt = getrawmetatable(game)
-local namecall = mt.__namecall
-setreadonly(mt,false)
-
-mt.__namecall = newcclosure(function(self,...)
+local namecall
+namecall = hookmetamethod(game,"__namecall",function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
-	if scriptactivated and LocalPlayer.Character then
+	if scriptactivated and not checkcaller() and LocalPlayer.Character then
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 			local closest = GetClosestPlayer(configs.FOV,500)
