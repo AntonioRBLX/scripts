@@ -189,7 +189,6 @@ mt.__namecall = newcclosure(function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
 	if scriptactivated and LocalPlayer.Character then
-		--[[
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
@@ -220,7 +219,6 @@ mt.__namecall = newcclosure(function(self,...)
 				end
 			end
 		end
-		--]]
 	end
 	return namecall(self,...)
 end)
