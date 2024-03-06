@@ -140,7 +140,7 @@ end)
 Main:CreateToggle("Kill Aura", function(value)
 	configs.KillAura = value
 end)
-Main:CreateSlider("Kill Aura Range", 0, 1000, 50, false, function(value)
+Main:CreateSlider("Kill Aura Range", 0, 100, 15, false, function(value)
 	configs.KillAuraRange = value
 end)
 Main:CreateToggle("Face Target", function(value)
@@ -290,7 +290,7 @@ while true do
 					end
 				end
 				if closest then
-					local NPCRoot = closest.HumanoidRootPart
+					local NPCRoot = closest[1].HumanoidRootPart
 					if configs.FaceTarget then
 						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,NPCRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
 					end
