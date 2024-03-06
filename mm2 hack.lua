@@ -127,7 +127,7 @@ end)
 Main:CreateToggle("Knife Aimbot", function(value)
 	configs.KnifeAimbot = value
 end)
-Main:CreateSlider("Prediction", 0, 1000, 50, false, function(value)
+Main:CreateSlider("Ping Prediction", 0, 1000, 50, false, function(value)
 	configs.Prediction = value
 end)
 Main:CreateSlider("FOV", 0, 1000, 350, false, function(value)
