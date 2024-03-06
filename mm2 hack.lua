@@ -146,7 +146,7 @@ end
 Main:CreateToggle("Kill Aura", function(value)
 	configs.KillAura = value
 end)
-Main:CreateSlider("Kill Aura Range", 0, 100, 15, false, function(value)
+Main:CreateSlider("Kill Aura Range", 0, 100, 15, true, function(value)
 	configs.KillAuraRange = value
 end)
 Main:CreateToggle("Face Target", function(value)
