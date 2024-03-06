@@ -271,6 +271,27 @@ while true do
 			Humanoid.WalkSpeed = configs.WalkSpeed
 			Humanoid.JumpPower = configs.JumpPower
 		end
+		if configs.KillAura then
+			local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
+			local Knife = Character:FindFirstChild("Knife")
+			if HumanoidRootPart and Knife and Knife.ClassName == "Tool" then
+				local closest
+				for _, child in pairs(workspace:GetChildren()) do
+					if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) then
+						local NPCRoot = child:FindFirstChild("HumanoidRootPart")
+						if NPCRoot then
+							local distance = (NPCRoot.Position - HumanoidRootPart.Position).Magnitude
+							if not closest or (distance < configs.KillAuraRange and distance < closest[2]) then
+								closest = {child,distance}
+							end
+						end
+					end
+				end
+				if closest then
+	
+				end
+			end
+		end
 	end
 	task.wait()
 end
