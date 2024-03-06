@@ -190,6 +190,9 @@ Visuals:CreateToggle("Include LocalPlayer", function(value)
 	configs.IncludeLocalPlayer = value
 end)
 
+Others:CreateButton("Dupe (patched)", function()
+	
+end)
 Others:CreateButton("Rejoin", function()
 	game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
 end)
