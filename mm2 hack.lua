@@ -27,6 +27,7 @@ local configs = {
 	FOV = 350;
 	KillAura = false;
 	KillAuraRange = 15;
+	FaceTarget = false;
 
 	AutoRemoveLag = false;
 	IncludeAccessories = false;
@@ -141,6 +142,9 @@ Main:CreateToggle("Kill Aura", function(value)
 end)
 Main:CreateSlider("Kill Aura Range", 0, 1000, 50, false, function(value)
 	configs.KillAuraRange = value
+end)
+Main:CreateToggle("Face Target", function(value)
+	configs.FaceTarget = value
 end)
 
 if Drawing then
@@ -288,7 +292,10 @@ while true do
 					end
 				end
 				if closest then
-	
+					local NPCRoot = closest.HumanoidRootPart
+					if configs.FaceTarget then
+						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,NPCRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
+					end
 				end
 			end
 		end
