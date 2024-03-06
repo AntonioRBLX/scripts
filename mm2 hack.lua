@@ -293,6 +293,9 @@ while true do
 					if configs.FaceTarget then
 						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,NPCRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
 					end
+					NPCRoot.CanCollide = false
+					NPCRoot.Size = Vector3.new(100,100,100)
+					Knife:Activate()
 				end
 			end
 		end
