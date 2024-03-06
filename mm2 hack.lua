@@ -258,8 +258,6 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 	return namecall(self,...)
 end)
 
-setreadonly(mt,true)
-
 StarterGui:SetCore("SendNotification" ,{
 	Title = "Info";
 	Text = "Successfully Loaded!";
