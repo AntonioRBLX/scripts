@@ -266,7 +266,7 @@ StarterGui:SetCore("SendNotification" ,{
 local prevtarget
 while true do
 	if prevtarget and prevtarget:FindFirstChild("HumanoidRootPart") then
-		local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
+		local PrevTargetRoot = prevtarget.HumanoidRootPart
 		PrevTargetRoot.CanCollide = true
 		PrevTargetRoot.Transparency = 1
 		PrevTargetRoot.Size = Vector3.new(2,2,1)
