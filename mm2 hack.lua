@@ -137,12 +137,7 @@ Main:CreateSlider("FOV", 0, 1000, 350, false, function(value)
 		Drawing2.Radius = configs.FOV
 	end
 end)
-if Drawing then
-	Main:CreateToggle("Show FOV Circle", function(value)
-		Drawing1.Visible = value
-		Drawing2.Visible = value
-	end)
-end
+
 Main:CreateToggle("Kill Aura", function(value)
 	configs.KillAura = value
 end)
@@ -152,22 +147,6 @@ Main:CreateSlider("Kill Aura Range", 0, 100, 15, true, function(value)
 end)
 Main:CreateToggle("Face Target", function(value)
 	configs.FaceTarget = value
-end)
-LocalPlayerTab:CreateButton("Remove Lag", function()
-	for _, child in pairs(workspace:GetChildren()) do
-		if Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) then
-			RemoveDisplays(child)
-		end
-	end
-end)
-LocalPlayerTab:CreateToggle("Auto Remove Lag", function(value)
-	configs.AutoRemoveLag = value
-end)
-LocalPlayerTab:CreateToggle("Include Accessories", function(value)
-	configs.IncludeAccessories = value
-end)
-LocalPlayerTab:CreateToggle("Include LocalPlayer", function(value)
-	configs.IncludeLocalPlayer = value
 end)
 LocalPlayerTab:CreateSlider("WalkSpeed", 0, 100, 16, false, function(value)
 	configs.WalkSpeed = value
@@ -187,6 +166,28 @@ Visuals:CreateToggle("ESP", function(value)
 			child:FindFirstChildOfClass("Highlight"):Destroy()
 		end
 	end
+end)
+if Drawing then
+	Visuals:CreateToggle("Show FOV Circle", function(value)
+		Drawing1.Visible = value
+		Drawing2.Visible = value
+	end)
+end
+Visuals:CreateButton("Remove Lag", function()
+	for _, child in pairs(workspace:GetChildren()) do
+		if Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) then
+			RemoveDisplays(child)
+		end
+	end
+end)
+Visuals:CreateToggle("Auto Remove Lag", function(value)
+	configs.AutoRemoveLag = value
+end)
+Visuals:CreateToggle("Include Accessories", function(value)
+	configs.IncludeAccessories = value
+end)
+Visuals:CreateToggle("Include LocalPlayer", function(value)
+	configs.IncludeLocalPlayer = value
 end)
 
 Others:CreateButton("Rejoin", function()
