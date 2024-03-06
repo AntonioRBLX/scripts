@@ -268,7 +268,6 @@ while true do
 	if prevtarget and prevtarget:FindFirstChild("HumanoidRootPart") then
 		local PrevTargetRoot = prevtarget.HumanoidRootPart
 		PrevTargetRoot.CanCollide = true
-		PrevTargetRoot.Transparency = 1
 		PrevTargetRoot.Size = Vector3.new(2,2,1)
 		prevtarget = nil
 	end
@@ -306,9 +305,7 @@ while true do
 					if configs.FaceTarget then
 						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,TargetRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
 					end
-					TargetRoot.CanCollide = false
-					TargetRoot.Transparency = 0
-					TargetRoot.Size = Vector3.new(15,15,15)
+					TargetRoot.Size = Vector3.new(250,250,250)
 					Knife:Activate()
 				end
 			end
