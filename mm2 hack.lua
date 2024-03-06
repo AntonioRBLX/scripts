@@ -265,8 +265,15 @@ StarterGui:SetCore("SendNotification" ,{
 
 local prevtarget
 while true do
+	if prevtarget and prevtarget:FindFirstChild("HumanoidRootPart") then
+		local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
+		PrevTargetRoot.CanCollide = true
+		PrevTargetRoot.Transparency = 1
+		PrevTargetRoot.Size = Vector3.new(2,2,1)
+		prevtarget = nil
+	end
 	if not scriptactivated then break end
-
+	
 	local Character = LocalPlayer.Character
 	if Character then
 		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
@@ -293,12 +300,6 @@ while true do
 					end
 				end
 				if closest then
-					if prevtarget and prevtarget:FindFirstChild("HumanoidRootPart") then
-						local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
-						PrevTargetRoot.CanCollide = true
-						PrevTargetRoot.Transparency = 1
-						PrevTargetRoot.Size = Vector3.new(2,2,1)
-					end
 					prevtarget = closest[1]
 					
 					local TargetRoot = prevtarget.HumanoidRootPart
