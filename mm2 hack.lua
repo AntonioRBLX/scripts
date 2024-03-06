@@ -148,6 +148,7 @@ Main:CreateToggle("Kill Aura", function(value)
 end)
 Main:CreateSlider("Kill Aura Range", 0, 100, 15, true, function(value)
 	configs.KillAuraRange = value
+	print(configs.KillAuraRange)
 end)
 Main:CreateToggle("Face Target", function(value)
 	configs.FaceTarget = value
@@ -282,7 +283,7 @@ while true do
 						local NPCRoot = child:FindFirstChild("HumanoidRootPart")
 						if NPCRoot then
 							local distance = (NPCRoot.Position - HumanoidRootPart.Position).Magnitude
-							if not closest or (distance < configs.KillAuraRange and distance < closest[2]) then
+							if not closest or distance < configs.KillAuraRange and distance < closest[2] then
 								closest = {child,distance}
 							end
 						end
