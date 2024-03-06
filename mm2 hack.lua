@@ -137,6 +137,12 @@ Main:CreateSlider("FOV", 0, 1000, 350, false, function(value)
 		Drawing2.Radius = configs.FOV
 	end
 end)
+if Drawing then
+	Main:CreateToggle("Show FOV Circle", function(value)
+		Drawing1.Visible = value
+		Drawing2.Visible = value
+	end)
+end
 Main:CreateToggle("Kill Aura", function(value)
 	configs.KillAura = value
 end)
@@ -146,13 +152,6 @@ end)
 Main:CreateToggle("Face Target", function(value)
 	configs.FaceTarget = value
 end)
-
-if Drawing then
-	Main:CreateToggle("Show FOV Circle", function(value)
-		Drawing1.Visible = value
-		Drawing2.Visible = value
-	end)
-end
 LocalPlayerTab:CreateButton("Remove Lag", function()
 	for _, child in pairs(workspace:GetChildren()) do
 		if Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) then
