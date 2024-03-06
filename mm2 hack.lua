@@ -278,7 +278,7 @@ while true do
 			if HumanoidRootPart and Knife and Knife.ClassName == "Tool" then
 				local closest
 				for _, child in pairs(workspace:GetChildren()) do
-					if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) then
+					if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) and child ~= Character then
 						local NPCRoot = child:FindFirstChild("HumanoidRootPart")
 						if NPCRoot then
 							local distance = (NPCRoot.Position - HumanoidRootPart.Position).Magnitude
