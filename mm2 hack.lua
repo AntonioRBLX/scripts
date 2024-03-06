@@ -298,7 +298,7 @@ while true do
 						target.Transparency = 1
 						target.HumanoidRootPart.Size = Vector3.new(2,2,1)
 					end
-					local target = closest[1]
+					target = closest[1]
 					
 					local NPCRoot = target.HumanoidRootPart
 					if configs.FaceTarget then
