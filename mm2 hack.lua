@@ -25,6 +25,8 @@ local configs = {
 	KnifeAimbot = false;
 	Prediction = 50;
 	FOV = 350;
+	KillAura = false;
+	KillAuraRange = 15;
 
 	AutoRemoveLag = false;
 	IncludeAccessories = false;
@@ -134,6 +136,13 @@ Main:CreateSlider("FOV", 0, 1000, 350, false, function(value)
 		Drawing2.Radius = configs.FOV
 	end
 end)
+Main:CreateToggle("Kill Aura", function(value)
+	configs.KillAura = value
+end)
+Main:CreateSlider("Kill Aura Range", 0, 1000, 50, false, function(value)
+	configs.KillAuraRange = value
+end)
+
 if Drawing then
 	Main:CreateToggle("Show FOV Circle", function(value)
 		Drawing1.Visible = value
