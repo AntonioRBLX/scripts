@@ -283,8 +283,10 @@ while true do
 						local NPCRoot = child:FindFirstChild("HumanoidRootPart")
 						if NPCRoot then
 							local distance = (NPCRoot.Position - HumanoidRootPart.Position).Magnitude
-							if not closest or distance < configs.KillAuraRange and distance < closest[2] then
-								closest = {child,distance}
+							if distance < configs.KillAuraRange then
+								if not closest or distance < closest[2] then
+									closest = {child,distance}
+								end
 							end
 						end
 					end
