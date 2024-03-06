@@ -263,7 +263,7 @@ StarterGui:SetCore("SendNotification" ,{
 	Text = "Successfully Loaded!";
 })
 
-local target
+local prevtarget
 while true do
 	if not scriptactivated then break end
 
@@ -293,20 +293,21 @@ while true do
 					end
 				end
 				if closest then
-					if target and target:FindFirstChild("HumanoidRootPart") then
-						NPCRoot.CanCollide = true
-						target.Transparency = 1
-						target.HumanoidRootPart.Size = Vector3.new(2,2,1)
+					if prevtarget and prevtarget:FindFirstChild("HumanoidRootPart") then
+						local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
+						PrevTargetRoot.CanCollide = true
+						PrevTargetRoot.Transparency = 1
+						PrevTargetRoot.Size = Vector3.new(2,2,1)
 					end
-					target = closest[1]
+					prevtarget = closest[1]
 					
-					local NPCRoot = target.HumanoidRootPart
+					local TargetRoot = prevtarget.HumanoidRootPart
 					if configs.FaceTarget then
-						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,NPCRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
+						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,TargetRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
 					end
-					NPCRoot.CanCollide = false
-					NPCRoot.Transparency = 0
-					NPCRoot.Size = Vector3.new(15,15,15)
+					TargetRoot.CanCollide = false
+					TargetRoot.Transparency = 0
+					TargetRoot.Size = Vector3.new(15,15,15)
 					Knife:Activate()
 				end
 			end
