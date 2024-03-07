@@ -1,10 +1,9 @@
-local HttpService = game:GetService("HttpService")
 local Configs = {
 	AutoPlayerLock = false;
 	LockRange = 16;
 	AttackRange = 12;
 }
-local Library = loadstring(HttpService:GetAsync("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
 
 local PhantomForcesWindow = Library:NewWindow("Combat")
 
