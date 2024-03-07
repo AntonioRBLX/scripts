@@ -173,7 +173,48 @@ if Drawing then
 		Drawing2.Visible = value
 	end)
 end
-Visuals:CreateButton("Remove Lag", function()
+Visuals:CreateButton("Remove Map Lag", function()
+	local Terrain = workspace:FindFirstChildOfClass('Terrain')
+	Terrain.WaterWaveSize = 0
+	Terrain.WaterWaveSpeed = 0
+	Terrain.WaterReflectance = 0
+	Terrain.WaterTransparency = 0
+	Lighting.GlobalShadows = false
+	Lighting.FogEnd = 9e9
+	settings().Rendering.QualityLevel = 1
+	function RemoveLagFromObject(object)
+		if not object:FindFirstAncestorOfClass("Model") or not object:FindFirstAncestorOfClass("Model"):FindFirstChildOfClass("Humanoid") then
+			if object:IsA("MeshPart") then
+				object.Material = Enum.Material.SmoothPlastic
+				object.TextureID = ""
+			elseif object:IsA("UnionOperation") then
+				object.Material = Enum.Material.SmoothPlastic
+			elseif object:IsA("Decal") then
+				object:Destroy()
+			elseif object.ClassName == "SpecialMesh" and object.MeshType == Enum.MeshType.FileType then
+				object.TextureID = ""
+			elseif object:IsA("ParticleEmitter") or object:IsA("Trail") then
+				object:Destroy()
+			elseif object:IsA("BasePart") then
+				object.Material = Enum.Material.SmoothPlastic
+				object.Reflectance = 0
+				object.TopSurface = Enum.SurfaceType.Smooth
+				object.BottomSurface = Enum.SurfaceType.Smooth
+				object.FrontSurface = Enum.SurfaceType.Smooth
+				object.BackSurface = Enum.SurfaceType.Smooth
+				object.LeftSurface = Enum.SurfaceType.Smooth
+				object.RightSurface = Enum.SurfaceType.Smooth
+			end
+		end
+	end
+	for _, descendant in pairs(workspace:GetDescendants()) do
+		RemoveLagFromObject(descendant)
+	end
+	workspace.DescendantAdded:Connect(function(descendant)
+		coroutine.wrap(RemoveLagFromObject)(descendant)
+	end)
+end)
+Visuals:CreateButton("Remove Accessory Lag", function()
 	for _, child in pairs(workspace:GetChildren()) do
 		if Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) then
 			RemoveDisplays(child)
@@ -183,8 +224,8 @@ end)
 Visuals:CreateToggle("Auto Remove Lag", function(value)
 	configs.AutoRemoveLag = value
 end)
-Visuals:CreateToggle("Include Accessories", function(value)
-	configs.IncludeAccessories = value
+Visuals:CreateToggle("Include Hats", function(value)
+	configs.IncludeOtherAccessories = value
 end)
 Visuals:CreateToggle("Include LocalPlayer", function(value)
 	configs.IncludeLocalPlayer = value
