@@ -1,3 +1,6 @@
+if _G.universalswordscriptalreadyexecuted then return end
+_G.universalswordscriptalreadyexecuted = true
+
 local Configs = {
 	AutoPlayerLock = false;
 	LockRange = 16;
@@ -5,18 +8,16 @@ local Configs = {
 }
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
 
-local PhantomForcesWindow = Library:NewWindow("Combat")
+local PhantomForcesWindow = Library:NewWindow("Combat")#
 
 local MainCheats = PhantomForcesWindow:NewSection("Main")
 
 MainCheats:CreateToggle("Auto-Player Lock", function(value)
 	Configs.AutoPlayerLock = value
 end)
-
 MainCheats:CreateSlider("Lock Range", 0, 100, 16, false, function(value)
 	Configs.LockRange = value
 end)
-
 MainCheats:CreateSlider("Attack Range", 0, 100, 12, false, function(value)
 	Configs.AttackRange = value
 end)
