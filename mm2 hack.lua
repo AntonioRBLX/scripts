@@ -3,7 +3,7 @@ _G.mm2hacksalreadyloadedbyCITY512 = true
 
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
-local Players = game.Players
+local Players = game:GetService("Players")
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
@@ -73,6 +73,7 @@ function GetRole(player)
 end
 
 function AddChams(character,color)
+	print(Players:FindFirstChild(character.Name))
 	if character.ClassName == "Model" and Players:FindFirstChild(character.Name) and character ~= LocalPlayer.Character then
 		local Highlight = Instance.new("Highlight", character)
 		Highlight.Name = "MM2CHEATSCHAMS"
