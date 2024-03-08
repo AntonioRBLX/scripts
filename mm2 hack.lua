@@ -274,7 +274,7 @@ Visuals:CreateButton("Remove Map Lag", function()
 			RemoveLagFromObject(descendant)
 		end
 		workspace.DescendantAdded:Connect(function(descendant)
-			coroutine.wrap(RemoveLagFromObject)(descendant)
+			RemoveLagFromObject(descendant)
 		end)
 	end
 end)
@@ -307,14 +307,16 @@ Others:CreateButton("Unload", function()
 end)
 
 workspace.ChildAdded:Connect(function(child)
-	if scriptactivated and child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) then
-		if configs.Chams and child ~= LocalPlayer.Character then
-			AddChams(child,Color3.fromRGB(255,255,255))
+	coroutine.wrap(function()
+		if scriptactivated and child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) then
+			if configs.Chams and child ~= LocalPlayer.Character then
+				AddChams(child,Color3.fromRGB(255,255,255))
+			end
+			if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
+				RemoveDisplays(child)
+			end
 		end
-		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
-			RemoveDisplays(child)
-		end
-	end
+	end)()
 end)
 
 if Drawing then
