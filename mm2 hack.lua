@@ -36,7 +36,8 @@ local configs = {
 	WalkSpeed = 16;
 	JumpPower = 50;
 
-	ESP = false;
+	Chams = false;
+	HighlightDepthMode = Enum.HighlightDepthMode.Occluded
 }
 
 local Drawing1
@@ -62,12 +63,14 @@ else
 		Text = "Drawing is not supported on this executor, ShowFOVCircle will not work.";
 	})
 end
-function AddESP(character,color)
-	local Highlight = Instance.new("Highlight", character)
-	Highlight.FillColor = color
-	Highlight.FillTransparency = 0.25
-	Highlight.OutlineColor = color
-	Highlight.DepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+function AddChams(character,color)
+	if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) and child:FindFirstChild("HumanoidRootPart") and child ~= LocalPlayer.Character then
+		local Highlight = Instance.new("Highlight", character)
+		Highlight.FillColor = color
+		Highlight.FillTransparency = 0.25
+		Highlight.OutlineColor = color
+		Highlight.DepthMode = configs.HighlightDepthMode
+	end
 end
 function RemoveDisplays(character)
 	local KnifeDisplay = character:FindFirstChild("KnifeDisplay")
@@ -94,14 +97,17 @@ function GetClosestPlayer(FOV,maxdist)
 	
 	if camera then
 		for _, child in pairs(workspace:GetChildren()) do
-			if Players:GetPlayerFromCharacter(child) and child ~= LocalPlayer.Character and child:FindFirstChild("HumanoidRootPart") then
-				local viewportpoint, onscreen = camera:WorldToScreenPoint(child.HumanoidRootPart.Position)
-				local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
-				local distancefromplayer = (child.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-	
-				if onscreen and distance <= FOV then
-					if (not closest or distance < closest[2]) and distancefromplayer <= maxdist then
-						closest = {child,distance}
+			if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) and child ~= LocalPlayer.Character then
+				local NPCRoot = child:FindFirstChild("HumanoidRootPart")
+				if NPCRoot then
+					local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
+					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
+					local distancefromplayer = (NPCRoot.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+		
+					if onscreen and distance <= FOV then
+						if (not closest or distance < closest[2]) and distancefromplayer <= maxdist then
+							closest = {child,distance}
+						end
 					end
 				end
 			end
@@ -156,18 +162,35 @@ LocalPlayerTab:CreateSlider("JumpPower", 0, 100, 50, false, function(value)
 	configs.JumpPower = value
 end)
 
-Visuals:CreateToggle("ESP", function(value)
-	configs.ESP = value
+Visuals:CreateToggle("Player Chams", function(value)
+	configs.Chams = value
 	for _, child in pairs(workspace:GetChildren()) do
-		if configs.ESP then
-			if Players:GetPlayerFromCharacter(child) and child ~= LocalPlayer.Character then
-				AddESP(child,Color3.new(255,255,255))
-			end
+		if configs.Chams then
+			AddChams(child,Color3.new(255,255,255))
 		elseif child:FindFirstChildOfClass("Highlight") then
 			child:FindFirstChildOfClass("Highlight"):Destroy()
 		end
 	end
 end)
+Visuals:CreateColorPicker("Innocents", Color3.new(143, 255, 112), function(value)
+	configs.InnocentColor = value
+end)
+Visuals:CreateColorPicker("Sheriff", Color3.new(112, 136, 255), function(value)
+	configs.SheriffColor = value
+end)
+Visuals:CreateColorPicker("Murderer", Color3.new(255, 112, 112), function(value)
+	configs.MurdererColor = value
+end)
+Visuals:CreateColorPicker("Hero", Color3.new(255, 231, 112), function(value)
+	configs.HeroColor = value
+end)
+Visuals:CreateToggle("AlwaysOnTop", function(value)
+	if value then
+		configs.HighlightDepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+	else
+		configs.HighlightDepthMode = Enum.HighlightDepthMode.Occluded
+	end
+end
 if Drawing then
 	Visuals:CreateToggle("Show FOV Circle", function(value)
 		Drawing1.Visible = value
@@ -229,7 +252,7 @@ Visuals:CreateButton("Remove Map Lag", function()
 end)
 Visuals:CreateButton("Remove Accessory Lag", function()
 	for _, child in pairs(workspace:GetChildren()) do
-		if Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) then
+		if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) then
 			RemoveDisplays(child)
 		end
 	end
@@ -256,9 +279,9 @@ Others:CreateButton("Unload", function()
 end)
 
 workspace.ChildAdded:Connect(function(child)
-	if scriptactivated and Players:FindFirstChild(child.Name) then
-		if configs.ESP and child ~= LocalPlayer.Character then
-			AddESP(child,Color3.new(255,255,255))
+	if scriptactivated and child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) then
+		if configs.Chams and child ~= LocalPlayer.Character then
+			AddChams(child,Color3.new(255,255,255))
 		end
 		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
 			RemoveDisplays(child)
@@ -323,12 +346,6 @@ StarterGui:SetCore("SendNotification" ,{
 
 local prevtarget
 while true do
-	if prevtarget and prevtarget:FindFirstChild("HumanoidRootPart") then
-		local PrevTargetRoot = prevtarget.HumanoidRootPart
-		PrevTargetRoot.CanCollide = true
-		PrevTargetRoot.Size = Vector3.new(2,2,1)
-		prevtarget = nil
-	end
 	if not scriptactivated then break end
 	
 	local Character = LocalPlayer.Character
@@ -371,4 +388,10 @@ while true do
 		end
 	end
 	task.wait()
+	if prevtarget and prevtarget:FindFirstChild("HumanoidRootPart") then
+		local PrevTargetRoot = prevtarget.HumanoidRootPart
+		PrevTargetRoot.CanCollide = true
+		PrevTargetRoot.Size = Vector3.new(2,2,1)
+		prevtarget = nil
+	end
 end
