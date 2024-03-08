@@ -73,7 +73,7 @@ function GetRole(player)
 end
 
 function AddChams(character,color)
-	if character.ClassName == "Model" and Players:GetPlayerFromCharacter(character) and character:FindFirstChild("HumanoidRootPart") and character ~= LocalPlayer.Character then
+	if character.ClassName == "Model" and Players:GetPlayerFromCharacter(character) and character ~= LocalPlayer.Character then
 		local Highlight = Instance.new("Highlight", character)
 		Highlight.Name = "MM2CHEATSCHAMS"
 		Highlight.FillColor = color
