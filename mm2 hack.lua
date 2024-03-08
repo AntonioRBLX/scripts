@@ -195,7 +195,7 @@ Visuals:CreateToggle("Player Chams", function(value)
 	configs.Chams = value
 	for _, player in pairs(Players:GetChildren()) do
 		local character = workspace:FindFirstChild(player.Name)
-		if character then
+		if character and character ~= LocalPlayer.Character then
 			local Highlight = character:FindFirstChildOfClass("Highlight")
 			if configs.Chams and not Highlight then
 				AddChams(character,Color3.fromRGB(255,255,255))
@@ -291,10 +291,8 @@ end)
 Visuals:CreateButton("Remove Accessory Lag", function()
 	for _, player in pairs(Players:GetChildren()) do
 		local character = workspace:FindFirstChild(player.Name)
-		if character then
-			if character.ClassName == "Model" and (configs.IncludeLocalPlayer or character ~= LocalPlayer.Character) then
-				RemoveDisplays(character)
-			end
+		if character and (configs.IncludeLocalPlayer or character ~= LocalPlayer.Character) then
+			RemoveDisplays(character)
 		end
 	end
 end)
