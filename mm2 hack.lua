@@ -7,7 +7,6 @@ local Players = game:GetService("Players")
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
--- check for supported commands
 if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod then
 	StarterGui:SetCore("SendNotification" ,{
 		Title = "Error";
@@ -21,6 +20,7 @@ local mouse = LocalPlayer:GetMouse()
 
 local scriptactivated = true
 local antilagalreadyexecuted = false
+
 local configs = {
 	GunAimbot = false;
 	KnifeAimbot = false;
@@ -37,7 +37,11 @@ local configs = {
 	JumpPower = 50;
 
 	Chams = false;
-	HighlightDepthMode = Enum.HighlightDepthMode.Occluded
+	HighlightDepthMode = Enum.HighlightDepthMode.Occluded;
+	InnocentColor = Color3.fromRGB(143, 255, 112);
+	SheriffColor = Color3.fromRGB(112, 136, 255);
+	MurdererColor = Color3.fromRGB(255, 112, 112);
+	HeroColor = Color3.fromRGB(143, 255, 112);
 }
 
 local Drawing1
@@ -50,7 +54,7 @@ if Drawing then
 	Drawing1.Visible = false
 	Drawing1.Radius = configs.FOV
 	Drawing1.Filled = false
-	
+
 	Drawing2 = Drawing.new("Circle")
 	Drawing2.Thickness = 4
 	Drawing2.Visible = false
@@ -63,15 +67,34 @@ else
 		Text = "Drawing is not supported on this executor, ShowFOVCircle will not work.";
 	})
 end
+
+function GetRole(player)
+
+end
+
 function AddChams(character,color)
 	if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) and child:FindFirstChild("HumanoidRootPart") and child ~= LocalPlayer.Character then
 		local Highlight = Instance.new("Highlight", character)
+		Highlight.Name = "MM2CHEATSCHAMS"
 		Highlight.FillColor = color
 		Highlight.FillTransparency = 0.25
 		Highlight.OutlineColor = color
 		Highlight.DepthMode = configs.HighlightDepthMode
 	end
 end
+
+function UpdateChams()
+	for _, i in pairs(workspace:GetChildren()) do
+		local highlight = child:FindFirstChildOfClass("Highlight") 
+		if highlight and highlight.Name == "MM2CHEATSCHAMS" then
+			Highlight.FillColor = Color3.fromRGB(255,255,255)
+			Highlight.FillTransparency = 0.25
+			Highlight.OutlineColor = color
+			Highlight.DepthMode = configs.HighlightDepthMode
+		end
+	end
+end
+
 function RemoveDisplays(character)
 	local KnifeDisplay = character:FindFirstChild("KnifeDisplay")
 	local GunDisplay = character:FindFirstChild("GunDisplay")
@@ -89,12 +112,13 @@ function RemoveDisplays(character)
 	if not GunDisplay then return end
 	GunDisplay:Destroy()
 end
+
 function GetClosestPlayer(FOV,maxdist)
 	if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
 
 	local camera = workspace.CurrentCamera
 	local closest
-	
+
 	if camera then
 		for _, child in pairs(workspace:GetChildren()) do
 			if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) and child ~= LocalPlayer.Character then
@@ -103,7 +127,7 @@ function GetClosestPlayer(FOV,maxdist)
 					local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
 					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
 					local distancefromplayer = (NPCRoot.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-		
+
 					if onscreen and distance <= FOV then
 						if (not closest or distance < closest[2]) and distancefromplayer <= maxdist then
 							closest = {child,distance}
@@ -118,6 +142,7 @@ function GetClosestPlayer(FOV,maxdist)
 	end
 	return nil
 end
+
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
@@ -155,6 +180,7 @@ end)
 Main:CreateToggle("Face Target", function(value)
 	configs.FaceTarget = value
 end)
+
 LocalPlayerTab:CreateSlider("WalkSpeed", 0, 100, 16, false, function(value)
 	configs.WalkSpeed = value
 end)
@@ -166,23 +192,27 @@ Visuals:CreateToggle("Player Chams", function(value)
 	configs.Chams = value
 	for _, child in pairs(workspace:GetChildren()) do
 		if configs.Chams then
-			AddChams(child,Color3.new(255,255,255))
+			AddChams(child,Color3.fromRGB(255,255,255))
 		elseif child:FindFirstChildOfClass("Highlight") then
 			child:FindFirstChildOfClass("Highlight"):Destroy()
 		end
 	end
 end)
-Visuals:CreateColorPicker("Innocents", Color3.new(143, 255, 112), function(value)
+Visuals:CreateColorPicker("Innocents", InnocentColor, function(value)
 	configs.InnocentColor = value
+	UpdateChams()
 end)
-Visuals:CreateColorPicker("Sheriff", Color3.new(112, 136, 255), function(value)
+Visuals:CreateColorPicker("Sheriff", SheriffColor, function(value)
 	configs.SheriffColor = value
+	UpdateChams()
 end)
-Visuals:CreateColorPicker("Murderer", Color3.new(255, 112, 112), function(value)
+Visuals:CreateColorPicker("Murderer", MurdererColor, function(value)
 	configs.MurdererColor = value
+	UpdateChams()
 end)
-Visuals:CreateColorPicker("Hero", Color3.new(255, 231, 112), function(value)
+Visuals:CreateColorPicker("Hero", HeroColor, function(value)
 	configs.HeroColor = value
+	UpdateChams()
 end)
 Visuals:CreateToggle("AlwaysOnTop", function(value)
 	if value then
@@ -190,7 +220,7 @@ Visuals:CreateToggle("AlwaysOnTop", function(value)
 	else
 		configs.HighlightDepthMode = Enum.HighlightDepthMode.Occluded
 	end
-end
+end)
 if Drawing then
 	Visuals:CreateToggle("Show FOV Circle", function(value)
 		Drawing1.Visible = value
@@ -200,18 +230,18 @@ end
 Visuals:CreateButton("Remove Map Lag", function()
 	if not antilagalreadyexecuted then
 		antilagalreadyexecuted = true
-			
+
 		local Terrain = workspace.Terrain
 		Terrain.WaterWaveSize = 0
 		Terrain.WaterWaveSpeed = 0
 		Terrain.WaterReflectance = 0
 		Terrain.WaterTransparency = 0
-		
+
 		local Lighting = game.Lighting
 		Lighting.GlobalShadows = false
 		Lighting.FogEnd = 9e9
 		settings().Rendering.QualityLevel = 1
-		
+
 		function RemoveLagFromObject(object)
 			if not object:FindFirstAncestorOfClass("Model") or not object:FindFirstAncestorOfClass("Model"):FindFirstChildOfClass("Humanoid") then
 				if object:IsA("MeshPart") then
@@ -281,7 +311,7 @@ end)
 workspace.ChildAdded:Connect(function(child)
 	if scriptactivated and child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) then
 		if configs.Chams and child ~= LocalPlayer.Character then
-			AddChams(child,Color3.new(255,255,255))
+			AddChams(child,Color3.fromRGB(255,255,255))
 		end
 		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
 			RemoveDisplays(child)
@@ -347,7 +377,7 @@ StarterGui:SetCore("SendNotification" ,{
 local prevtarget
 while true do
 	if not scriptactivated then break end
-	
+
 	local Character = LocalPlayer.Character
 	if Character then
 		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
@@ -375,7 +405,7 @@ while true do
 				end
 				if closest then
 					prevtarget = closest[1]
-					
+
 					local TargetRoot = prevtarget.HumanoidRootPart
 					if configs.FaceTarget then
 						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,TargetRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
