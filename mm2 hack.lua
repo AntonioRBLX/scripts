@@ -196,20 +196,20 @@ Visuals:CreateToggle("Player Chams", function(value)
 		end
 	end
 end)
-Visuals:CreateColorPicker("Innocents", configs.InnocentColor, function(value)
-	configs.InnocentColor = value
-	UpdateChams()
-end)
-Visuals:CreateColorPicker("Sheriff", configs.SheriffColor, function(value)
-	configs.SheriffColor = value
-	UpdateChams()
-end)
 Visuals:CreateColorPicker("Murderer", configs.MurdererColor, function(value)
 	configs.MurdererColor = value
 	UpdateChams()
 end)
 Visuals:CreateColorPicker("Hero", configs.HeroColor, function(value)
 	configs.HeroColor = value
+	UpdateChams()
+end)
+Visuals:CreateColorPicker("Innocents", configs.InnocentColor, function(value)
+	configs.InnocentColor = value
+	UpdateChams()
+end)
+Visuals:CreateColorPicker("Sheriff", configs.SheriffColor, function(value)
+	configs.SheriffColor = value
 	UpdateChams()
 end)
 Visuals:CreateToggle("AlwaysOnTop", function(value)
