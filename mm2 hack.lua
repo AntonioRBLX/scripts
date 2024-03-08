@@ -88,8 +88,6 @@ function UpdateChams()
 		local highlight = child:FindFirstChildOfClass("Highlight") 
 		if highlight and highlight.Name == "MM2CHEATSCHAMS" then
 			Highlight.FillColor = Color3.fromRGB(255,255,255)
-			Highlight.FillTransparency = 0.25
-			Highlight.OutlineColor = color
 			Highlight.DepthMode = configs.HighlightDepthMode
 		end
 	end
