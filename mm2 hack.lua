@@ -75,14 +75,14 @@ function GetRole(player)
 end
 
 function AddChams(object,color,allowparts)
-	print(Players:FindFirstChild(character.Name))
+	print(Players:FindFirstChild(object.Name))
 	local Highlight = Instance.new("Highlight")
 	Highlight.Name = "MM2CHEATSCHAMS"
 	Highlight.FillColor = color
 	Highlight.FillTransparency = 0.25
 	Highlight.OutlineColor = color
 	Highlight.DepthMode = configs.HighlightDepthMode
-	
+
 	if not allowparts and object.ClassName == "Model" and Players:FindFirstChild(object.Name) and object ~= LocalPlayer.object then
 		Highlight.Parent = object
 	elseif allowparts then
@@ -339,7 +339,7 @@ workspace.ChildAdded:Connect(function(child)
 			if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
 				RemoveDisplays(child)
 			end
-		elseif configs.ShowGunDrop child.ClassName == "Part" and child.Name == "GunDrop" then
+		elseif configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
 			AddChams(child,configs.GunDropColor)
 		end
 	end)()
