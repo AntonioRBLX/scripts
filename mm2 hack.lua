@@ -73,7 +73,7 @@ function GetRole(player)
 end
 
 function AddChams(character,color)
-	if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) and child:FindFirstChild("HumanoidRootPart") and child ~= LocalPlayer.Character then
+	if character.ClassName == "Model" and Players:GetPlayerFromCharacter(character) and character:FindFirstChild("HumanoidRootPart") and character ~= LocalPlayer.Character then
 		local Highlight = Instance.new("Highlight", character)
 		Highlight.Name = "MM2CHEATSCHAMS"
 		Highlight.FillColor = color
@@ -84,9 +84,9 @@ function AddChams(character,color)
 end
 
 function UpdateChams()
-	for _, i in pairs(workspace:GetChildren()) do
-		local highlight = child:FindFirstChildOfClass("Highlight") 
-		if highlight and highlight.Name == "MM2CHEATSCHAMS" then
+	for _, child in pairs(workspace:GetChildren()) do
+		local Highlight = child:FindFirstChildOfClass("Highlight") 
+		if Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
 			Highlight.FillColor = Color3.fromRGB(255,255,255)
 			Highlight.DepthMode = configs.HighlightDepthMode
 		end
@@ -196,19 +196,19 @@ Visuals:CreateToggle("Player Chams", function(value)
 		end
 	end
 end)
-Visuals:CreateColorPicker("Innocents", InnocentColor, function(value)
+Visuals:CreateColorPicker("Innocents", configs.InnocentColor, function(value)
 	configs.InnocentColor = value
 	UpdateChams()
 end)
-Visuals:CreateColorPicker("Sheriff", SheriffColor, function(value)
+Visuals:CreateColorPicker("Sheriff", configs.SheriffColor, function(value)
 	configs.SheriffColor = value
 	UpdateChams()
 end)
-Visuals:CreateColorPicker("Murderer", MurdererColor, function(value)
+Visuals:CreateColorPicker("Murderer", configs.MurdererColor, function(value)
 	configs.MurdererColor = value
 	UpdateChams()
 end)
-Visuals:CreateColorPicker("Hero", HeroColor, function(value)
+Visuals:CreateColorPicker("Hero", configs.HeroColor, function(value)
 	configs.HeroColor = value
 	UpdateChams()
 end)
@@ -240,7 +240,7 @@ Visuals:CreateButton("Remove Map Lag", function()
 		Lighting.FogEnd = 9e9
 		settings().Rendering.QualityLevel = 1
 
-		function RemoveLagFromObject(object)
+		local function RemoveLagFromObject(object)
 			if not object:FindFirstAncestorOfClass("Model") or not object:FindFirstAncestorOfClass("Model"):FindFirstChildOfClass("Humanoid") then
 				if object:IsA("MeshPart") then
 					object.Material = Enum.Material.SmoothPlastic
