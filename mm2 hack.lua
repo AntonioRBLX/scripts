@@ -218,6 +218,7 @@ Visuals:CreateToggle("AlwaysOnTop", function(value)
 	else
 		configs.HighlightDepthMode = Enum.HighlightDepthMode.Occluded
 	end
+	UpdateChams()
 end)
 if Drawing then
 	Visuals:CreateToggle("Show FOV Circle", function(value)
