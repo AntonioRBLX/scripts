@@ -84,11 +84,14 @@ function AddChams(character,color)
 end
 
 function UpdateChams()
-	for _, child in pairs(workspace:GetChildren()) do
-		local Highlight = child:FindFirstChildOfClass("Highlight") 
-		if Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
-			Highlight.FillColor = Color3.fromRGB(255,255,255)
-			Highlight.DepthMode = configs.HighlightDepthMode
+	for _, player in pairs(Players:GetChildren()) do
+		local character = workspace:FindFirstChild(player.Name)
+		if character then
+			local Highlight = character:FindFirstChildOfClass("Highlight") 
+			if Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
+				Highlight.FillColor = Color3.fromRGB(255,255,255)
+				Highlight.DepthMode = configs.HighlightDepthMode
+			end
 		end
 	end
 end
@@ -118,9 +121,10 @@ function GetClosestPlayer(FOV,maxdist)
 	local closest
 
 	if camera then
-		for _, child in pairs(workspace:GetChildren()) do
-			if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) and child ~= LocalPlayer.Character then
-				local NPCRoot = child:FindFirstChild("HumanoidRootPart")
+		for _, player in pairs(Players:GetChildren()) do
+			local character = workspace:FindFirstChild(player.Name)
+			if character and character ~= LocalPlayer.Character then
+				local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 				if NPCRoot then
 					local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
 					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
@@ -128,7 +132,7 @@ function GetClosestPlayer(FOV,maxdist)
 
 					if onscreen and distance <= FOV then
 						if (not closest or distance < closest[2]) and distancefromplayer <= maxdist then
-							closest = {child,distance}
+							closest = {character,distance}
 						end
 					end
 				end
@@ -188,12 +192,15 @@ end)
 
 Visuals:CreateToggle("Player Chams", function(value)
 	configs.Chams = value
-	for _, child in pairs(workspace:GetChildren()) do
-		local Highlight = child:FindFirstChildOfClass("Highlight")
-		if configs.Chams and not Highlight then
-			AddChams(child,Color3.fromRGB(255,255,255))
-		elseif Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
-			Highlight:Destroy()
+	for _, player in pairs(Players:GetChildren()) do
+		local character = workspace:FindFirstChild(player.Name)
+		if character then
+			local Highlight = character:FindFirstChildOfClass("Highlight")
+			if configs.Chams and not Highlight then
+				AddChams(character,Color3.fromRGB(255,255,255))
+			elseif Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
+				Highlight:Destroy()
+			end
 		end
 	end
 end)
@@ -281,9 +288,12 @@ Visuals:CreateButton("Remove Map Lag", function()
 	end
 end)
 Visuals:CreateButton("Remove Accessory Lag", function()
-	for _, child in pairs(workspace:GetChildren()) do
-		if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) then
-			RemoveDisplays(child)
+	for _, player in pairs(Players:GetChildren()) do
+		local character = workspace:FindFirstChild(player.Name)
+		if character then
+			if character.ClassName == "Model" and (configs.IncludeLocalPlayer or character ~= LocalPlayer.Character) then
+				RemoveDisplays(character)
+			end
 		end
 	end
 end)
@@ -392,14 +402,15 @@ while true do
 			local Knife = Character:FindFirstChild("Knife")
 			if HumanoidRootPart and Knife and Knife.ClassName == "Tool" then
 				local closest
-				for _, child in pairs(workspace:GetChildren()) do
-					if child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) and child ~= Character then
-						local NPCRoot = child:FindFirstChild("HumanoidRootPart")
+				for _, player in pairs(Players:GetChildren()) do
+					local character = workspace:FindFirstChild(player.Name)
+					if character and character ~= Character then
+						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 						if NPCRoot then
 							local distance = (NPCRoot.Position - HumanoidRootPart.Position).Magnitude
 							if distance < configs.KillAuraRange then
 								if not closest or distance < closest[2] then
-									closest = {child,distance}
+									closest = {character,distance}
 								end
 							end
 						end
