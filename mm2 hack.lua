@@ -41,7 +41,7 @@ local configs = {
 	InnocentColor = Color3.fromRGB(143, 255, 112);
 	SheriffColor = Color3.fromRGB(112, 136, 255);
 	MurdererColor = Color3.fromRGB(255, 112, 112);
-	HeroColor = Color3.fromRGB(143, 255, 112);
+	HeroColor = Color3.fromRGB(255, 231, 112);
 }
 
 local Drawing1
