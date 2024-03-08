@@ -73,7 +73,7 @@ function GetRole(player)
 end
 
 function AddChams(character,color)
-	if character.ClassName == "Model" and Players:GetPlayerFromCharacter(character) and character ~= LocalPlayer.Character then
+	if character.ClassName == "Model" and Players:FindFirstChild(character.Name) and character ~= LocalPlayer.Character then
 		local Highlight = Instance.new("Highlight", character)
 		Highlight.Name = "MM2CHEATSCHAMS"
 		Highlight.FillColor = color
@@ -309,7 +309,7 @@ end)
 
 workspace.ChildAdded:Connect(function(child)
 	coroutine.wrap(function()
-		if scriptactivated and child.ClassName == "Model" and Players:GetPlayerFromCharacter(child) then
+		if scriptactivated and child.ClassName == "Model" and Players:FindFirstChild(child.Name) then
 			if configs.Chams and child ~= LocalPlayer.Character then
 				AddChams(child,Color3.fromRGB(255,255,255))
 			end
