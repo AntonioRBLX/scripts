@@ -199,7 +199,7 @@ Visuals:CreateButton("Remove Map Lag", function()
 				elseif object:IsA("Decal") then
 					object:Destroy()
 				elseif object.ClassName == "SpecialMesh" and object.MeshType == Enum.MeshType.FileMesh then
-					object.TextureID = ""
+					object.TextureId = ""
 				elseif object:IsA("ParticleEmitter") or object:IsA("Trail") then
 					object:Destroy()
 				elseif object:IsA("BasePart") then
