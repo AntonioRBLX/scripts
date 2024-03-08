@@ -3,7 +3,7 @@ _G.mm2hacksalreadyloadedbyCITY512 = true
 
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
-local Players = game:GetService("Players")
+local Players = game.Players
 
 if not game:IsLoaded() then game.Loaded:Wait() end
 
