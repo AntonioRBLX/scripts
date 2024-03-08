@@ -189,10 +189,11 @@ end)
 Visuals:CreateToggle("Player Chams", function(value)
 	configs.Chams = value
 	for _, child in pairs(workspace:GetChildren()) do
-		if configs.Chams then
+		local Highlight = child:FindFirstChildOfClass("Highlight")
+		if configs.Chams and not Highlight then
 			AddChams(child,Color3.fromRGB(255,255,255))
-		elseif child:FindFirstChildOfClass("Highlight") then
-			child:FindFirstChildOfClass("Highlight"):Destroy()
+		elseif Highlight and Highlight.Name = "MM2CHEATSCHAMS" then
+			Highlight:Destroy()
 		end
 	end
 end)
