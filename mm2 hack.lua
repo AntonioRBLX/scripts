@@ -192,7 +192,7 @@ Visuals:CreateToggle("Player Chams", function(value)
 		local Highlight = child:FindFirstChildOfClass("Highlight")
 		if configs.Chams and not Highlight then
 			AddChams(child,Color3.fromRGB(255,255,255))
-		elseif Highlight and Highlight.Name = "MM2CHEATSCHAMS" then
+		elseif Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
 			Highlight:Destroy()
 		end
 	end
