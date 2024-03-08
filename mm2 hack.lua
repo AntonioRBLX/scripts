@@ -37,11 +37,13 @@ local configs = {
 	JumpPower = 50;
 
 	Chams = false;
+	ShowGunDrop = false;
 	HighlightDepthMode = Enum.HighlightDepthMode.Occluded;
-	InnocentColor = Color3.fromRGB(143, 255, 112);
-	SheriffColor = Color3.fromRGB(112, 136, 255);
 	MurdererColor = Color3.fromRGB(255, 112, 112);
 	HeroColor = Color3.fromRGB(255, 231, 112);
+	InnocentColor = Color3.fromRGB(143, 255, 112);
+	SheriffColor = Color3.fromRGB(112, 136, 255);
+	GunDropColor = Color3.fromRGB(141, 112, 255);
 }
 
 local Drawing1
@@ -72,15 +74,19 @@ function GetRole(player)
 
 end
 
-function AddChams(character,color)
+function AddChams(object,color,allowparts)
 	print(Players:FindFirstChild(character.Name))
-	if character.ClassName == "Model" and Players:FindFirstChild(character.Name) and character ~= LocalPlayer.Character then
-		local Highlight = Instance.new("Highlight", character)
-		Highlight.Name = "MM2CHEATSCHAMS"
-		Highlight.FillColor = color
-		Highlight.FillTransparency = 0.25
-		Highlight.OutlineColor = color
-		Highlight.DepthMode = configs.HighlightDepthMode
+	local Highlight = Instance.new("Highlight")
+	Highlight.Name = "MM2CHEATSCHAMS"
+	Highlight.FillColor = color
+	Highlight.FillTransparency = 0.25
+	Highlight.OutlineColor = color
+	Highlight.DepthMode = configs.HighlightDepthMode
+	
+	if not allowparts and object.ClassName == "Model" and Players:FindFirstChild(object.Name) and object ~= LocalPlayer.object then
+		Highlight.Parent = object
+	elseif allowparts then
+		Highlight.Parent = object
 	end
 end
 
@@ -198,12 +204,15 @@ Visuals:CreateToggle("Player Chams", function(value)
 		if character and character ~= LocalPlayer.Character then
 			local Highlight = character:FindFirstChildOfClass("Highlight")
 			if configs.Chams and not Highlight then
-				AddChams(character,Color3.fromRGB(255,255,255))
+				AddChams(character,Color3.fromRGB(255,255,255),false)
 			elseif Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
 				Highlight:Destroy()
 			end
 		end
 	end
+end)
+Visuals:CreateToggle("Show Gun Drop", function(value)
+	configs.ShowGunDrop = true
 end)
 Visuals:CreateColorPicker("Murderer", configs.MurdererColor, function(value)
 	configs.MurdererColor = value
@@ -219,6 +228,10 @@ Visuals:CreateColorPicker("Innocents", configs.InnocentColor, function(value)
 end)
 Visuals:CreateColorPicker("Sheriff", configs.SheriffColor, function(value)
 	configs.SheriffColor = value
+	UpdateChams()
+end)
+Visuals:CreateColorPicker("Gun Drop Color", configs.GunDropColor, function(value)
+	configs.MurdererColor = value
 	UpdateChams()
 end)
 Visuals:CreateToggle("AlwaysOnTop", function(value)
@@ -321,11 +334,13 @@ workspace.ChildAdded:Connect(function(child)
 	coroutine.wrap(function()
 		if scriptactivated and child.ClassName == "Model" and Players:FindFirstChild(child.Name) then
 			if configs.Chams and child ~= LocalPlayer.Character then
-				AddChams(child,Color3.fromRGB(255,255,255))
+				AddChams(child,Color3.fromRGB(255,255,255),false)
 			end
 			if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
 				RemoveDisplays(child)
 			end
+		elseif configs.ShowGunDrop child.ClassName == "Part" and child.Name == "GunDrop" then
+			AddChams(child,configs.GunDropColor)
 		end
 	end)()
 end)
