@@ -83,7 +83,7 @@ function AddChams(object,color,allowparts)
 	Highlight.OutlineColor = color
 	Highlight.DepthMode = configs.HighlightDepthMode
 
-	if not allowparts and object.ClassName == "Model" and Players:FindFirstChild(object.Name) and object ~= LocalPlayer.object then
+	if not allowparts and object.ClassName == "Model" and Players:FindFirstChild(object.Name) and object ~= LocalPlayer.Character then
 		Highlight.Parent = object
 	elseif allowparts then
 		Highlight.Parent = object
