@@ -77,6 +77,7 @@ end
 function AddChams(object,color,allowparts)
 	print(Players:FindFirstChild(object.Name))
 	local Highlight = Instance.new("Highlight")
+	Highlight.Adornee = object
 	Highlight.Name = "MM2CHEATSCHAMS"
 	Highlight.FillColor = color
 	Highlight.FillTransparency = 0.25
