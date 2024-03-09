@@ -75,7 +75,6 @@ function GetRole(player)
 end
 
 function AddChams(object,color,allowparts)
-	print(Players:FindFirstChild(object.Name))
 	local Highlight = Instance.new("Highlight")
 	Highlight.Adornee = object
 	Highlight.Name = "MM2CHEATSCHAMS"
@@ -185,7 +184,6 @@ Main:CreateToggle("Kill Aura", function(value)
 end)
 Main:CreateSlider("Kill Aura Range", 0, 100, 15, true, function(value)
 	configs.KillAuraRange = value
-	print(configs.KillAuraRange)
 end)
 Main:CreateToggle("Face Target", function(value)
 	configs.FaceTarget = value
