@@ -443,7 +443,7 @@ while true do
 					end
 					TargetRoot.CanCollide = false
 					TargetRoot.Size = Vector3.new(5,5,5)
-					targetRoot.Position = HumanoidRootPart.Position
+					TargetRoot.Position = HumanoidRootPart.Position
 					Knife:Activate()
 				end
 			end
