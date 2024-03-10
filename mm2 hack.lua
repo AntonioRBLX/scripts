@@ -403,7 +403,6 @@ local prevtarget
 while true do
 	if prevtarget and prevtarget:FindFirstChild("HumanoidRootPart") then
 		local PrevTargetRoot = prevtarget.HumanoidRootPart
-		PrevTargetRoot.CanCollide = true
 		PrevTargetRoot.Size = Vector3.new(2,2,1)
 		prevtarget = nil
 	end
