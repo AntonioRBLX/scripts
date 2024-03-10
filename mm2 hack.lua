@@ -366,7 +366,7 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
 				attachment.Position = Vector3.new(1.6, 1.2, -3)
 
-				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,50,0,nil,true,configs.Prediction,nil,true)
+				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,75,0,nil,true,configs.Prediction,nil,true)
 				attachment:Destroy()
 
 				if aimpos then
@@ -442,7 +442,8 @@ while true do
 						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,TargetRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
 					end
 					TargetRoot.CanCollide = false
-					TargetRoot.Size = Vector3.new(configs.KillAuraRange * 2,configs.KillAuraRange * 2,configs.KIllAuraRange * 2)
+					TargetRoot.Size = Vector3.new(5,5,5)
+					targetRoot.Position = HumanoidRootPart.Position
 					Knife:Activate()
 				end
 			end
