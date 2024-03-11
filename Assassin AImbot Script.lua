@@ -47,13 +47,6 @@ Drawings[2].Visible = true
 Drawings[2].Radius = 500
 Drawings[2].ZIndex = -1
 
-mx = game.Debris
-mx2 = game.Debris.MaxItems
-
-if (mx.MaxItems > 40000) then
-	mx.MaxItems = mx2*.75
-end
-
 UserInputService.InputChanged:Connect(function(input)
 	if input.UserInputType == Enum.UserInputType.MouseMovement then
 		Drawings[1].Position = UserInputService:GetMouseLocation()
