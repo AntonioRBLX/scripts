@@ -17,6 +17,9 @@ local LegOff = Vector3.new(0, 3, 0)
 local aa = 0
 
 --// Visuals
+local enabled = true
+local ESP = true
+local method = 1
 local vpgui = Instance.new("ScreenGui")
 vpgui.Parent = CoreGui
 local vpframe = Instance.new("ViewportFrame")
@@ -76,7 +79,7 @@ RunService.PostSimulation:Connect(function()
 	Client.Target = nil
 	Client.TargetDistance = Drawings[1].Radius
 	local players = {}
-	
+
 	for _, player in next, Players:GetChildren() do
 
 		local character = workspace:FindFirstChild(player.Name)
@@ -150,7 +153,7 @@ RunService.PostSimulation:Connect(function()
 end)
 
 function addesp(plr)
-	function esp(plr2)
+	local function esp(plr2)
 		local box = Drawing.new('Square')
 		box.ZIndex = -2
 		box.Visible = false
@@ -158,7 +161,7 @@ function addesp(plr)
 		box.Thickness = 1
 		box.Transparency = 1
 		box.Filled = false
-		
+
 		local boxoutline = Drawing.new('Square')
 		boxoutline.ZIndex = -3
 		boxoutline.Visible = false
@@ -166,12 +169,12 @@ function addesp(plr)
 		boxoutline.Thickness = 3
 		boxoutline.Transparency = 1
 		boxoutline.Filled = false
-		
+
 		aa = aa + 2
-		
+
 		local func_id = aa
 		local func_id2 = aa - 1
-		
+
 		Connections[func_id2] = workspace.ChildRemoved:Connect(function(child)
 			if child == plr2 then
 				boxoutline.Visible = false
@@ -185,18 +188,18 @@ function addesp(plr)
 				if workspace:FindFirstChild(plr2.Name) then
 					if plr2 and plr2:IsA("Model") and plr2:FindFirstChildWhichIsA("Humanoid") and plr2:FindFirstChild("HumanoidRootPart") and plr2:FindFirstChild("Head") and plr2.Humanoid.Health > 0 and plr2.Name ~= LocalPlayer.Name then
 						local Vector, onScreen = CurrentCamera:worldToViewportPoint(plr2.HumanoidRootPart.Position)
-						
+
 						local RootPart = plr2.HumanoidRootPart
 						local Head = plr2.Head
 						local RootPosition, RootVisible = worldToViewportPoint(CurrentCamera, RootPart.Position)
 						local HeadPosition = worldToViewportPoint(CurrentCamera, Head.Position + HeadOff)
 						local LegPosition = worldToViewportPoint(CurrentCamera, RootPart.Position - LegOff)
-						
+
 						if onScreen then
 							boxoutline.Size = Vector2.new(1000 / RootPosition.Z, HeadPosition.Y - LegPosition.Y)
 							boxoutline.Position = Vector2.new(RootPosition.X - boxoutline.Size.X / 2, RootPosition.Y - boxoutline.Size.Y / 2)
 							boxoutline.Visible = true
-							
+
 							box.Size = Vector2.new(1000 / RootPosition.Z, HeadPosition.Y - LegPosition.Y)
 							box.Position = Vector2.new(RootPosition.X - box.Size.X / 2, RootPosition.Y - box.Size.Y / 2)
 							box.Visible = true
@@ -244,13 +247,13 @@ end)
 --// Hooks
 --local namecall
 --namecall = hookmetamethod(game, '__namecall', function(self,...)
-	--local args = {...}
-	--local method = getnamecallmethod()
-	--if enabled and not checkcaller() and tostring(self) == "ThrowKnife" and method == "FireServer" then
-		--args[1] = getleadshot(LocalPlayer.Character.Knife.Handle,Client.Target.HumanoidRootPart)
-		--return namecall(self,unpack(args))
-	--end
-	--return namecall(self,...)
+--local args = {...}
+--local method = getnamecallmethod()
+--if enabled and not checkcaller() and tostring(self) == "ThrowKnife" and method == "FireServer" then
+--args[1] = getleadshot(LocalPlayer.Character.Knife.Handle,Client.Target.HumanoidRootPart)
+--return namecall(self,unpack(args))
+--end
+--return namecall(self,...)
 --end)
 local index ; index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
 	if enabled then
