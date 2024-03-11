@@ -39,11 +39,13 @@ local Drawings = {
 Drawings[1].Color = Color3.new(1, 0, 1)
 Drawings[1].Thickness = 2
 Drawings[1].Visible = true
+Drawings[1].Filled = false
 Drawings[1].Radius = 500
 
 Drawings[2].Color = Color3.new(0, 0, 0)
 Drawings[2].Thickness = 4
 Drawings[2].Visible = true
+Drawings[2].Filled = false
 Drawings[2].Radius = 500
 Drawings[2].ZIndex = -1
 
