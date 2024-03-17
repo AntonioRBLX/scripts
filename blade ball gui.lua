@@ -48,7 +48,7 @@ while true do
 		local hrp = char:FindFirstChild("HumanoidRootPart")
 		if hrp then
 			for _, child in pairs(ballsfolder:GetChildren()) do
-				if closestball:IsA("Part") and child:GetAttribute("realBall") then
+				if closestball:IsA("Part") and child:GetAttribute("realBall") and closestball:FindFirstChildOfClass("Highlight") then
 					table.insert(balls,child)
 					local dist = (child.Position - hrp.Position).Magnitude
 					if not closestball or dist < (hrp.Position - closestball.Position).Magnitude then
@@ -57,7 +57,7 @@ while true do
 				end
 			end
 			if closestball then
-				if configs.AutoParry and closestball.BrickColor == BrickColor.new("Really red") then
+				if configs.AutoParry and closestball.Highlight then
 					local parrysize = closestball.Velocity.Magnitude * stats().PerformanceStats.Ping:GetValue() / 1000
 					
 					if (hrp.Position - closestball.Position).Magnitude >= parrysize then
