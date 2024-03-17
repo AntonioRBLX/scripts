@@ -73,24 +73,30 @@ while true do
 							local hotbar = playergui:FindFirstChild("Hotbar")
 							
 							if hotbar then
-								local Block = hotbar:FindFirstChild("Block")
-								
 								if configs.RagingAndRaptures then
 									local Ability = hotbar:FindFirstChild("Ability")
 									local Abilities = char:FindFirstChild("Abilities")
 									
-									if Ability and Abilities and (Abilities["Raging Deflection"].Enabled or Abilities["Rapture"].Enabled) then
-										local AbilityUIGradient = Ability:FindFirstChildOfClass("UIGradient")
+									if Ability and Abilities then
+										local RagingDeflection = Abilities:FindFirstChild("Raging Deflection")
+										local Raptures = Abilities:FindFirstChild("Raptures")
 										
-										if AbilityUIGradient and AbilityUIGradient.Offset.Y <= 0.5 then
-											abilitybuttonpress:Fire()
+										if RagingDeflection and RagingDeflection.Enabled or Raptures and Raptures.Enabled then
+											local AbilityUIGradient = Ability:FindFirstChildOfClass("UIGradient")
+											
+											if AbilityUIGradient and AbilityUIGradient.Offset.Y <= 0.5 then
+												abilitybuttonpress:Fire()
+											end
 										end
 									end
-								elseif Block then
-									local BlockUIGradient = Block:FindFirstChildOfClass("UIGradient")
-									
-									if BlockUIGradient and BlockUIGradient.Offset.Y <= 0.5 then
-										parrybuttonpress:Fire()
+								else
+									local Block = hotbar:FindFirstChild("Block")
+									if Block then
+										local BlockUIGradient = Block:FindFirstChildOfClass("UIGradient")
+										
+										if BlockUIGradient and BlockUIGradient.Offset.Y <= 0.5 then
+											parrybuttonpress:Fire()
+										end
 									end
 								end
 							end
