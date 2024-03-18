@@ -152,103 +152,226 @@ function GetClosestPlayer(FOV,maxdist)
 	return nil
 end
 
-local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
+local Library = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
-local PhantomForcesWindow = Library:NewWindow("Combat")
+local Window = Library:CreateWindow({
+   Name = "MM2 Cheats";
+   LoadingTitle = "MM2 Cheats Loading";
+   LoadingSubtitle = "by CITY512";
+   ConfigurationSaving = {
+      Enabled = true;
+      FolderName = nil; -- Create a custom folder for your hub/game
+      FileName = "MM2 Cheats"
+   };
+   Discord = {
+      Enabled = false;
+      Invite = "noinvitelink"; -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+      RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+   };
+   KeySystem = false, -- Set this to true to use our key system
+   KeySettings = {
+      Title = "Untitled";
+      Subtitle = "Key System";
+      Note = "No method of obtaining the key is provided";
+      FileName = "Key"; -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+      SaveKey = true; -- The user's key will be saved, but if you change the key, they will be unable to use your script
+      GrabKeyFromSite = false; -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+      Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+   }
+})
 
-local Main = PhantomForcesWindow:NewSection("Main")
-local LocalPlayerTab = PhantomForcesWindow:NewSection("LocalPlayer")
-local Visuals = PhantomForcesWindow:NewSection("Visuals")
-local Others = PhantomForcesWindow:NewSection("Others")
+local Main = Window:CreateTab("Main", 4483362458) -- Title, Image
+local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458) -- Title, Image
+local Visuals = Window:CreateTab("Visuals", 4483362458) -- Title, Image
+local Others = Window:CreateTab("Others", 4483362458) -- Title, Image
 
-Main:CreateToggle("Gun Aimbot", function(value)
-	configs.GunAimbot = value
-end)
-Main:CreateToggle("Knife Aimbot", function(value)
-	configs.KnifeAimbot = value
-end)
-Main:CreateSlider("Ping Prediction", 0, 1000, 50, false, function(value)
-	configs.Prediction = value
-end)
-Main:CreateSlider("FOV", 0, 1000, 350, false, function(value)
+local Toggle = Main:CreateToggle({
+   Name = "Gun Aimbot";
+   CurrentValue = false;
+   Flag = "Gun Aimbot"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   configs.GunAimbot = value
+   end;
+})
+local Toggle = Main:CreateToggle({
+   Name = "Knife Aimbot";
+   CurrentValue = false;
+   Flag = "Knife Aimbot"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   configs.KnifeAimbot = value
+   end;
+})
+local Slider = Main:CreateSlider({
+   Name = "Ping Prediction";
+   Range = {0, 1000};
+   Increment = 10;
+   Suffix = "ms";
+   CurrentValue = 50;
+   Flag = "Ping Prediction"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   configs.Prediction = value
+   end;
+})
+local Slider = Main:CreateSlider({
+   Name = "FOV";
+   Range = {0, 1000};
+   Increment = 10;
+   Suffix = "ms";
+   CurrentValue = 350;
+   Flag = "FOV"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
 	configs.FOV = value
 	if Drawing then
 		Drawing1.Radius = configs.FOV
 		Drawing2.Radius = configs.FOV
 	end
-end)
-
-Main:CreateToggle("Kill Aura", function(value)
-	configs.KillAura = value
-end)
-Main:CreateSlider("Kill Aura Range", 0, 100, 15, true, function(value)
+   end;
+}}
+local Toggle = Main:CreateToggle({
+   Name = "Kill Aura";
+   CurrentValue = false;
+   Flag = "Kill Aura"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   configs.KillAura = value
+   end;
+})
+local Slider = Main:CreateSlider({
+   Name = "FOV";
+   Range = {0, 100};
+   Increment = 10;
+   Suffix = "studs";
+   CurrentValue = 15;
+   Flag = "FOV"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
 	configs.KillAuraRange = value
-end)
-Main:CreateToggle("Face Target", function(value)
-	configs.FaceTarget = value
-end)
-
-LocalPlayerTab:CreateSlider("WalkSpeed", 0, 100, 16, false, function(value)
+   end;
+}}
+local Toggle = Main:CreateToggle({
+   Name = "Face Target";
+   CurrentValue = false;
+   Flag = "Face Target"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   configs.FaceTarget = value
+   end;
+})
+local Slider = Main:CreateSlider({
+   Name = "WalkSpeed";
+   Range = {0, 100};
+   Increment = 10;
+   Suffix = "";
+   CurrentValue = 16;
+   Flag = "WalkSpeed"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
 	configs.WalkSpeed = value
-end)
-LocalPlayerTab:CreateSlider("JumpPower", 0, 100, 50, false, function(value)
+   end;
+}}
+local Slider = Main:CreateSlider({
+   Name = "JumpPower";
+   Range = {0, 100};
+   Increment = 10;
+   Suffix = "";
+   CurrentValue = 50;
+   Flag = "JumpPower"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
 	configs.JumpPower = value
-end)
-
-Visuals:CreateToggle("Player Chams", function(value)
-	configs.Chams = value
-	for _, player in pairs(Players:GetChildren()) do
-		local character = workspace:FindFirstChild(player.Name)
-		if character and character ~= LocalPlayer.Character then
-			local Highlight = character:FindFirstChildOfClass("Highlight")
-			if configs.Chams and not Highlight then
-				AddChams(character,Color3.fromRGB(255,255,255),false)
-			elseif Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
-				Highlight:Destroy()
+   end;
+}}
+local Toggle = Main:CreateToggle({
+   Name = "Player Chams";
+   CurrentValue = false;
+   Flag = "Player Chams"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   configs.Chams = value
+		for _, player in pairs(Players:GetChildren()) do
+			local character = workspace:FindFirstChild(player.Name)
+			if character and character ~= LocalPlayer.Character then
+				local Highlight = character:FindFirstChildOfClass("Highlight")
+				if configs.Chams and not Highlight then
+					AddChams(character,Color3.fromRGB(255,255,255),false)
+				elseif Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
+					Highlight:Destroy()
+				end
 			end
 		end
-	end
-end)
-Visuals:CreateToggle("Show Gun Drop", function(value)
-	configs.ShowGunDrop = true
-end)
-Visuals:CreateColorPicker("Murderer", configs.MurdererColor, function(value)
-	configs.MurdererColor = value
+   end;
+})
+local ShowGunDrop = Main:CreateToggle({
+   Name = "Show Gun Drop";
+   CurrentValue = false;
+   Flag = "Show Gun Drop"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   configs.ShowGunDrop = value
+   end;
+})
+local MurdererColor = Main:CreateColorPicker({
+    Name = "Murderer Color";
+    Color = configs.MurdererColor;
+    Flag = "Murderer Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(value)
+        configs.MurdererColor = value
 	UpdateChams()
-end)
-Visuals:CreateColorPicker("Hero", configs.HeroColor, function(value)
-	configs.HeroColor = value
+    end
+})
+local HeroColor = Main:CreateColorPicker({
+    Name = "Hero Color";
+    Color = configs.HeroColor;
+    Flag = "Hero Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(value)
+        configs.HeroColor = value
 	UpdateChams()
-end)
-Visuals:CreateColorPicker("Innocents", configs.InnocentColor, function(value)
-	configs.InnocentColor = value
+    end
+})
+local InnocentColor = Main:CreateColorPicker({
+    Name = "Innocent Color";
+    Color = configs.InnocentColor;
+    Flag = "Innocent Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(value)
+        configs.InnocentColor = value
 	UpdateChams()
-end)
-Visuals:CreateColorPicker("Sheriff", configs.SheriffColor, function(value)
-	configs.SheriffColor = value
+    end
+})
+local SheriffColor = Main:CreateColorPicker({
+    Name = "Sheriff Color";
+    Color = configs.SheriffColor;
+    Flag = "Sheriff Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(value)
+        configs.SheriffColor = value
 	UpdateChams()
-end)
-Visuals:CreateColorPicker("Gun Drop Color", configs.GunDropColor, function(value)
-	configs.MurdererColor = value
+    end
+})
+local GunDropColor = Main:CreateColorPicker({
+    Name = "Gun Drop Color";
+    Color = configs.GunDropColor;
+    Flag = "Gun Drop Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    Callback = function(value)
+        configs.GunDropColor = value
 	UpdateChams()
-end)
-Visuals:CreateToggle("AlwaysOnTop", function(value)
-	if value then
+    end
+})
+local Toggle = Main:CreateToggle({
+   Name = "Always On Top";
+   CurrentValue = false;
+   Flag = "Always On Top"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   if value then
 		configs.HighlightDepthMode = Enum.HighlightDepthMode.AlwaysOnTop
 	else
 		configs.HighlightDepthMode = Enum.HighlightDepthMode.Occluded
 	end
 	UpdateChams()
-end)
+   end;
+})
 if Drawing then
 	Visuals:CreateToggle("Show FOV Circle", function(value)
 		Drawing1.Visible = value
 		Drawing2.Visible = value
 	end)
 end
-Visuals:CreateButton("Remove Map Lag", function()
-	if not antilagalreadyexecuted then
+local Button = Visuals:CreateButton({
+   Name = "Remove Map Lag";
+   Callback = function()
+   	if not antilagalreadyexecuted then
 		antilagalreadyexecuted = true
 
 		local Terrain = workspace.Terrain
@@ -299,35 +422,63 @@ Visuals:CreateButton("Remove Map Lag", function()
 			RemoveLagFromObject(descendant)
 		end)
 	end
-end)
-Visuals:CreateButton("Remove Accessory Lag", function()
-	for _, player in pairs(Players:GetChildren()) do
+   end;
+})
+local Button = Visuals:CreateButton({
+   Name = "Remove Accessory Lag";
+   Callback = function()
+	   for _, player in pairs(Players:GetChildren()) do
 		local character = workspace:FindFirstChild(player.Name)
 		if character and (configs.IncludeLocalPlayer or character ~= LocalPlayer.Character) then
 			RemoveDisplays(character)
 		end
 	end
-end)
-Visuals:CreateToggle("Auto Remove Lag", function(value)
-	configs.AutoRemoveLag = value
-end)
-Visuals:CreateToggle("Include Hats", function(value)
-	configs.IncludeOtherAccessories = value
-end)
-Visuals:CreateToggle("Include LocalPlayer", function(value)
-	configs.IncludeLocalPlayer = value
-end)
-
-Others:CreateButton("Dupe", function()
-	loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20dupe"))()
-end)
-Others:CreateButton("Rejoin", function()
-	game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
-end)
-Others:CreateButton("Unload", function()
-	_G.mm2hacksalreadyloadedbyCITY512 = false
+   end;
+})
+local AutoRemoveLag = Visuals:CreateToggle({
+   Name = "Auto Remove Lag";
+   CurrentValue = false;
+   Flag = "Auto Remove Lag"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   configs.AutoRemoveLag = value
+   end;
+})
+local IncludeHats = Visuals:CreateToggle({
+   Name = "Include Hats";
+   CurrentValue = false;
+   Flag = "Include Hats"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   configs.IncludeOtherAccessories = value
+   end;
+})
+local IncludeHats = Visuals:CreateToggle({
+   Name = "Include LocalPlayer";
+   CurrentValue = false;
+   Flag = "Include LocalPlayer"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(value)
+	   configs.IncludeLocalPlayer = value
+   end;
+})
+local Button = Others:CreateButton({
+   Name = "Dupe";
+   Callback = function()
+	 loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20dupe"))()
+   end;
+})
+local Rejoin = Others:CreateButton({
+   Name = "Rejoin";
+   Callback = function()
+	 game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
+   end;
+})
+local Unload = Others:CreateButton({
+   Name = "Unload";
+   Callback = function()
+	 _G.mm2hacksalreadyloadedbyCITY512 = false
 	scriptactivated = false
-end)
+	Rayfield:Destroy()
+   end;
+})
 
 workspace.ChildAdded:Connect(function(child)
 	coroutine.wrap(function()
