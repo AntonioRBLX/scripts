@@ -255,7 +255,7 @@ local Toggle = Main:CreateToggle({
 		configs.FaceTarget = value
 	end;
 })
-local Slider = Main:CreateSlider({
+local Slider = LocalPlayerTab:CreateSlider({
 	Name = "WalkSpeed";
 	Range = {0, 100};
 	Increment = 10;
@@ -266,7 +266,7 @@ local Slider = Main:CreateSlider({
 		configs.WalkSpeed = value
 	end;
 })
-local Slider = Main:CreateSlider({
+local Slider = LocalPlayerTab:CreateSlider({
 	Name = "JumpPower";
 	Range = {0, 100};
 	Increment = 10;
@@ -277,7 +277,7 @@ local Slider = Main:CreateSlider({
 		configs.JumpPower = value
 	end;
 })
-local Toggle = Main:CreateToggle({
+local Toggle = Visuals:CreateToggle({
 	Name = "Player Chams";
 	CurrentValue = false;
 	Flag = "Player Chams"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -296,7 +296,7 @@ local Toggle = Main:CreateToggle({
 		end
 	end;
 })
-local ShowGunDrop = Main:CreateToggle({
+local ShowGunDrop = Visuals:CreateToggle({
 	Name = "Show Gun Drop";
 	CurrentValue = false;
 	Flag = "Show Gun Drop"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -304,7 +304,7 @@ local ShowGunDrop = Main:CreateToggle({
 		configs.ShowGunDrop = value
 	end;
 })
-local MurdererColor = Main:CreateColorPicker({
+local MurdererColor = Visuals:CreateColorPicker({
 	Name = "Murderer Color";
 	Color = configs.MurdererColor;
 	Flag = "Murderer Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -313,7 +313,7 @@ local MurdererColor = Main:CreateColorPicker({
 		UpdateChams()
 	end
 })
-local HeroColor = Main:CreateColorPicker({
+local HeroColor = Visuals:CreateColorPicker({
 	Name = "Hero Color";
 	Color = configs.HeroColor;
 	Flag = "Hero Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -322,7 +322,7 @@ local HeroColor = Main:CreateColorPicker({
 		UpdateChams()
 	end
 })
-local InnocentColor = Main:CreateColorPicker({
+local InnocentColor = Visuals:CreateColorPicker({
 	Name = "Innocent Color";
 	Color = configs.InnocentColor;
 	Flag = "Innocent Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -331,7 +331,7 @@ local InnocentColor = Main:CreateColorPicker({
 		UpdateChams()
 	end
 })
-local SheriffColor = Main:CreateColorPicker({
+local SheriffColor = Visuals:CreateColorPicker({
 	Name = "Sheriff Color";
 	Color = configs.SheriffColor;
 	Flag = "Sheriff Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -340,7 +340,7 @@ local SheriffColor = Main:CreateColorPicker({
 		UpdateChams()
 	end
 })
-local GunDropColor = Main:CreateColorPicker({
+local GunDropColor = Visuals:CreateColorPicker({
 	Name = "Gun Drop Color";
 	Color = configs.GunDropColor;
 	Flag = "Gun Drop Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -349,7 +349,7 @@ local GunDropColor = Main:CreateColorPicker({
 		UpdateChams()
 	end
 })
-local Toggle = Main:CreateToggle({
+local Toggle = Visuals:CreateToggle({
 	Name = "Always On Top";
 	CurrentValue = false;
 	Flag = "Always On Top"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
