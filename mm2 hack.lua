@@ -157,7 +157,7 @@ local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY51
 
 local Window = Library:CreateWindow({
 	Name = "MM2 Cheats";
-	LoadingTitle = "MM2 Cheats Loading";
+	LoadingTitle = "MM2 Cheats";
 	LoadingSubtitle = "by CITY512";
 	ConfigurationSaving = {
 		Enabled = true;
@@ -451,7 +451,7 @@ local IncludeHats = Visuals:CreateToggle({
 		configs.IncludeOtherAccessories = value
 	end;
 })
-local IncludeHats = Visuals:CreateToggle({
+local IncludeLocalPlayer = Visuals:CreateToggle({
 	Name = "Include LocalPlayer";
 	CurrentValue = false;
 	Flag = "Include LocalPlayer"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -459,7 +459,7 @@ local IncludeHats = Visuals:CreateToggle({
 		configs.IncludeLocalPlayer = value
 	end;
 })
-local Button = Others:CreateButton({
+local Dupe = Others:CreateButton({
 	Name = "Dupe";
 	Callback = function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20dupe"))()
