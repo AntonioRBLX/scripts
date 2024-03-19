@@ -152,7 +152,7 @@ function GetClosestPlayer(FOV,maxdist)
 	return nil
 end
 
-local Library = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
 local Window = Library:CreateWindow({
