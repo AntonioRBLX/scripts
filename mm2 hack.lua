@@ -161,7 +161,7 @@ local Window = Library:CreateWindow({
 	LoadingSubtitle = "by CITY512";
 	ConfigurationSaving = {
 		Enabled = true;
-		FolderName = nil; -- Create a custom folder for your hub/game
+		FolderName = "MM2 Cheats"; -- Create a custom folder for your hub/game
 		FileName = "MM2 Cheats"
 	};
 	Discord = {
