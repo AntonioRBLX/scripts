@@ -549,7 +549,7 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
 				attachment.Position = Vector3.new(1.5, 1.9, 1)
 
-				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,50,0,nil,true,configs.Prediction,nil,false)
+				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,75,0,nil,true,configs.Prediction,nil,false)
 				attachment:Destroy()
 
 				if aimpos then
