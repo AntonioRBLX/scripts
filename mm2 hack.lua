@@ -371,10 +371,15 @@ local GunDropColor = Visuals:CreateColorPicker({
 	end
 })
 if Drawing then
-	Visuals:CreateToggle("Show FOV Circle", function(value)
-		Drawing1.Visible = value
-		Drawing2.Visible = value
-	end)
+	local ShowFOVCircle = Visuals:CreateToggle({
+		Name = "Show FOV Circle";
+		CurrentValue = false;
+		Flag = "Show FOV Circle"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+		Callback = function(value)
+			Drawing1.Visible = value
+			Drawing2.Visible = value
+		end;
+	})
 end
 
 local Section = Visuals:CreateSection("World", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
