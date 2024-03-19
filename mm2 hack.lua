@@ -435,6 +435,7 @@ local RemoveMapLag = Visuals:CreateButton({
 				RemoveLagFromObject(descendant)
 			end
 			workspace.DescendantAdded:Connect(function(descendant)
+				task.wait(0.5)
 				RemoveLagFromObject(descendant)
 			end)
 		end
@@ -497,18 +498,18 @@ local Unload = Others:CreateButton({
 })
 
 workspace.ChildAdded:Connect(function(child)
-	coroutine.wrap(function()
-		if scriptactivated and child.ClassName == "Model" and Players:FindFirstChild(child.Name) then
-			if configs.Chams and child ~= LocalPlayer.Character then
-				AddChams(child,Color3.fromRGB(255,255,255),false)
-			end
-			if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
-				RemoveDisplays(child)
-			end
-		elseif configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
-			AddChams(child,configs.GunDropColor)
+	if scriptactivated and child.ClassName == "Model" and Players:FindFirstChild(child.Name) then
+		task.wait(0.5)
+		if configs.Chams and child ~= LocalPlayer.Character then
+			AddChams(child,Color3.fromRGB(255,255,255),false)
 		end
-	end)()
+		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 1) and child:WaitForChild("GunDisplay", 1) then
+			RemoveDisplays(child)
+		end
+	elseif configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
+		task.wait(0.5)
+		AddChams(child,configs.GunDropColor)
+	end
 end)
 
 if Drawing then
