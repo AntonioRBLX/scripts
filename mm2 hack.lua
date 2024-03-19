@@ -156,13 +156,13 @@ local Library = loadstring(game:HttpGet("https://sirius.menu/rayfield"))()
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
 local Window = Library:CreateWindow({
-	Name = "MM2 Cheats";
-	LoadingTitle = "MM2 Cheats";
+	Name = "MM2CHEATSBYCITY512";
+	LoadingTitle = "Murder Mystery 2 Main";
 	LoadingSubtitle = "by CITY512";
 	ConfigurationSaving = {
 		Enabled = true;
-		FolderName = "MM2 Cheats"; -- Create a custom folder for your hub/game
-		FileName = "MM2 Cheats"
+		FolderName = "MM2CHEATSBYCITY512"; -- Create a custom folder for your hub/game
+		FileName = "MM2CHEATSBYCITY512"
 	};
 	Discord = {
 		Enabled = false;
