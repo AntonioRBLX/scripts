@@ -186,7 +186,7 @@ local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458) -- Title, Ima
 local Visuals = Window:CreateTab("Visuals", 4483362458) -- Title, Image
 local Others = Window:CreateTab("Others", 4483362458) -- Title, Image
 
-local Toggle = Main:CreateToggle({
+local GunAimbot = Main:CreateToggle({
 	Name = "Gun Aimbot";
 	CurrentValue = false;
 	Flag = "Gun Aimbot"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -194,7 +194,7 @@ local Toggle = Main:CreateToggle({
 		configs.GunAimbot = value
 	end;
 })
-local Toggle = Main:CreateToggle({
+local KnifeAimbot = Main:CreateToggle({
 	Name = "Knife Aimbot";
 	CurrentValue = false;
 	Flag = "Knife Aimbot"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -202,10 +202,10 @@ local Toggle = Main:CreateToggle({
 		configs.KnifeAimbot = value
 	end;
 })
-local Slider = Main:CreateSlider({
+local PingPrediction = Main:CreateSlider({
 	Name = "Ping Prediction";
 	Range = {0, 1000};
-	Increment = 10;
+	Increment = 1;
 	Suffix = "ms";
 	CurrentValue = 50;
 	Flag = "Ping Prediction"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -213,11 +213,11 @@ local Slider = Main:CreateSlider({
 		configs.Prediction = value
 	end;
 })
-local Slider = Main:CreateSlider({
+local FOV = Main:CreateSlider({
 	Name = "FOV";
 	Range = {0, 1000};
-	Increment = 10;
-	Suffix = "ms";
+	Increment = 1;
+	Suffix = "";
 	CurrentValue = 350;
 	Flag = "FOV"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
@@ -228,7 +228,7 @@ local Slider = Main:CreateSlider({
 		end
 	end;
 })
-local Toggle = Main:CreateToggle({
+local KillAura = Main:CreateToggle({
 	Name = "Kill Aura";
 	CurrentValue = false;
 	Flag = "Kill Aura"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -236,10 +236,10 @@ local Toggle = Main:CreateToggle({
 		configs.KillAura = value
 	end;
 })
-local Slider = Main:CreateSlider({
-	Name = "FOV";
+local KillAuraRange = Main:CreateSlider({
+	Name = "Kill Aura Range";
 	Range = {0, 100};
-	Increment = 10;
+	Increment = 0.1;
 	Suffix = "studs";
 	CurrentValue = 15;
 	Flag = "FOV"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -247,7 +247,7 @@ local Slider = Main:CreateSlider({
 		configs.KillAuraRange = value
 	end;
 })
-local Toggle = Main:CreateToggle({
+local FaceTarget = Main:CreateToggle({
 	Name = "Face Target";
 	CurrentValue = false;
 	Flag = "Face Target"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -255,10 +255,10 @@ local Toggle = Main:CreateToggle({
 		configs.FaceTarget = value
 	end;
 })
-local Slider = LocalPlayerTab:CreateSlider({
+local WalkSpeed = LocalPlayerTab:CreateSlider({
 	Name = "WalkSpeed";
 	Range = {0, 100};
-	Increment = 10;
+	Increment = 1;
 	Suffix = "";
 	CurrentValue = 16;
 	Flag = "WalkSpeed"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -266,10 +266,10 @@ local Slider = LocalPlayerTab:CreateSlider({
 		configs.WalkSpeed = value
 	end;
 })
-local Slider = LocalPlayerTab:CreateSlider({
+local JumpPower = LocalPlayerTab:CreateSlider({
 	Name = "JumpPower";
 	Range = {0, 100};
-	Increment = 10;
+	Increment = 1;
 	Suffix = "";
 	CurrentValue = 50;
 	Flag = "JumpPower"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -277,7 +277,7 @@ local Slider = LocalPlayerTab:CreateSlider({
 		configs.JumpPower = value
 	end;
 })
-local Toggle = Visuals:CreateToggle({
+local PlayerChams = Visuals:CreateToggle({
 	Name = "Player Chams";
 	CurrentValue = false;
 	Flag = "Player Chams"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -349,7 +349,7 @@ local GunDropColor = Visuals:CreateColorPicker({
 		UpdateChams()
 	end
 })
-local Toggle = Visuals:CreateToggle({
+local AlwaysOnTop = Visuals:CreateToggle({
 	Name = "Always On Top";
 	CurrentValue = false;
 	Flag = "Always On Top"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -368,7 +368,7 @@ if Drawing then
 		Drawing2.Visible = value
 	end)
 end
-local Button = Visuals:CreateButton({
+local RemoveMapLag = Visuals:CreateButton({
 	Name = "Remove Map Lag";
 	Callback = function()
 		if not antilagalreadyexecuted then
@@ -424,7 +424,7 @@ local Button = Visuals:CreateButton({
 		end
 	end;
 })
-local Button = Visuals:CreateButton({
+local RemoveAccessoryLag = Visuals:CreateButton({
 	Name = "Remove Accessory Lag";
 	Callback = function()
 		for _, player in pairs(Players:GetChildren()) do
