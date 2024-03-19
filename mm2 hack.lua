@@ -186,6 +186,8 @@ local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458) -- Title, Ima
 local Visuals = Window:CreateTab("Visuals", 4483362458) -- Title, Image
 local Others = Window:CreateTab("Others", 4483362458) -- Title, Image
 
+local Section = Main:CreateSection("Aimbot", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
 local GunAimbot = Main:CreateToggle({
 	Name = "Gun Aimbot";
 	CurrentValue = false;
@@ -228,6 +230,9 @@ local FOV = Main:CreateSlider({
 		end
 	end;
 })
+
+local Section = Main:CreateSection("Kill Aura", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
 local KillAura = Main:CreateToggle({
 	Name = "Kill Aura";
 	CurrentValue = false;
@@ -277,6 +282,9 @@ local JumpPower = LocalPlayerTab:CreateSlider({
 		configs.JumpPower = value
 	end;
 })
+
+local Section = Visuals:CreateSection("Chams", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
 local PlayerChams = Visuals:CreateToggle({
 	Name = "Player Chams";
 	CurrentValue = false;
@@ -302,6 +310,19 @@ local ShowGunDrop = Visuals:CreateToggle({
 	Flag = "Show Gun Drop"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		configs.ShowGunDrop = value
+	end;
+})
+local AlwaysOnTop = Visuals:CreateToggle({
+	Name = "Always On Top";
+	CurrentValue = false;
+	Flag = "Always On Top"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(value)
+		if value then
+			configs.HighlightDepthMode = Enum.HighlightDepthMode.AlwaysOnTop
+		else
+			configs.HighlightDepthMode = Enum.HighlightDepthMode.Occluded
+		end
+		UpdateChams()
 	end;
 })
 local MurdererColor = Visuals:CreateColorPicker({
@@ -349,25 +370,15 @@ local GunDropColor = Visuals:CreateColorPicker({
 		UpdateChams()
 	end
 })
-local AlwaysOnTop = Visuals:CreateToggle({
-	Name = "Always On Top";
-	CurrentValue = false;
-	Flag = "Always On Top"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(value)
-		if value then
-			configs.HighlightDepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-		else
-			configs.HighlightDepthMode = Enum.HighlightDepthMode.Occluded
-		end
-		UpdateChams()
-	end;
-})
 if Drawing then
 	Visuals:CreateToggle("Show FOV Circle", function(value)
 		Drawing1.Visible = value
 		Drawing2.Visible = value
 	end)
 end
+
+local Section = Visuals:CreateSection("World", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
 local RemoveMapLag = Visuals:CreateButton({
 	Name = "Remove Map Lag";
 	Callback = function()
