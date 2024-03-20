@@ -515,7 +515,7 @@ local IncludeHats = Visuals:CreateToggle({
 	CurrentValue = false;
 	Flag = "Include Hats"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
-		configs.IncludeOtherAccessories = value
+		configs.IncludeAccessories = value
 	end;
 })
 local IncludeLocalPlayer = Visuals:CreateToggle({
