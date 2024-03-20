@@ -33,6 +33,8 @@ local configs = {
 	AutoRemoveLag = false;
 	IncludeAccessories = false;
 	IncludeLocalPlayer = false;
+	ToggleWalkSpeed = false;
+	ToggleJumpPower = false;
 	WalkSpeed = 16;
 	JumpPower = 50;
 
@@ -258,6 +260,22 @@ local FaceTarget = Main:CreateToggle({
 	Flag = "Face Target"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		configs.FaceTarget = value
+	end;
+})
+local WalkSpeedToggle = Main:CreateToggle({
+	Name = "Toggle WalkSpeed";
+	CurrentValue = false;
+	Flag = "Toggle WalkSpeed"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(value)
+		configs.ToggleWalkSpeed = value
+	end;
+})
+local JumpPowerToggle = Main:CreateToggle({
+	Name = "Toggle JumpPower";
+	CurrentValue = false;
+	Flag = "Toggle JumpPower"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(value)
+		configs.ToggleJumpPower = value
 	end;
 })
 local WalkSpeed = LocalPlayerTab:CreateSlider({
@@ -580,8 +598,12 @@ while true do
 	if Character then
 		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
 		if Humanoid then
-			Humanoid.WalkSpeed = configs.WalkSpeed
-			Humanoid.JumpPower = configs.JumpPower
+			if configs.ToggleWalkSpeed then
+				Humanoid.WalkSpeed = configs.WalkSpeed
+			end
+			if configs.ToggleJumpPower then
+				Humanoid.JumpPower = configs.JumpPower
+			end
 		end
 		if configs.KillAura then
 			local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
