@@ -33,7 +33,7 @@ local configs = {
 	FaceTarget = false;
 
 	AutoRemoveLag = false;
-	 = false;
+	IncludeAccessories = false;
 	IncludeLocalPlayer = false;
 	ToggleWalkSpeed = false;
 	ToggleJumpPower = false;
