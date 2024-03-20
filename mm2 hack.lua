@@ -25,6 +25,7 @@ local configs = {
 	GunAimbot = false;
 	KnifeAimbot = false;
 	Prediction = 50;
+	ShowHitIndicator = false;
 	FOV = 350;
 	KillAura = false;
 	KillAuraRange = 15;
@@ -215,6 +216,14 @@ local PingPrediction = Main:CreateSlider({
 	Flag = "Ping Prediction"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		configs.Prediction = value
+	end;
+})
+local ShowHitIndicator = Visuals:CreateToggle({
+	Name = "Show Hit Indicator";
+	CurrentValue = false;
+	Flag = "Show Hit Indicator"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(value)
+		configs.ShowHitIndicator = value
 	end;
 })
 local FOV = Main:CreateSlider({
@@ -556,6 +565,19 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 				attachment:Destroy()
 
 				if aimpos then
+					if configs.ShowHitIndicator then
+						spawn(function()
+							local Indicator = Instance.new("Part", workspace)
+							Indicator.Position = aimpos
+							Indicator.BrickColor = BrickColor.new("Bright red")
+							Indicator.Size = Vector3.new(0.5,0.5,0.5)
+							Indicator.Anchored = true
+							Indicator.CanCollide = false
+							Indicator.Shape = Enum.PartType.Ball
+							task.wait(3)
+							Indicator:Destroy()
+						end)
+					end
 					args[2] = aimpos
 					return self.InvokeServer(self,table.unpack(args))
 				end
@@ -571,6 +593,19 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 				attachment:Destroy()
 
 				if aimpos then
+					if configs.ShowHitIndicator then
+						spawn(function()
+							local Indicator = Instance.new("Part", workspace)
+							Indicator.Position = aimpos
+							Indicator.BrickColor = BrickColor.new("Bright red")
+							Indicator.Size = Vector3.new(0.5,0.5,0.5)
+							Indicator.Anchored = true
+							Indicator.CanCollide = false
+							Indicator.Shape = Enum.PartType.Ball
+							task.wait(3)
+							Indicator:Destroy()
+						end)
+					end
 					args[1] = CFrame.new(aimpos,aimpos)
 					return self.FireServer(self,table.unpack(args))
 				end
