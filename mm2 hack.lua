@@ -159,7 +159,7 @@ local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-In
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
 local Window = Library:CreateWindow({
-	Name = "MM2CHEATSBYCITY512";
+	Name = "Murder Mystery 2";
 	LoadingTitle = "Murder Mystery 2 Main";
 	LoadingSubtitle = "by CITY512";
 	ConfigurationSaving = {
