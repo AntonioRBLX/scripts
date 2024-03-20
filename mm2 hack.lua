@@ -33,7 +33,7 @@ local configs = {
 	FaceTarget = false;
 
 	AutoRemoveLag = false;
-	IncludeAccessories = false;
+	 = false;
 	IncludeLocalPlayer = false;
 	ToggleWalkSpeed = false;
 	ToggleJumpPower = false;
@@ -552,7 +552,7 @@ workspace.ChildAdded:Connect(function(child)
 		if configs.Chams and child ~= LocalPlayer.Character then
 			AddChams(child,Color3.fromRGB(255,255,255),false)
 		end
-		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child ~= LocalPlayer.Character) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
+		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child.Name ~= LocalPlayer.Name) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
 			RemoveDisplays(child)
 		end
 	elseif configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
