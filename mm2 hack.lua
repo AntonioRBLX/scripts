@@ -155,7 +155,7 @@ function GetClosestPlayer(FOV,maxdist)
 		getclosestplayertoscreenpoint(Vector2.new(mouse.X,mouse.Y))
 	elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
 		for _, character in pairs(workspace:GetChildren()) do
-			if character.ClassName == "Model" and Players:FindFirstChild(character.Name) and character:FindFirstChild("HumanoidRootPart") then
+			if character.ClassName == "Model" and Players:FindFirstChild(character.Name) and character ~= LocalPlayer.Character and character:FindFirstChild("HumanoidRootPart") then
 				local distance = (character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
 				if not closest or distance < (closest.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude then
 					closest = character
