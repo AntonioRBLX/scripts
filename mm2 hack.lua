@@ -25,6 +25,7 @@ local configs = {
 	GunAimbot = false;
 	KnifeAimbot = false;
 	Prediction = 50;
+	AimbotMethod = "ClosestPlayerToCursor";
 	ShowHitIndicator = false;
 	FOV = 350;
 	KillAura = false;
@@ -130,27 +131,40 @@ function GetClosestPlayer(FOV,maxdist)
 	local camera = workspace.CurrentCamera
 	local closest
 
-	if camera then
+	local function getclosestplayertoscreenpoint(point)
 		for _, player in pairs(Players:GetChildren()) do
 			local character = workspace:FindFirstChild(player.Name)
 			if character and character ~= LocalPlayer.Character then
 				local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 				if NPCRoot then
 					local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
-					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
+					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
 					local distancefromplayer = (NPCRoot.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
 
 					if onscreen and distance <= FOV then
-						if (not closest or distance < closest[2]) and distancefromplayer <= maxdist then
-							closest = {character,distance}
+						if not closest or distance < (closest.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude and distancefromplayer <= maxdist then
+							closest = character
 						end
 					end
 				end
 			end
 		end
-		if closest then
-			return closest[1]
+		return closest
+	end
+	if configs.AimbotMethod == "ClosestPlayerToCursor" and camera then
+		getclosestplayertoscreenpoint(Vector2.new(mouse.X,mouse.Y))
+	elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
+		for _, character in pairs(workspace:GetChildren()) do
+			if character.ClassName == "Model" and Players:FindFirstChild(character.Name) and character:FindFirstChild("HumanoidRootPart") then
+				local distance = (character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+				if not closest or distance < (closest.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude then
+					closest = character
+				end
+			end
 		end
+		return closest
+	elseif configs.AimbotMethod == "ClosestPlayerToScreenCenter" and camera then
+		getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y - 58)/2)
 	end
 	return nil
 end
@@ -217,6 +231,16 @@ local PingPrediction = Main:CreateSlider({
 	Callback = function(value)
 		configs.Prediction = value
 	end;
+})
+local Dropdown = Main:CreateDropdown({
+	Name = "Aimbot Method";
+	Options = {"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter"};
+	CurrentOption = "ClosestPlayerToCursor";
+	MultiSelection = false; -- If MultiSelections is allowed
+	Flag = "Aimbot Method"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(option)
+		configs.AimbotMethod = option
+	end,
 })
 local ShowHitIndicator = Main:CreateToggle({
 	Name = "Show Hit Indicator";
