@@ -218,7 +218,7 @@ local PingPrediction = Main:CreateSlider({
 		configs.Prediction = value
 	end;
 })
-local ShowHitIndicator = Visuals:CreateToggle({
+local ShowHitIndicator = Main:CreateToggle({
 	Name = "Show Hit Indicator";
 	CurrentValue = false;
 	Flag = "Show Hit Indicator"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -271,7 +271,7 @@ local FaceTarget = Main:CreateToggle({
 		configs.FaceTarget = value
 	end;
 })
-local WalkSpeedToggle = Main:CreateToggle({
+local WalkSpeedToggle = LocalPlayerTab:CreateToggle({
 	Name = "Toggle WalkSpeed";
 	CurrentValue = false;
 	Flag = "Toggle WalkSpeed"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
@@ -279,7 +279,7 @@ local WalkSpeedToggle = Main:CreateToggle({
 		configs.ToggleWalkSpeed = value
 	end;
 })
-local JumpPowerToggle = Main:CreateToggle({
+local JumpPowerToggle = LocalPlayerTab:CreateToggle({
 	Name = "Toggle JumpPower";
 	CurrentValue = false;
 	Flag = "Toggle JumpPower"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
