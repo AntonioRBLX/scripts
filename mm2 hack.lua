@@ -25,8 +25,7 @@ local configs = {
 	GunAimbot = false;
 	KnifeAimbot = false;
 	Prediction = 50;
-	AimbotMethod = "ClosestPlayerToCursor";
-	ShowHitIndicator = false;
+	ShowCalculations = false;
 	FOV = 350;
 	KillAura = false;
 	KillAuraRange = 15;
@@ -276,12 +275,12 @@ local Dropdown = Main:CreateDropdown({
 		configs.AimbotMethod = option
 	end,
 })
-local ShowPath = Main:CreateToggle({
-	Name = "Show Path";
+local ShowCalculations = Main:CreateToggle({
+	Name = "Show Calculations";
 	CurrentValue = false;
-	Flag = "Show Path"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Show Calculations"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
-		configs.ShowPath = value
+		configs.ShowCalculations = value
 	end;
 })
 local FOV = Main:CreateSlider({
