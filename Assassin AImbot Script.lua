@@ -87,3 +87,7 @@ index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
 	end
 	return index(obj, idx)
 end))
+game.StarterGui:SetCore("SendNotification", {
+	Title = "Loaded"
+	Text = "too lazy to make an interface. roblox: CITY512 / discord: Luc#9803"
+})
