@@ -573,41 +573,6 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
 	if scriptactivated and not checkcaller() and LocalPlayer.Character then
-		local function CreatePath(path)
-			if configs.ShowCalculations then
-				local hue = 0
-				local prevatt
-				local container = Instance.new("Part", workspace)
-				container.Anchored = true
-				container.CanCollide = false
-				container.Transparency = 1
-				for _, i in pairs(path) do
-					local att = Instance.new("Attachment", container)
-					att.WorldPosition = i
-			
-					if prevatt then
-						local beam = Instance.new("Beam", container)
-						beam.Attachment0 = prevatt
-						beam.Attachment1 = att
-						beam.FaceCamera = true
-						beam.Width0 = 0.1
-						beam.Width1 = 0.1
-						beam.Segments = 1
-						beam.Transparency = 0
-						beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.443137, 1))
-					end
-					
-					hue += 3
-					if hue >= 360 then
-						hue = 0
-					end
-					
-					prevatt = att
-				end
-				task.wait(3)
-				container:Destroy()
-			end
-		end
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 			local closest = GetClosestPlayer(configs.FOV,500)
@@ -619,7 +584,41 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 				attachment:Destroy()
 
 				if aimpos then
-					coroutine.wrap(CreatePath)(path)
+					spawn(function()
+						if configs.ShowCalculations then
+							local hue = 0
+							local prevatt
+							local container = Instance.new("Part", workspace)
+							container.Anchored = true
+							container.CanCollide = false
+							container.Transparency = 1
+							for _, i in pairs(path) do
+								local att = Instance.new("Attachment", container)
+								att.WorldPosition = i
+						
+								if prevatt then
+									local beam = Instance.new("Beam", container)
+									beam.Attachment0 = prevatt
+									beam.Attachment1 = att
+									beam.FaceCamera = true
+									beam.Width0 = 0.1
+									beam.Width1 = 0.1
+									beam.Segments = 1
+									beam.Transparency = 0
+									beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.443137, 1))
+								end
+								
+								hue += 3
+								if hue >= 360 then
+									hue = 0
+								end
+								
+								prevatt = att
+							end
+							task.wait(3)
+							container:Destroy()
+						end
+					end
 					args[2] = aimpos
 					return self.InvokeServer(self,table.unpack(args))
 				end
@@ -635,7 +634,41 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 				attachment:Destroy()
 
 				if aimpos then
-					coroutine.wrap(CreatePath)(path)
+					spawn(function()
+						if configs.ShowCalculations then
+							local hue = 0
+							local prevatt
+							local container = Instance.new("Part", workspace)
+							container.Anchored = true
+							container.CanCollide = false
+							container.Transparency = 1
+							for _, i in pairs(path) do
+								local att = Instance.new("Attachment", container)
+								att.WorldPosition = i
+						
+								if prevatt then
+									local beam = Instance.new("Beam", container)
+									beam.Attachment0 = prevatt
+									beam.Attachment1 = att
+									beam.FaceCamera = true
+									beam.Width0 = 0.1
+									beam.Width1 = 0.1
+									beam.Segments = 1
+									beam.Transparency = 0
+									beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.443137, 1))
+								end
+								
+								hue += 3
+								if hue >= 360 then
+									hue = 0
+								end
+								
+								prevatt = att
+							end
+							task.wait(3)
+							container:Destroy()
+						end
+					end
 					args[1] = CFrame.new(aimpos,aimpos)
 					return self.FireServer(self,table.unpack(args))
 				end
