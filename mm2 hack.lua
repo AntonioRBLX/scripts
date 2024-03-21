@@ -80,7 +80,7 @@ function checkcharhaschildren(char)
 	if char:FindFirstChild("HumanoidRootPart") and char:FindFirstChildOfClass("Humanoid") then
 		return true
 	else
-		return nil
+		return false
 	end
 end
 function GetRole(player)
