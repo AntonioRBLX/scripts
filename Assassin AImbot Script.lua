@@ -2,9 +2,9 @@ local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
 local configs = {
-	AimbotEnabled = true
-	AimbotMethod = "ClosestPlayerToScreenCenter"
-	PingPrediction = 50
+	AimbotEnabled = true;
+	AimbotMethod = "ClosestPlayerToScreenCenter";
+	PingPrediction = 50;
 	FOV = 500
 }
 
