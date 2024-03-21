@@ -84,9 +84,12 @@ function AddChams(object,color,allowparts)
 	Highlight.FillTransparency = 0.25
 	Highlight.OutlineColor = color
 	Highlight.DepthMode = configs.HighlightDepthMode
-
+	
 	if not allowparts and object.ClassName == "Model" and Players:FindFirstChild(object.Name) and object ~= LocalPlayer.Character then
 		Highlight.Parent = object
+		if object:FindFirstChild("HumanoidRootPart") then
+			Highlight.Adornee = object.HumanoidRootPart
+		end
 	elseif allowparts then
 		Highlight.Parent = object
 	end
