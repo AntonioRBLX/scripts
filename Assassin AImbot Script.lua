@@ -3,7 +3,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local configs = {
 	AimbotEnabled = true;
-	AimbotMethod = "ClosestPlayerToScreenCenter";
+	AimbotMethod = "ClosestPlayerToCharacter";
 	PingPrediction = 50;
 	FOV = 500
 }
