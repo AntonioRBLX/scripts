@@ -1,6 +1,9 @@
 if _G.mm2hacksalreadyloadedbyCITY512 then return end
 _G.mm2hacksalreadyloadedbyCITY512 = true
 
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
+local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
+
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
@@ -77,6 +80,7 @@ function GetRole(player)
 
 end
 function AddChams(object,color,allowparts)
+	local lplrchar = LocalPlayer.Character
 	local Highlight = Instance.new("Highlight")
 	Highlight.Adornee = object
 	Highlight.Name = "MM2CHEATSCHAMS"
@@ -84,12 +88,9 @@ function AddChams(object,color,allowparts)
 	Highlight.FillTransparency = 0.25
 	Highlight.OutlineColor = color
 	Highlight.DepthMode = configs.HighlightDepthMode
-	
-	if not allowparts and object.ClassName == "Model" and Players:FindFirstChild(object.Name) and object ~= LocalPlayer.Character then
+
+	if not allowparts and object.ClassName == "Model" and Players:FindFirstChild(object.Name) and object ~= lplrchar then
 		Highlight.Parent = object
-		if object:FindFirstChild("HumanoidRootPart") then
-			Highlight.Adornee = object.HumanoidRootPart
-		end
 	elseif allowparts then
 		Highlight.Parent = object
 	end
@@ -128,6 +129,8 @@ end
 
 function GetClosestPlayer(FOV,maxdist)
 	if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
+	local lplrchar = LocalPlayer.Character
+	local lplrhrp = lplrchar.HumanoidRootPart
 
 	local camera = workspace.CurrentCamera
 	local closest
@@ -135,30 +138,31 @@ function GetClosestPlayer(FOV,maxdist)
 	local function getclosestplayertoscreenpoint(point)
 		for _, player in pairs(Players:GetChildren()) do
 			local character = workspace:FindFirstChild(player.Name)
-			if character and character ~= LocalPlayer.Character then
+			if character and character ~= lplrchar then
 				local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 				if NPCRoot then
 					local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
 					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
-					local distancefromplayer = (NPCRoot.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
+					local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
 					if onscreen and distance <= FOV then
-						if not closest or distance < (closest.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude and distancefromplayer <= maxdist then
+						if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
 							closest = character
 						end
 					end
 				end
 			end
 		end
-		return closest
 	end
 	if configs.AimbotMethod == "ClosestPlayerToCursor" and camera then
 		getclosestplayertoscreenpoint(Vector2.new(mouse.X,mouse.Y))
+		return closest
 	elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
-		for _, character in pairs(workspace:GetChildren()) do
-			if character.ClassName == "Model" and Players:FindFirstChild(character.Name) and character ~= LocalPlayer.Character and character:FindFirstChild("HumanoidRootPart") then
-				local distance = (character.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude
-				if not closest or distance < (closest.HumanoidRootPart.Position - LocalPlayer.Character.HumanoidRootPart.Position).Magnitude then
+		for _, player in pairs(Players:GetChildren()) do
+			local character = workspace:FindFirstChild(player.Name)
+			if character and character ~= lplrchar and character:FindFirstChild("HumanoidRootPart") then
+				local distance = (character.HumanoidRootPart.Position - lplrhrp.Position).Magnitude
+				if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distance <= maxdist then
 					closest = character
 				end
 			end
@@ -166,12 +170,10 @@ function GetClosestPlayer(FOV,maxdist)
 		return closest
 	elseif configs.AimbotMethod == "ClosestPlayerToScreenCenter" and camera then
 		getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y - 58)/2)
+		return closest
 	end
 	return nil
 end
-
-local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
-local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
 local Window = Library:CreateWindow({
 	Name = "Murder Mystery 2";
@@ -343,18 +345,19 @@ local PlayerChams = Visuals:CreateToggle({
 	Flag = "Player Chams"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		configs.Chams = value
+		local lplrchar = LocalPlayer.Character
 		for _, player in pairs(Players:GetChildren()) do
 			local character = workspace:FindFirstChild(player.Name)
-			if character and character ~= LocalPlayer.Character then
-				local Highlight = character:FindFirstChildOfClass("Highlight")
-				if configs.Chams and not Highlight then
-					AddChams(character,Color3.fromRGB(255,255,255),false)
-				elseif Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
-					Highlight:Destroy()
-				end
-			end
-		end
-	end;
+			if character and character ~= lplrchar then
+	local Highlight = character:FindFirstChildOfClass("Highlight")
+	if configs.Chams and not Highlight then
+		AddChams(character,Color3.fromRGB(255,255,255),false)
+	elseif Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
+		Highlight:Destroy()
+	end
+end
+end
+end;
 })
 local ShowGunDrop = Visuals:CreateToggle({
 	Name = "Show Gun Drop";
@@ -495,13 +498,14 @@ local RemoveMapLag = Visuals:CreateButton({
 local RemoveAccessoryLag = Visuals:CreateButton({
 	Name = "Remove Accessory Lag";
 	Callback = function()
+		local lplrchar = LocalPlayer.Character
 		for _, player in pairs(Players:GetChildren()) do
 			local character = workspace:FindFirstChild(player.Name)
-			if character and (configs.IncludeLocalPlayer or character ~= LocalPlayer.Character) then
-				RemoveDisplays(character)
-			end
-		end
-	end;
+			if character and (configs.IncludeLocalPlayer or character ~= lplrchar) then
+	RemoveDisplays(character)
+end
+end
+end;
 })
 local AutoRemoveLag = Visuals:CreateToggle({
 	Name = "Auto Remove Lag";
@@ -549,16 +553,17 @@ local Unload = Others:CreateButton({
 })
 
 workspace.ChildAdded:Connect(function(child)
+	local lplrchar = LocalPlayer.Character
 	if scriptactivated and child.ClassName == "Model" and Players:FindFirstChild(child.Name) then
-		if configs.Chams and child ~= LocalPlayer.Character then
-			AddChams(child,Color3.fromRGB(255,255,255),false)
-		end
-		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child.Name ~= LocalPlayer.Name) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
-			RemoveDisplays(child)
-		end
-	elseif configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
-		AddChams(child,configs.GunDropColor)
-	end
+		if configs.Chams and child ~= lplrchar then
+	AddChams(child,Color3.fromRGB(255,255,255),false)
+end
+if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child.Name ~= LocalPlayer.Name) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
+	RemoveDisplays(child)
+end
+elseif configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
+	AddChams(child,configs.GunDropColor)
+end
 end)
 
 if Drawing then
