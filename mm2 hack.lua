@@ -595,7 +595,7 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 							for _, i in pairs(path) do
 								local att = Instance.new("Attachment", container)
 								att.WorldPosition = i
-						
+
 								if prevatt then
 									local beam = Instance.new("Beam", container)
 									beam.Attachment0 = prevatt
@@ -607,18 +607,18 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 									beam.Transparency = 0
 									beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.443137, 1))
 								end
-								
+
 								hue += 3
 								if hue >= 360 then
 									hue = 0
 								end
-								
+
 								prevatt = att
 							end
 							task.wait(3)
 							container:Destroy()
 						end
-					end
+					end)
 					args[2] = aimpos
 					return self.InvokeServer(self,table.unpack(args))
 				end
@@ -645,7 +645,7 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 							for _, i in pairs(path) do
 								local att = Instance.new("Attachment", container)
 								att.WorldPosition = i
-						
+
 								if prevatt then
 									local beam = Instance.new("Beam", container)
 									beam.Attachment0 = prevatt
@@ -657,18 +657,18 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 									beam.Transparency = 0
 									beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.443137, 1))
 								end
-								
+
 								hue += 3
 								if hue >= 360 then
 									hue = 0
 								end
-								
+
 								prevatt = att
 							end
 							task.wait(3)
 							container:Destroy()
 						end
-					end
+					end)
 					args[1] = CFrame.new(aimpos,aimpos)
 					return self.FireServer(self,table.unpack(args))
 				end
