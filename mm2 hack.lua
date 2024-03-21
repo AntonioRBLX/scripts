@@ -1,3 +1,6 @@
+if not game:IsLoaded() then game.Loaded:Wait() end
+repeat task.wait() until game.Players.LocalPlayer
+
 if _G.mm2hacksalreadyloadedbyCITY512 then return end
 _G.mm2hacksalreadyloadedbyCITY512 = true
 
@@ -7,8 +10,6 @@ local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY51
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
-
-if not game:IsLoaded() then game.Loaded:Wait() end
 
 if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod then
 	StarterGui:SetCore("SendNotification" ,{
