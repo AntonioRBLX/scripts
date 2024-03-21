@@ -76,41 +76,6 @@ end
 function GetRole(player)
 
 end
-function CreatePath(path)
-	if configs.ShowCalculations then
-		local hue = 0
-		local prevatt
-		local container = Instance.new("Part", workspace)
-		container.Anchored = true
-		container.CanCollide = false
-		container.Transparency = 1
-		for _, i in pairs(path) do
-			local att = Instance.new("Attachment", container)
-			att.WorldPosition = i
-	
-			if prevatt then
-				local beam = Instance.new("Beam", container)
-				beam.Attachment0 = prevatt
-				beam.Attachment1 = att
-				beam.FaceCamera = true
-				beam.Width0 = 0.1
-				beam.Width1 = 0.1
-				beam.Segments = 1
-				beam.Transparency = 0
-				beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.443137, 1))
-			end
-			
-			hue += 3
-			if hue >= 360 then
-				hue = 0
-			end
-			
-			prevatt = att
-		end
-		task.wait(3)
-		container:Destroy()
-	end
-end
 function AddChams(object,color,allowparts)
 	local Highlight = Instance.new("Highlight")
 	Highlight.Adornee = object
