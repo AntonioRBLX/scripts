@@ -76,13 +76,6 @@ else
 		Text = "Drawing is not supported on this executor, ShowFOVCircle will not work.";
 	})
 end
-function checkcharhaschildren(char)
-	if char:FindFirstChild("HumanoidRootPart") and char:FindFirstChildOfClass("Humanoid") then
-		return true
-	else
-		return false
-	end
-end
 function GetRole(player)
 
 end
@@ -587,7 +580,7 @@ local namecall
 namecall = hookmetamethod(game,"__namecall",function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
-	if scriptactivated and not checkcaller() and LocalPlayer.Character and checkcharhaschildren(LocalPlayer.Character) then
+	if scriptactivated and not checkcaller() and LocalPlayer.Character then
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 			local closest = GetClosestPlayer(configs.FOV,500)
