@@ -4,8 +4,8 @@ local lplr = game.Players.LocalPlayer
 local char = lplr.Character or lplr.CharacterAdded:Wait()
 
 local anims = {
-	idle1 = "http://www.roblox.com/asset/?id=910004836";
-	idle2 = "http://www.roblox.com/asset/?id=910009958";
+	idle1 = "http://www.roblox.com/asset/?id=616136790";
+	idle2 = "http://www.roblox.com/asset/?id=616138447";
 	walk = "http://www.roblox.com/asset/?id=910034870";
 	run =  "http://www.roblox.com/asset/?id=910025107";
 	swim = "http://www.roblox.com/asset/?id=910028158";
