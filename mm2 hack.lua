@@ -637,8 +637,11 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
 				attachment.Position = Vector3.new(1.5, 1.9, 1)
-
-				local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,nil,true,configs.Prediction,nil,false)
+				if sleight then
+					path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,nil,true,configs.Prediction,nil,false)
+				else
+					path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,80,0,nil,true,configs.Prediction,nil,false)
+				end
 				attachment:Destroy()
 
 				if aimpos then
@@ -681,6 +684,8 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 					return self.FireServer(self,table.unpack(args))
 				end
 			end
+		elseif configs.KnifeAimbot and tostring(self) == "Sleight" and tostring(method) == "FireServer" then
+			sleight = true
 		end
 	end
 	return namecall(self,...)
