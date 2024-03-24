@@ -289,6 +289,12 @@ function AddEvents(player)
 		if hum then
 			addhumanoiddiedconnection(hum)
 		end
+		if configs.Chams and char ~= lplrchar then
+			AddChams(child,Color3.new(1,1,1),false)
+		end
+		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child.Name ~= LocalPlayer.Name) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
+			RemoveDisplays(child)
+		end
 	end)
 
 	connections[current - 2] = player:WaitForChild("Backpack").ChildAdded:Connect(function(child)
@@ -688,14 +694,7 @@ local Unload = Others:CreateButton({
 
 workspace.ChildAdded:Connect(function(child)
 	local lplrchar = LocalPlayer.Character
-	if scriptactivated and child.ClassName == "Model" and Players:FindFirstChild(child.Name) then
-		if configs.Chams and child ~= lplrchar then
-			AddChams(child,Color3.new(1,1,1),false)
-		end
-		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child.Name ~= LocalPlayer.Name) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
-			RemoveDisplays(child)
-		end
-	elseif configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
+	if configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
 		AddChams(child,configs.GunDropColor,true)
 	end
 end)
