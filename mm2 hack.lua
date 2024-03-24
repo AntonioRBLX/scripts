@@ -483,7 +483,7 @@ local PlayerChams = Visuals:CreateToggle({
 			local character = workspace:FindFirstChild(player.Name)
 			if character and character ~= lplrchar then
 				if configs.Chams then
-					AddChams(character,Color3.fromRGB(255,255,255),false)
+					AddChams(character,Color3.new(1,1,1),false)
 				else
 					for _, child in pairs(character:GetChildren()) do
 						local BHA = child:FindFirstChildOfClass("BoxHandleAdornment")
@@ -494,6 +494,7 @@ local PlayerChams = Visuals:CreateToggle({
 				end
 			end
 		end
+		UpdateChamsOnAllPlayers()
 	end;
 })
 local ShowGunDrop = Visuals:CreateToggle({
@@ -687,7 +688,7 @@ workspace.ChildAdded:Connect(function(child)
 	local lplrchar = LocalPlayer.Character
 	if scriptactivated and child.ClassName == "Model" and Players:FindFirstChild(child.Name) then
 		if configs.Chams and child ~= lplrchar then
-			AddChams(child,Color3.fromRGB(255,255,255),false)
+			AddChams(child,Color3.new(1,1,1),false)
 		end
 		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child.Name ~= LocalPlayer.Name) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
 			RemoveDisplays(child)
