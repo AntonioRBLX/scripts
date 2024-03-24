@@ -89,7 +89,7 @@ function AddChams(object,color,bpwhitelisted)
 		local BHA = Instance.new("BoxHandleAdornment", part)
 		BHA.Name = "MM2CHEATSCHAMS"
 		BHA.Adornee = part
-		BHA.Color = color
+		BHA.Color3 = color
 		BHA.ZIndex = 1
 		BHA.AlwaysOnTop = configs.AlwaysOnTop
 		BHA.Size = part.Size
