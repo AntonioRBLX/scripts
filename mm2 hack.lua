@@ -104,7 +104,7 @@ function AddChams(object,color,bpwhitelisted)
 		BHA.Name = "MM2CHEATSBYCITY512"
 		BHA.Adornee = part
 		BHA.Color3 = color
-		BHA.ZIndex = 1
+		BHA.ZIndex = 10
 		BHA.AlwaysOnTop = configs.AlwaysOnTop
 		BHA.Size = part.Size
 		BHA.Transparency = 0.3
