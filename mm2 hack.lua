@@ -45,13 +45,16 @@ local configs = {
 
 	Chams = false;
 	ShowGunDrop = false;
-	HighlightDepthMode = Enum.HighlightDepthMode.Occluded;
+	AlwaysOnTop = false;
 	MurdererColor = Color3.fromRGB(255, 112, 112);
 	HeroColor = Color3.fromRGB(255, 231, 112);
 	InnocentColor = Color3.fromRGB(143, 255, 112);
 	SheriffColor = Color3.fromRGB(112, 136, 255);
 	GunDropColor = Color3.fromRGB(141, 112, 255);
 }
+
+local connections = {}
+local c = 0
 
 local Drawing1
 local Drawing2
@@ -79,31 +82,46 @@ end
 function GetRole(player)
 
 end
-function AddChams(object,color,allowparts)
+function AddChams(object,color,bpwhitelisted)
 	local lplrchar = LocalPlayer.Character
-	local Highlight = Instance.new("Highlight")
-	Highlight.Adornee = object
-	Highlight.Name = "MM2CHEATSCHAMS"
-	Highlight.FillColor = color
-	Highlight.FillTransparency = 0.25
-	Highlight.OutlineColor = color
-	Highlight.DepthMode = configs.HighlightDepthMode
 
-	if not allowparts and object.ClassName == "Model" and Players:FindFirstChild(object.Name) and object ~= lplrchar then
-		Highlight.Parent = object
-	elseif allowparts then
-		Highlight.Parent = object
+	local function addboxhandleadornment(part)
+		local BHA = Instance.new("BoxHandleAdornment", part)
+		BHA.Name = "MM2CHEATSCHAMS"
+		BHA.Adornee = part
+		BHA.Color = color
+		BHA.ZIndex = 1
+		BHA.AlwaysOnTop = configs.AlwaysOnTop
+		BHA.Size = part.Size
+		BHA.Transparency = 0.3
+	end
+	if not bpwhitelisted and object ~= lplrchar then
+		local player = Players:FindFirstChild(object.Name)
+		local humanoid = object:FindFirstChildOfClass("Humanoid")
+		if player then
+			if humanoid and humanoid.Health > 0 then
+				for _, child in pairs(char:GetChildren()) do
+					if child:IsA("BasePart") then
+						addboxhandleadornment(child)
+					end
+				end
+			end
+		end
+	elseif bpwhitelisted then
+		addboxhandleadornmnet(object)
 	end
 end
-
-function UpdateChams()
-	for _, player in pairs(Players:GetChildren()) do
-		local character = workspace:FindFirstChild(player.Name)
-		if character then
-			local Highlight = character:FindFirstChildOfClass("Highlight") 
-			if Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
-				Highlight.FillColor = Color3.fromRGB(255,255,255)
-				Highlight.DepthMode = configs.HighlightDepthMode
+function RemoveChams(object)
+	if object.ClassName == "Model" then
+		local player = Players:FindFirstChild(object.Name)
+		if player then
+			for _, child in pairs(object:GetChildren()) do
+				if child:IsA("BasePart") then
+					local BHA = child:FindFirstChildOfClass("BoxHandleAdornment")
+					if BHA then
+						BHA:Destroy()
+					end
+				end
 			end
 		end
 	end
@@ -349,15 +367,19 @@ local PlayerChams = Visuals:CreateToggle({
 		for _, player in pairs(Players:GetChildren()) do
 			local character = workspace:FindFirstChild(player.Name)
 			if character and character ~= lplrchar then
-	local Highlight = character:FindFirstChildOfClass("Highlight")
-	if configs.Chams and not Highlight then
-		AddChams(character,Color3.fromRGB(255,255,255),false)
-	elseif Highlight and Highlight.Name == "MM2CHEATSCHAMS" then
-		Highlight:Destroy()
-	end
-end
-end
-end;
+				if configs.Chams then
+					AddChams(character,Color3.fromRGB(255,255,255),false)
+				else
+					for _, child in pairs(character:GetChildren()) do
+						local BHA = child:FindFirstChildOfClass("BoxHandleAdornment")
+						if BHA then
+							BHA:Destroy()
+						end
+					end
+				end
+			end
+		end
+	end;
 })
 local ShowGunDrop = Visuals:CreateToggle({
 	Name = "Show Gun Drop";
@@ -372,11 +394,7 @@ local AlwaysOnTop = Visuals:CreateToggle({
 	CurrentValue = false;
 	Flag = "Always On Top"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
-		if value then
-			configs.HighlightDepthMode = Enum.HighlightDepthMode.AlwaysOnTop
-		else
-			configs.HighlightDepthMode = Enum.HighlightDepthMode.Occluded
-		end
+		configs.AlwaysOnTop = value
 		UpdateChams()
 	end;
 })
@@ -556,14 +574,14 @@ workspace.ChildAdded:Connect(function(child)
 	local lplrchar = LocalPlayer.Character
 	if scriptactivated and child.ClassName == "Model" and Players:FindFirstChild(child.Name) then
 		if configs.Chams and child ~= lplrchar then
-	AddChams(child,Color3.fromRGB(255,255,255),false)
-end
-if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child.Name ~= LocalPlayer.Name) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
-	RemoveDisplays(child)
-end
-elseif configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
-	AddChams(child,configs.GunDropColor)
-end
+			AddChams(child,Color3.fromRGB(255,255,255),false)
+		end
+		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child.Name ~= LocalPlayer.Name) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
+			RemoveDisplays(child)
+		end
+	elseif configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
+		AddChams(child,configs.GunDropColor,true)
+	end
 end)
 
 if Drawing then
