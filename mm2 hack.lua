@@ -52,6 +52,12 @@ local configs = {
 	SheriffColor = Color3.fromRGB(112, 136, 255);
 	GunDropColor = Color3.fromRGB(141, 112, 255);
 }
+local roles = {
+	Murderer = nil;
+	Sheriff = nil;
+	Hero = nil;
+}
+local SheriffDied = false
 
 local connections = {}
 local c = 0
@@ -80,25 +86,34 @@ else
 	})
 end
 function GetRole(player)
-
+	for i, v in pairs(roles) do
+		if v == player.Name then
+			return i
+		end
+	end
+	return "Innocent"
 end
 function AddChams(object,color,bpwhitelisted)
 	local lplrchar = LocalPlayer.Character
 
 	local function addboxhandleadornment(part)
 		local BHA = Instance.new("BoxHandleAdornment", part)
-		BHA.Name = "MM2CHEATSCHAMS"
+		BHA.Name = "MM2CHEATSBYCITY512"
 		BHA.Adornee = part
 		BHA.Color3 = color
 		BHA.ZIndex = 1
 		BHA.AlwaysOnTop = configs.AlwaysOnTop
 		BHA.Size = part.Size
 		BHA.Transparency = 0.3
+		
+		if part.Name == "GunDrop" then
+			BHA.AlwaysOnTop = true
+		end
 	end
 	if not bpwhitelisted and object ~= lplrchar then
 		local player = Players:FindFirstChild(object.Name)
 		local humanoid = object:FindFirstChildOfClass("Humanoid")
-		if player then
+		if object.ClassName == "Model" and player then
 			if humanoid and humanoid.Health > 0 then
 				for _, child in pairs(char:GetChildren()) do
 					if child:IsA("BasePart") then
@@ -109,6 +124,39 @@ function AddChams(object,color,bpwhitelisted)
 		end
 	elseif bpwhitelisted then
 		addboxhandleadornmnet(object)
+	end
+end
+function UpdateChams(type,obj)
+	if type == 1 then
+		if obj and obj.Character then
+			local color = Color3.new(1,1,1)
+			local role = GetRole(obj)
+			if role == "Murderer" then
+				color = configs.MurdererColor
+			elseif role == "Sheriff" then
+				color = configs.SheriffColor
+			elseif role == "Hero" then
+				color = configs.HeroColor
+			elseif role == "Innocent" then
+				color = configs.InnocentColor
+			end
+			
+			for _, child in pairs(obj.Character:GetChildren()) do
+				if child:IsA("BasePart") then
+					local BHA = child:FindFirstChildOfClass("BoxHandleAdornment")
+					if BHA then
+						BHA.Color3 = color
+					end
+				end
+			end
+		end
+	elseif type == 2 then
+		if obj and obj:IsA("BasePart") and obj.Name == "GunDrop" then
+			local BHA = child:FindFirstChildOfClass("BoxHandleAdornment")
+			if BHA then
+				BHA.Color3 = configs.GunDropColor
+			end
+		end
 	end
 end
 function RemoveChams(object)
@@ -126,7 +174,11 @@ function RemoveChams(object)
 		end
 	end
 end
-
+function UpdateChamsOnAllPlayers()
+	for _, player in pairs(Players:GetChildren()) do
+		UpdateChams(1,player)
+	end
+end
 function RemoveDisplays(character)
 	local KnifeDisplay = character:FindFirstChild("KnifeDisplay")
 	local GunDisplay = character:FindFirstChild("GunDisplay")
@@ -191,6 +243,68 @@ function GetClosestPlayer(FOV,maxdist)
 		return closest
 	end
 	return nil
+end
+
+function AddEvents(player)
+	c += 4
+	current = c
+
+	local plrchar = player.Character or player.CharacterAdded:Wait()
+	local humanoid = plrchar:WaitForChild("Humanoid")
+
+	local function addhumanoiddiedconnection(humanoid)
+		connections[current - 3] = humanoid.Died:Connect(function()
+			local role = GetRole(removedplayer)
+			if role ~= "Innocent" then
+				roles[role] = nil
+				if role == "Sheriff" then
+					SheriffDied = true
+				end
+			end
+			connections[current - 3]:Disconnect()
+		end)
+	end
+	
+	connections[current] = Players.PlayerRemoving:Connect(function(removedplayer)
+		if removedplayer == player then
+			local role = GetRole(removedplayer)
+			if role ~= "Innocent" then
+				roles[role] = nil
+				if role == "Sheriff" then
+					SheriffDied = true
+				end
+			end
+				
+			connections[current]:Disconnect()
+			connections[current - 1]:Disconnect()
+			connections[current - 2]:Disconnect()
+		end
+	end)
+	
+	connections[current - 1] = player.CharacterAdded:Connect(function(char)
+		local hum = char:WaitForChild("Humanoid")
+		if hum then
+			addhumanoiddiedconnection(hum)
+		end
+	end)
+	
+	connections[current - 2] = player:WaitForChild("Backpack").ChildAdded:Connect(function(child)
+		if child.ClassName == "Tool" then
+			if child.Name == "Knife" then
+				roles.Murderer = player
+			elseif child.Name == "Gun" then
+				if SheriffDied then
+					roles.Hero = player
+				else
+					roles.Sheriff = player
+					SheriffDied = false
+				end
+			end
+		end
+	end)
+	if humanoid then
+		addhumanoiddiedconnection(humanoid)
+	end
 end
 
 local Window = Library:CreateWindow({
@@ -395,7 +509,6 @@ local AlwaysOnTop = Visuals:CreateToggle({
 	Flag = "Always On Top"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		configs.AlwaysOnTop = value
-		UpdateChams()
 	end;
 })
 local MurdererColor = Visuals:CreateColorPicker({
@@ -404,7 +517,7 @@ local MurdererColor = Visuals:CreateColorPicker({
 	Flag = "Murderer Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		configs.MurdererColor = value
-		UpdateChams()
+		UpdateChamsOnAllPlayers()
 	end
 })
 local HeroColor = Visuals:CreateColorPicker({
@@ -413,7 +526,7 @@ local HeroColor = Visuals:CreateColorPicker({
 	Flag = "Hero Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		configs.HeroColor = value
-		UpdateChams()
+		UpdateChamsOnAllPlayers()
 	end
 })
 local InnocentColor = Visuals:CreateColorPicker({
@@ -422,7 +535,7 @@ local InnocentColor = Visuals:CreateColorPicker({
 	Flag = "Innocent Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		configs.InnocentColor = value
-		UpdateChams()
+		UpdateChamsOnAllPlayers()
 	end
 })
 local SheriffColor = Visuals:CreateColorPicker({
@@ -431,7 +544,7 @@ local SheriffColor = Visuals:CreateColorPicker({
 	Flag = "Sheriff Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		configs.SheriffColor = value
-		UpdateChams()
+		UpdateChamsOnAllPlayers()
 	end
 })
 local GunDropColor = Visuals:CreateColorPicker({
@@ -440,7 +553,6 @@ local GunDropColor = Visuals:CreateColorPicker({
 	Flag = "Gun Drop Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(value)
 		configs.GunDropColor = value
-		UpdateChams()
 	end
 })
 if Drawing then
@@ -593,6 +705,13 @@ if Drawing then
 		end
 	end)
 end
+
+for _, player in pairs(Players:GetChildren()) do
+	AddEvents(player)
+end
+Players.ChildAdded:Connect(function(player)
+	AddEvents(player)
+end)
 
 local namecall
 namecall = hookmetamethod(game,"__namecall",function(self,...)
