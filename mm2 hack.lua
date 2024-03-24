@@ -1,6 +1,14 @@
 if not game:IsLoaded() then game.Loaded:Wait() end
 repeat task.wait() until game.Players.LocalPlayer
 
+if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod then
+	StarterGui:SetCore("SendNotification" ,{
+		Title = "Error";
+		Text = "Incompatible Executor!: Certain functions are not supported by this executor.";
+	})
+	return
+end
+
 if _G.mm2hacksalreadyloadedbyCITY512 then return end
 _G.mm2hacksalreadyloadedbyCITY512 = true
 
@@ -10,14 +18,6 @@ local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY51
 local UserInputService = game:GetService("UserInputService")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
-
-if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod then
-	StarterGui:SetCore("SendNotification" ,{
-		Title = "Error";
-		Text = "Incompatible Executor!: Certain functions are not supported by this executor.";
-	})
-	return
-end
 
 local LocalPlayer = Players.LocalPlayer
 local mouse = LocalPlayer:GetMouse()
@@ -58,6 +58,7 @@ local roles = {
 	Hero = nil;
 }
 local SheriffDied = false
+local sleight = false
 
 local connections = {}
 local c = 0
@@ -105,7 +106,7 @@ function AddChams(object,color,bpwhitelisted)
 		BHA.AlwaysOnTop = configs.AlwaysOnTop
 		BHA.Size = part.Size
 		BHA.Transparency = 0.3
-		
+
 		if part.Name == "GunDrop" then
 			BHA.AlwaysOnTop = true
 		end
@@ -115,7 +116,7 @@ function AddChams(object,color,bpwhitelisted)
 		local humanoid = object:FindFirstChildOfClass("Humanoid")
 		if object.ClassName == "Model" and player then
 			if humanoid and humanoid.Health > 0 then
-				for _, child in pairs(char:GetChildren()) do
+				for _, child in pairs(object:GetChildren()) do
 					if child:IsA("BasePart") then
 						addboxhandleadornment(child)
 					end
@@ -123,7 +124,7 @@ function AddChams(object,color,bpwhitelisted)
 			end
 		end
 	elseif bpwhitelisted then
-		addboxhandleadornmnet(object)
+		addboxhandleadornment(object)
 	end
 end
 function UpdateChams(type,obj)
@@ -140,7 +141,7 @@ function UpdateChams(type,obj)
 			elseif role == "Innocent" then
 				color = configs.InnocentColor
 			end
-			
+
 			for _, child in pairs(obj.Character:GetChildren()) do
 				if child:IsA("BasePart") then
 					local BHA = child:FindFirstChildOfClass("BoxHandleAdornment")
@@ -152,7 +153,7 @@ function UpdateChams(type,obj)
 		end
 	elseif type == 2 then
 		if obj and obj:IsA("BasePart") and obj.Name == "GunDrop" then
-			local BHA = child:FindFirstChildOfClass("BoxHandleAdornment")
+			local BHA = obj:FindFirstChildOfClass("BoxHandleAdornment")
 			if BHA then
 				BHA.Color3 = configs.GunDropColor
 			end
@@ -247,14 +248,14 @@ end
 
 function AddEvents(player)
 	c += 4
-	current = c
+	local current = c
 
 	local plrchar = player.Character or player.CharacterAdded:Wait()
 	local humanoid = plrchar:WaitForChild("Humanoid")
 
 	local function addhumanoiddiedconnection(humanoid)
 		connections[current - 3] = humanoid.Died:Connect(function()
-			local role = GetRole(removedplayer)
+			local role = GetRole(player)
 			if role ~= "Innocent" then
 				roles[role] = nil
 				if role == "Sheriff" then
@@ -264,7 +265,7 @@ function AddEvents(player)
 			connections[current - 3]:Disconnect()
 		end)
 	end
-	
+
 	connections[current] = Players.PlayerRemoving:Connect(function(removedplayer)
 		if removedplayer == player then
 			local role = GetRole(removedplayer)
@@ -274,20 +275,20 @@ function AddEvents(player)
 					SheriffDied = true
 				end
 			end
-				
+
 			connections[current]:Disconnect()
 			connections[current - 1]:Disconnect()
 			connections[current - 2]:Disconnect()
 		end
 	end)
-	
+
 	connections[current - 1] = player.CharacterAdded:Connect(function(char)
 		local hum = char:WaitForChild("Humanoid")
 		if hum then
 			addhumanoiddiedconnection(hum)
 		end
 	end)
-	
+
 	connections[current - 2] = player:WaitForChild("Backpack").ChildAdded:Connect(function(child)
 		if child.ClassName == "Tool" then
 			if child.Name == "Knife" then
@@ -632,10 +633,10 @@ local RemoveAccessoryLag = Visuals:CreateButton({
 		for _, player in pairs(Players:GetChildren()) do
 			local character = workspace:FindFirstChild(player.Name)
 			if character and (configs.IncludeLocalPlayer or character ~= lplrchar) then
-	RemoveDisplays(character)
-end
-end
-end;
+				RemoveDisplays(character)
+			end
+		end
+	end;
 })
 local AutoRemoveLag = Visuals:CreateToggle({
 	Name = "Auto Remove Lag";
@@ -774,6 +775,7 @@ namecall = hookmetamethod(game,"__namecall",function(self,...)
 			if closest then
 				local attachment = Instance.new("Attachment", HumanoidRootPart)
 				attachment.Position = Vector3.new(1.5, 1.9, 1)
+				local path, aimpos
 				if sleight then
 					path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,nil,true,configs.Prediction,nil,false)
 				else
