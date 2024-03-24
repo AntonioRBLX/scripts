@@ -711,6 +711,21 @@ if Drawing then
 end
 
 for _, player in pairs(Players:GetChildren()) do
+	local backpack = player:WaitForChild("Backpack")
+	local char = player.Character
+	if backpack then
+		if char:FindFirstChild("Knife") then
+			table.insert(roles.Murderer,player)
+		elseif char:FindFirstChild("Gun") then
+			table.insert(roles.Sheriff,player)
+		end
+	elseif char then
+		if char:FindFirstChild("Knife") then
+			table.insert(roles.Murderer,player)
+		elseif char:FindFirstChild("Gun") then
+			table.insert(roles.Sheriff,player)
+		end
+	end
 	AddEvents(player)
 end
 Players.ChildAdded:Connect(function(player)
