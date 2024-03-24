@@ -53,9 +53,9 @@ local configs = {
 	GunDropColor = Color3.fromRGB(141, 112, 255);
 }
 local roles = {
-	Murderer = nil;
-	Sheriff = nil;
-	Hero = nil;
+	Murderer = {};
+	Sheriff = {};
+	Hero = {};
 }
 local SheriffDied = false
 local sleight = false
@@ -88,8 +88,10 @@ else
 end
 function GetRole(player)
 	for i, v in pairs(roles) do
-		if v == player.Name then
-			return i
+		for idx, plr in pairs(v) do
+			if plr == player.Name then
+				return i, idx
+			end
 		end
 	end
 	return "Innocent"
@@ -255,9 +257,9 @@ function AddEvents(player)
 
 	local function addhumanoiddiedconnection(humanoid)
 		connections[current - 3] = humanoid.Died:Connect(function()
-			local role = GetRole(player)
+			local role, idx = GetRole(player)
 			if role ~= "Innocent" then
-				roles[role] = nil
+				roles[role][idx] = nil
 				if role == "Sheriff" then
 					SheriffDied = true
 				end
@@ -268,9 +270,9 @@ function AddEvents(player)
 
 	connections[current] = Players.PlayerRemoving:Connect(function(removedplayer)
 		if removedplayer == player then
-			local role = GetRole(removedplayer)
+			local role, idx = GetRole(removedplayer)
 			if role ~= "Innocent" then
-				roles[role] = nil
+				roles[role][idx] = nil
 				if role == "Sheriff" then
 					SheriffDied = true
 				end
@@ -292,12 +294,12 @@ function AddEvents(player)
 	connections[current - 2] = player:WaitForChild("Backpack").ChildAdded:Connect(function(child)
 		if child.ClassName == "Tool" then
 			if child.Name == "Knife" then
-				roles.Murderer = player
+				table.insert(roles.Murderer,player)
 			elseif child.Name == "Gun" then
 				if SheriffDied then
-					roles.Hero = player
+					table.insert(roles.Hero,player)
 				else
-					roles.Sheriff = player
+					table.insert(roles.Sheriff,player)
 					SheriffDied = false
 				end
 			end
