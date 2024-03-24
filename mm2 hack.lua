@@ -178,8 +178,10 @@ function RemoveChams(object)
 	end
 end
 function UpdateChamsOnAllPlayers()
-	for _, player in pairs(Players:GetChildren()) do
-		UpdateChams(1,player)
+	if configs.Chams then
+		for _, player in pairs(Players:GetChildren()) do
+			UpdateChams(1,player)
+		end
 	end
 end
 function RemoveDisplays(character)
@@ -310,6 +312,7 @@ function AddEvents(player)
 				end
 			end
 		end
+		UpdateChamsOnAllPlayers()
 	end)
 	if humanoid then
 		addhumanoiddiedconnection(humanoid)
