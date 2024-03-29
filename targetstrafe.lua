@@ -38,7 +38,7 @@ while true do
 		if closest then
 			local closestHumanoid = closest.Parent:FindFirstChildOfClass("Humanoid")
 			if closestHumanoid and closestHumanoid.Health > 0 then
-				if (closest.Position + closestHumanoid.MoveDirection * 3 - NPCRoot.Position).Magnitude <= 6 then
+				if (closest.Position + closestHumanoid.MoveDirection * 3 - NPCRoot.Position).Magnitude <= 10 then
 					NPCRoot.CFrame = CFrame.new(NPCRoot.Position,closest.Position * Vector3.new(1,0,1) + NPCRoot.Position * Vector3.new(0,1,0))
 					walkpos = NPCRoot.Position - closest.Position
 				elseif (closest.Position - NPCRoot.Position).Magnitude <= 32 then
