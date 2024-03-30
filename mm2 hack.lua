@@ -292,7 +292,7 @@ function AddEvents(player)
 			addhumanoiddiedconnection(hum)
 		end
 		if configs.Chams and char ~= lplrchar then
-			AddChams(child,Color3.new(1,1,1),false)
+			AddChams(char,Color3.new(1,1,1),false)
 		end
 		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child.Name ~= LocalPlayer.Name) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
 			RemoveDisplays(child)
