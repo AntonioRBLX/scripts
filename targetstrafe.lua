@@ -1,8 +1,9 @@
 local closest
-local LocalPlayer = game.Players.LocalPlayer
-local NPCChar = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
-local NPCRoot = NPCChar:WaitForChild("HumanoidRootPart")
-local NPCHumanoid = NPCChar:WaitForChild("Humanoid")
+local Players = game:GetService("Players")
+local LocalPlayer = Players.LocalPlayer
+local LPlrChar = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local LPlrRoot = LPlrChar:WaitForChild("HumanoidRootPart")
+local LPlrHumanoid = LPlrChar:WaitForChild("Humanoid")
 
 local Controls = require(LocalPlayer.PlayerScripts.PlayerModule):GetControls()
 
@@ -11,29 +12,26 @@ local rotationdirection = 1
 local distance = math.random(8,20)
 
 LocalPlayer.CharacterAdded:Connect(function(char)
-	print("character added")
-	NPCChar = char
-	NPCRoot = NPCChar:WaitForChild("HumanoidRootPart")
-	NPCHumanoid = NPCChar:WaitForChild("Humanoid")
-	print(NPCRoot,NPCHumanoid)
+	LPlrChar = char
+	LPlrRoot = NPCChar:WaitForChild("HumanoidRootPart")
+	LPlrHumanoid = NPCChar:WaitForChild("Humanoid")
 end)
 while true do
 	closest = nil
 	local part
-	if NPCChar and NPCRoot and NPCHumanoid then
-		for _, v in pairs(workspace:GetChildren()) do
-			if v.ClassName == "Model" and v ~= NPCChar then
-				local TargetRoot = v:FindFirstChild("HumanoidRootPart")
-				if TargetRoot and TargetRoot:IsA("BasePart") then
-					local closestplayer = game.Players:GetPlayerFromCharacter(TargetRoot.Parent)
-					if closestplayer and closestplayer.Team ~= LocalPlayer.Team then
-						local distance = (TargetRoot.Position - NPCRoot.Position).Magnitude
-						if not closest or distance < (closest.Position - NPCRoot.Position).Magnitude then
-							closest = TargetRoot
+	if LPlrChar and LPlrRoot and LPlrHumanoid then
+		for _, NPC in pairs(Players:GetPlayers()) do
+			if NPC ~= LocalPlayer and NPC.Team ~= LocalPlayer.Team then
+				local NPCChar = workspace:FindFirstChild(NPC.Name)
+				if NPCChar then
+					local NPCRoot = NPCChar:FindFirstChild("HumanoidRootPart")
+					if NPCRoot and NPCRoot:IsA("BasePart") then
+						local distance = (NPCRoot.Position - LPlrRoot.Position).Magnitude
+						if not closest or distance < (closest.Position - LPlrRoot.Position).Magnitude then
+							closest = NPCRoot
 						end
 					end
 				end
-			end
 		end
 		if closest then
 			local closestHumanoid = closest.Parent:FindFirstChildOfClass("Humanoid")
