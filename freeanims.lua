@@ -16,7 +16,6 @@ local anims = {
 }
 
 function addanims(char)
-	local char = lplr.Character
 	if char then
 		local animatescript = char:WaitForChild("Animate")
 		if animatescript then
