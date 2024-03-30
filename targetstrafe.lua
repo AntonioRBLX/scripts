@@ -36,13 +36,13 @@ while true do
 		if closest then
 			local closestHumanoid = closest.Parent:FindFirstChildOfClass("Humanoid")
 			if closestHumanoid and closestHumanoid.Health > 0 then
-				if (closest.Position + closestHumanoid.MoveDirection * 3 - NPCRoot.Position).Magnitude <= 10 then
-					NPCRoot.CFrame = CFrame.new(NPCRoot.Position,closest.Position * Vector3.new(1,0,1) + NPCRoot.Position * Vector3.new(0,1,0))
-					walkpos = NPCRoot.Position - closest.Position
-				elseif (closest.Position - NPCRoot.Position).Magnitude <= 32 then
-					NPCRoot.CFrame = CFrame.new(NPCRoot.Position,closest.Position * Vector3.new(1,0,1) + NPCRoot.Position * Vector3.new(0,1,0))
+				if (closest.Position + closestHumanoid.MoveDirection * 3 - LPlrRoot.Position).Magnitude <= 10 then
+					LPlrRoot.CFrame = CFrame.new(LPlrRoot.Position,closest.Position * Vector3.new(1,0,1) + LPlrRoot.Position * Vector3.new(0,1,0))
+					walkpos = LPlrRoot.Position - closest.Position
+				elseif (closest.Position - LPlrRoot.Position).Magnitude <= 32 then
+					LPlrRoot.CFrame = CFrame.new(LPlrRoot.Position,closest.Position * Vector3.new(1,0,1) + LPlrRoot.Position * Vector3.new(0,1,0))
 					walkpos = closest.Position + CFrame.Angles(0,math.rad(rotationangle),0).LookVector * distance
-					NPCHumanoid.Jump = true
+					LPlrHumanoid.Jump = true
 					rotationangle += rotationdirection * 3
 					if math.random(1,50) == 1 then
 						rotationdirection = -rotationdirection -- Changes the pivot direction
@@ -59,7 +59,7 @@ while true do
 					local raycast = workspace:Raycast(walkpos,Vector3.new(0,-10000,0),raycastParams)
 					if raycast and raycast.Position then
 						Controls:Disable()
-						NPCHumanoid.WalkToPoint = walkpos
+						LPlrHumanoid.WalkToPoint = walkpos
 					else
 						Controls:Enable()
 					end
