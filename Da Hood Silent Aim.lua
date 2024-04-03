@@ -6,7 +6,6 @@ local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
 local FOVCircle
-local AimbotSettings = getgenv().AimbotSettings or {}
 
 if Drawing then
     FOVCircle = Drawing.new("Circle")
@@ -53,7 +52,7 @@ end)
 
 local index
 index = hookmetamethod(game, "__index", function(obj, idx)
-    if AimbotSettings.Ping and AimbotSettings.FOV and obj:IsA("Mouse") and idx == "Hit" then 
+    if obj:IsA("Mouse") and idx == "Hit" then 
         local target = GetClosestPlayer()
         return target and CFrame.new(aimbot:ComputePathAsync(LocalPlayer.Character.HumanoidRootPart.Position,target,0,0,{},true,AimbotSettings.Ping,0,true)) or index(obj, idx)
     end
