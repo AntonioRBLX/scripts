@@ -1,4 +1,4 @@
-Da Hood Aimbot:
+Da Hood Silent Aim:
 
 getgenv().AimbotSettings = {
     Ping = 50;
