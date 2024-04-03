@@ -15,7 +15,6 @@ if Drawing then
     FOVCircle.Radius = FOV
     FOVCircle.Filled = false
     FOVCircle.Visible = true
-    FOVCircle.Size = FOV
 end
 
 function GetClosestPlayer()
