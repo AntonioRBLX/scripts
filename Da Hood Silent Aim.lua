@@ -6,6 +6,7 @@ local LocalPlayer = Players.LocalPlayer
 local Camera = workspace.CurrentCamera
 
 local FOVCircle
+local index
 
 if Drawing then
     FOVCircle = Drawing.new("Circle")
@@ -50,7 +51,6 @@ UserInputService.InputChanged:Connect(function(input)
     end
 end)
 
-local index
 index = hookmetamethod(game, "__index", function(obj, idx)
     if obj:IsA("Mouse") and idx == "Hit" then 
         local target = GetClosestPlayer()
