@@ -9,7 +9,7 @@ local Ping
 local FOV
 
 local FOVCircle
-local AimbotSettings = getgenv().AimbotSettings
+local AimbotSettings = getgenv().AimbotSettings or {}
 
 if Drawing then
     FOVCircle = Drawing.new("Circle")
@@ -17,11 +17,6 @@ if Drawing then
     FOVCircle.Thickness = 2
     FOVCircle.Radius = FOV
     FOVCircle.Filled = false
-end
-
-if AimbotSettings then
-    Ping = AimbotSettings[1]
-    FOV = AimbotSettings[2]
 end
 
 function GetClosestPlayer()
@@ -60,7 +55,7 @@ end)
 
 local index
 index = hookmetamethod(game, "__index", function(obj, idx)
-    if Ping and FOV and obj:IsA("Mouse") and idx == "Hit" then 
+    if AimbotSettings.Ping and AimbotSettings.FOV and obj:IsA("Mouse") and idx == "Hit" then 
         local target = GetClosestPlayer()
         return target and CFrame.new(aimbot:ComputePathAsync(LocalPlayer.Character.HumanoidRootPart.Position,target,0,0,{},true,Ping,0,true)) or index(obj, idx)
     end
