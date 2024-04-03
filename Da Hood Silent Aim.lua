@@ -33,7 +33,7 @@ function GetClosestPlayer()
                         local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
                         local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
-                        if onscreen and distance <= FOV then
+                        if onscreen and distance <= AimbotSettings.FOV then
                             if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
                                 closest = character
                             end
@@ -57,7 +57,7 @@ local index
 index = hookmetamethod(game, "__index", function(obj, idx)
     if AimbotSettings.Ping and AimbotSettings.FOV and obj:IsA("Mouse") and idx == "Hit" then 
         local target = GetClosestPlayer()
-        return target and CFrame.new(aimbot:ComputePathAsync(LocalPlayer.Character.HumanoidRootPart.Position,target,0,0,{},true,Ping,0,true)) or index(obj, idx)
+        return target and CFrame.new(aimbot:ComputePathAsync(LocalPlayer.Character.HumanoidRootPart.Position,target,0,0,{},true,AimbotSettings.Ping,0,true)) or index(obj, idx)
     end
 
     return index(obj, idx) 
