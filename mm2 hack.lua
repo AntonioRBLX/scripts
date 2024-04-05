@@ -1,35 +1,52 @@
-if not game:IsLoaded() then game.Loaded:Wait() end
-repeat task.wait() until game.Players.LocalPlayer
+local CoreGui = game:GetService("CoreGui")
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+local TeleportService = game:GetService("TeleportService")
 
-if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod then
-	StarterGui:SetCore("SendNotification" ,{
-		Title = "Error";
-		Text = "Incompatible Executor!: Certain functions are not supported by this executor.";
+function notify(title,msg)
+	game:GetService("StarterGui"):SetCore("SendNotification" ,{
+		Title = title;
+		Text = msg;
 	})
+end
+if not game:IsLoaded() then
+	local message = Instance.new("Hint", CoreGui)
+	message.Text = "Waiting For Game To Load..."
+	game.Loaded:Wait()
+	message:Destroy()
+end
+if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod then -- Checks if executor is supported
+	notify("Error","Incompatible Executor! Functions are not supported by this executor.")
+	return
+end
+if game.PlaceId ~= 142823291 and game.PlaceId ~= 636649648 then 
+	notify("Error","Unsupported game. Supported Games: Murder Mystery 2 / MM2 Assassin")
 	return
 end
 
-if _G.mm2hacksalreadyloadedbyCITY512 then return end
+if _G.mm2hacksalreadyloadedbyCITY512 then
+	notify("Error","Already Executed!")
+	return
+end -- Checks if the script is already executed
 _G.mm2hacksalreadyloadedbyCITY512 = true
+
+-- Modules
 
 local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
-local UserInputService = game:GetService("UserInputService")
-local StarterGui = game:GetService("StarterGui")
-local Players = game:GetService("Players")
+repeat task.wait() until game.Players.LocalPlayer -- Waits for LocalPlayer to load in.
+-- Variables
 
 local LocalPlayer = Players.LocalPlayer
-local mouse = LocalPlayer:GetMouse()
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local Mouse = LocalPlayer:GetMouse()
 
-local scriptactivated = true
-local antilagalreadyexecuted = false
-
-local configs = {
+local configs = { -- Library Configurations
 	GunAimbot = false;
 	KnifeAimbot = false;
 	Prediction = 50;
-	ShowCalculations = false;
+	AimbotMethod = "Murderer/Target";
 	FOV = 350;
 	KillAura = false;
 	KillAuraRange = 15;
@@ -43,25 +60,52 @@ local configs = {
 	WalkSpeed = 16;
 	JumpPower = 50;
 
+	CoinFarm = false;
+	XPFarm = false;
+	AutoUnbox = false;
+	AutoUnboxCrate = {};
+
 	Chams = false;
 	ShowGunDrop = false;
-	AlwaysOnTop = false;
 	MurdererColor = Color3.fromRGB(255, 112, 112);
 	HeroColor = Color3.fromRGB(255, 231, 112);
 	InnocentColor = Color3.fromRGB(143, 255, 112);
 	SheriffColor = Color3.fromRGB(112, 136, 255);
 	GunDropColor = Color3.fromRGB(141, 112, 255);
 }
-local roles = {
-	Murderer = {};
-	Sheriff = {};
-	Hero = {};
+local players = {} --[[
+					Nikilis = {
+						Role = "Murderer";
+					}
+					--]]
+local weapons = {
+	Knife = {
+		Role = {"Murderer"};
+		Speed = {
+			Normal = 80;
+			Sleight = 100;
+		}
+	};
+	Gun = {
+		Role = {"Sheriff","Hero"};
+	}
 }
-local SheriffDied = false
-local sleight = false
-
+local match = {
+	SheriffDied = false;
+}
+local powers = {
+	Sleight = false;
+}
+local eventfunctions = {}
+local scriptvariables = {
+	antilagalreadyexecuted = true;
+	scriptactivated = true;
+	executeonteleport = false;
+	tpcheck = false;
+	queueonteleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport;
+}
 local connections = {}
-local c = 0
+local a = 0
 
 local Drawing1
 local Drawing2
@@ -81,112 +125,215 @@ if Drawing then
 	Drawing2.ZIndex = -1
 	Drawing2.Filled = false
 else
-	StarterGui:SetCore("SendNotification" ,{
-		Title = "Info";
-		Text = "Drawing is not supported on this executor, ShowFOVCircle will not work.";
-	})
+	notify("Info","Drawing is not supported on this executor, functions such as ShowFOVCircle will not work.")
 end
-function GetRole(player)
-	for i, v in pairs(roles) do
-		for idx, plr in pairs(v) do
-			if plr == player.Name then
-				return i, idx
-			end
-		end
-	end
-	return "Innocent"
-end
-function AddChams(object,color,bpwhitelisted)
-	local lplrchar = LocalPlayer.Character
 
-	local function addboxhandleadornment(part)
+-- Functions
+
+function AddChams(object,isacharmodel,chamsettings) -- Adds ESP
+	local function AddBoxHandleAdornment(part)
 		local BHA = Instance.new("BoxHandleAdornment", part)
-		BHA.Name = "MM2CHEATSBYCITY512"
+		BHA.Name = "MM2CHAMS"
 		BHA.Adornee = part
-		BHA.Color3 = color
+		BHA.Color3 = chamsettings.Color
 		BHA.ZIndex = 10
-		BHA.AlwaysOnTop = configs.AlwaysOnTop
+		BHA.AlwaysOnTop = true
 		BHA.Size = part.Size
 		BHA.Transparency = 0.3
+	end
+	if isacharmodel then
+		if object.ClassName == "Model" and Players:FindFirstChild(object.Name) then
+			for _, limb in pairs(object:GetChildren()) do
+				if limb:IsA("BasePart") and limb.Name ~= "HumanoidRootPart" and not limb:FindFirstChild("MM2CHAMS") then
+					AddBoxHandleAdornment(limb)
+				end
+			end
+		end
+	elseif object:IsA("BasePart") then
+		AddBoxHandleAdornment(object)
+	end
+end
+function UpdateChams(object,isacharmodel,chamsettings) -- Updates ESP
+	local function changeadornment(BHA)
+		BHA.Color3 = chamsettings.Color
+	end
+	if isacharmodel then
+		if object.ClassName == "Model" and Players:FindFirstChild(object.Name) then
+			for _, limb in pairs(object:GetChildren()) do
+				local BHA = limb:FindFirstChild("MM2CHAMS")
+				if BHA and BHA.ClassName == "BoxHandleAdornment" then
+					changeadornment(BHA)
+				end
+			end
+		end
+	else
+		local BHA = object:FindFirstChild("MM2CHAMS")
+		if BHA and BHA.ClassName == "BoxHandleAdornment" then
+			changeadornment(BHA)
+		end
+	end
+end
+function RemoveChams(object,isacharmodel) -- Destroys ESP
+	if isacharmodel then
+		if object.ClassName == "Model" and Players:FindFirstChild(object.Name) then
+			for _, limb in pairs(object:GetChildren()) do
+				local BHA = limb:FindFirstChild("MM2CHAMS")
+				if BHA and BHA.ClassName == "BoxHandleAdornment" then
+					BHA:Destroy()
+				end
+			end
+		end
+	else
+		local BHA = object:FindFirstChild("MM2CHAMS")
+		if BHA and BHA.ClassName == "BoxHandleAdornment" then
+			BHA:Destroy()
+		end
+	end
+end
+function GetClosestPlayer(FOV,maxdist)
+	local lplrchar = LocalPlayer.Character
+	if lplrchar then
+		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
+		if lplrhrp and lplrhrp:IsA("BasePart") then
+			local camera = workspace.CurrentCamera
+			local closest
+			local function getclosestplayertoscreenpoint(point)
+				for _, player in pairs(Players:GetPlayers()) do
+					local character = player.Character
+					if character and character ~= lplrchar then
+						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+						if NPCRoot and NPCRoot:IsA("BasePart") then
+							local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
+							local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
+							local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
-		if part.Name == "GunDrop" then
-			BHA.AlwaysOnTop = true
-		end
-	end
-	if not bpwhitelisted and object ~= lplrchar then
-		local player = Players:FindFirstChild(object.Name)
-		local humanoid = object:FindFirstChildOfClass("Humanoid")
-		if object.ClassName == "Model" and player then
-			if humanoid and humanoid.Health > 0 then
-				for _, child in pairs(object:GetChildren()) do
-					if child:IsA("BasePart") then
-						addboxhandleadornment(child)
+							if onscreen and distance <= FOV then
+								if not closest or distancefromplayer < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
+									closest = character
+								end
+							end
+						end
 					end
 				end
 			end
-		end
-	elseif bpwhitelisted then
-		addboxhandleadornment(object)
-	end
-end
-function UpdateChams(type,obj)
-	if type == 1 then
-		if obj and obj.Character then
-			local color = Color3.new(1,1,1)
-			local role = GetRole(obj)
-			if role == "Murderer" then
-				color = configs.MurdererColor
-			elseif role == "Sheriff" then
-				color = configs.SheriffColor
-			elseif role == "Hero" then
-				color = configs.HeroColor
-			elseif role == "Innocent" then
-				color = configs.InnocentColor
-			end
-
-			for _, child in pairs(obj.Character:GetChildren()) do
-				if child:IsA("BasePart") then
-					local BHA = child:FindFirstChildOfClass("BoxHandleAdornment")
-					if BHA then
-						BHA.Color3 = color
+			if configs.AimbotMethod == "ClosestPlayerToCursor" and camera then
+				getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
+				return closest
+			elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
+				for _, player in pairs(Players:GetPlayers()) do
+					local character = player.Character
+					if character and character ~= lplrchar  then
+						local characterroot = character:FindFirstChild("HumanoidRootPart")
+						if characterroot and characterroot:IsA("BasePart") then
+							local distance = (characterroot.Position - lplrhrp.Position).Magnitude
+							if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distance <= maxdist then
+								closest = character
+							end
+						end
+					end
+				end
+			elseif configs.AimbotMethod == "ClosestPlayerToScreenCenter" and camera then
+				getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y - 58)/2)
+			elseif configs.AimbotMethod == "Murderer/Target" then
+				if game.PlaceId == "636649648" then
+					
+				elseif players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
+					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
+				else
+					for _, player in pairs(Players:GetPlayers()) do
+						if players[player.Name] and players[player.Name].Role and players[player.Name].Role == weapons.Knife.Role[1] then
+							local character = player.Character
+							if character and character ~= lplrchar then
+								local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+								if NPCRoot and NPCRoot:IsA("BasePart") then
+									local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
+	
+									if not closest or distancefromplayer < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
+										closest = character
+									end
+								end
+							end
+						end
 					end
 				end
 			end
-		end
-	elseif type == 2 then
-		if obj and obj:IsA("BasePart") and obj.Name == "GunDrop" then
-			local BHA = obj:FindFirstChildOfClass("BoxHandleAdornment")
-			if BHA then
-				BHA.Color3 = configs.GunDropColor
-			end
+			return closest
 		end
 	end
+	return nil
 end
-function RemoveChams(object)
-	if object.ClassName == "Model" then
-		local player = Players:FindFirstChild(object.Name)
-		if player then
-			for _, child in pairs(object:GetChildren()) do
-				if child:IsA("BasePart") then
-					local BHA = child:FindFirstChildOfClass("BoxHandleAdornment")
-					if BHA then
-						BHA:Destroy()
-					end
+function ChamPlayerRoles() -- Chams Player Using Colors Based On Their Role
+	for _, player in pairs(Players:GetPlayers()) do
+		local character = player.Character
+		if character and players[player.Name] and player ~= LocalPlayer then
+			local role = players[player.Name].Role
+			if role then
+				if role == weapons.Knife.Role[1] then
+					AddChams(character,true,{
+						Color = configs.MurdererColor;
+					})
+				elseif role == weapons.Gun.Role[1] then
+					AddChams(character,true,{
+						Color = configs.SheriffColor;
+					})
+				elseif role == weapons.Gun.Role[2] then
+					AddChams(character,true,{
+						Color = configs.HeroColor;
+					})
+				elseif role == "Innocent" then
+					AddChams(character,true,{
+						Color = configs.InnocentColor;
+					})
 				end
 			end
 		end
 	end
 end
-function UpdateChamsOnAllPlayers()
-	if configs.Chams then
-		for _, player in pairs(Players:GetChildren()) do
-			UpdateChams(1,player)
+function UnchamPlayers()
+	for _, player in pairs(Players:GetPlayers()) do
+		local character = player.Character
+		if character then
+			RemoveChams(character,true)
+		end
+	end
+end
+function UpdateAllChams()
+	for _, child in pairs(workspace:GetChildren()) do
+		local player = Players:GetPlayerFromCharacter(child)
+		if player and players[player.Name] and player ~= LocalPlayer then
+			local role = players[player.Name].Role
+			if role then
+				if role == weapons.Knife.Role[1] then
+					UpdateChams(child,true,{
+						Color = configs.MurdererColor;
+					})
+				elseif role == weapons.Gun.Role[1] then
+					UpdateChams(child,true,{
+						Color = configs.SheriffColor;
+					})
+				elseif role == weapons.Gun.Role[2] then
+					UpdateChams(child,true,{
+						Color = configs.HeroColor;
+					})
+				elseif role == "Innocent" then
+					UpdateChams(child,true,{
+						Color = configs.InnocentColor;
+					})
+				end
+			end
+		elseif child:IsA("BasePart") and child.Name == "GunDrop" then
+			UpdateChams(child,false,{
+				Color = configs.GunDropColor;
+			})
 		end
 	end
 end
 function RemoveDisplays(character)
-	local KnifeDisplay = character:FindFirstChild("KnifeDisplay")
-	local GunDisplay = character:FindFirstChild("GunDisplay")
+	local KnifeDisplay = character:WaitForChild("KnifeDisplay", 10)
+	local GunDisplay = character:WaitForChild("GunDisplay", 10)
+
+	if KnifeDisplay then KnifeDisplay:Destroy() end
+	if GunDisplay then GunDisplay:Destroy() end
 
 	if configs.IncludeAccessories then
 		for _, child in pairs(character:GetChildren()) do
@@ -195,129 +342,124 @@ function RemoveDisplays(character)
 			end
 		end
 	end
-
-	if not KnifeDisplay then return end
-	KnifeDisplay:Destroy()
-	if not GunDisplay then return end
-	GunDisplay:Destroy()
 end
+function eventfunctions.Initialize(player)
+	players[player.Name] = {Role = "Innocent";}
 
-function GetClosestPlayer(FOV,maxdist)
-	if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
-	local lplrchar = LocalPlayer.Character
-	local lplrhrp = lplrchar.HumanoidRootPart
+	local backpack = player:WaitForChild("Backpack")
+	local character = player.Character or player.CharacterAdded:Wait()
 
-	local camera = workspace.CurrentCamera
-	local closest
+	a += 4
+	local b = a
 
-	local function getclosestplayertoscreenpoint(point)
-		for _, player in pairs(Players:GetChildren()) do
-			local character = workspace:FindFirstChild(player.Name)
-			if character and character ~= lplrchar then
-				local NPCRoot = character:FindFirstChild("HumanoidRootPart")
-				if NPCRoot then
-					local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
-					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
-					local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
-
-					if onscreen and distance <= FOV then
-						if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
-							closest = character
-						end
-					end
+	local function Disconnect()
+		if connections[b] then
+			connections[b]:Disconnect()
+		end
+		if connections[b - 1] then
+			connections[b - 1]:Disconnect()
+		end
+		if connections[b - 2] then
+			connections[b - 2]:Disconnect()
+		end
+		if connections[b - 3] then
+			connections[b - 3]:Disconnect()
+		end
+	end
+	local function HumanoidDiedEvent(humanoid)
+		if connections[b] then
+			connections[b]:Disconnect()
+		end
+		connections[b] = humanoid.Died:Connect(function()
+			if players[player.Name].Role == weapons.Gun.Role[1] or players[player.Name].Role == weapons.Gun.Role[2] then
+				match.SheriffDied = true
+			end
+			players[player.Name].Role = "Innocent"
+			print(tostring(player),"has died.")
+		end)
+	end
+	local function AssignRole(Tool)
+		if Tool.Name == "Knife" then
+			players[player.Name].Role = weapons.Knife.Role[1]
+			if configs.Chams and player ~= LocalPlayer then
+				UpdateChams(character,true,{
+					Color = configs.MurdererColor;
+				})
+			end
+		elseif Tool.Name == "Gun" then
+			if match.SheriffDied then
+				players[player.Name].Role = weapons.Gun.Role[2]
+				if configs.Chams and player ~= LocalPlayer then
+					UpdateChams(character,true,{
+						Color = configs.HeroColor;
+					})
+				end
+			else
+				players[player.Name].Role = weapons.Gun.Role[1]
+				if configs.Chams and player ~= LocalPlayer then
+					UpdateChams(character,true,{
+						Color = configs.SheriffColor;
+					})
 				end
 			end
 		end
 	end
-	if configs.AimbotMethod == "ClosestPlayerToCursor" and camera then
-		getclosestplayertoscreenpoint(Vector2.new(mouse.X,mouse.Y))
-		return closest
-	elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
-		for _, player in pairs(Players:GetChildren()) do
-			local character = workspace:FindFirstChild(player.Name)
-			if character and character ~= lplrchar and character:FindFirstChild("HumanoidRootPart") then
-				local distance = (character.HumanoidRootPart.Position - lplrhrp.Position).Magnitude
-				if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distance <= maxdist then
-					closest = character
-				end
-			end
+	local function CharacterAdded(char)
+		character = char
+		players[player.Name].Role = "Innocent"
+
+		local bp = player:WaitForChild("Backpack")
+		backpack = bp
+		local humanoid = char:WaitForChild("Humanoid")
+		if humanoid.ClassName == "Humanoid" then
+			HumanoidDiedEvent(humanoid)
 		end
-		return closest
-	elseif configs.AimbotMethod == "ClosestPlayerToScreenCenter" and camera then
-		getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y - 58)/2)
-		return closest
-	end
-	return nil
-end
-
-function AddEvents(player)
-	c += 4
-	local current = c
-
-	local plrchar = player.Character or player.CharacterAdded:Wait()
-	local humanoid = plrchar:WaitForChild("Humanoid")
-
-	local function addhumanoiddiedconnection(humanoid)
-		connections[current - 3] = humanoid.Died:Connect(function()
-			local role, idx = GetRole(player)
-			if role ~= "Innocent" then
-				roles[role][idx] = nil
-				if role == "Sheriff" then
-					SheriffDied = true
-				end
+		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or player ~= LocalPlayer) then
+			RemoveDisplays(char)
+		end
+		if configs.Chams and player ~= LocalPlayer then
+			AddChams(char,true,{
+				Color = configs.InnocentColor;
+			})
+		end
+		if connections[b - 1] then
+			connections[b - 1]:Disconnect()
+		end
+		connections[b - 1] = bp.ChildAdded:Connect(function(child)
+			if child.ClassName == "Tool" then
+				AssignRole(child)
 			end
-			connections[current - 3]:Disconnect()
 		end)
 	end
 
-	connections[current] = Players.PlayerRemoving:Connect(function(removedplayer)
+	connections[b - 2] = player.CharacterAdded:Connect(function(character)
+		print(tostring(player).."'s character has been added.")
+		CharacterAdded(character)
+	end)
+	connections[b - 3] = Players.PlayerRemoving:Connect(function(removedplayer)
 		if removedplayer == player then
-			local role, idx = GetRole(removedplayer)
-			if role ~= "Innocent" then
-				roles[role][idx] = nil
-				if role == "Sheriff" then
-					SheriffDied = true
-				end
-			end
-
-			connections[current]:Disconnect()
-			connections[current - 1]:Disconnect()
-			connections[current - 2]:Disconnect()
+			players[player.Name] = nil
+			Disconnect()
 		end
+		print(tostring(removedplayer),"has left the game")
 	end)
+	CharacterAdded(character)
 
-	connections[current - 1] = player.CharacterAdded:Connect(function(char)
-		local hum = char:WaitForChild("Humanoid")
-		if hum then
-			addhumanoiddiedconnection(hum)
-		end
-		if configs.Chams and char ~= lplrchar then
-			AddChams(char,Color3.new(1,1,1),false)
-		end
-		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or child.Name ~= LocalPlayer.Name) and child:WaitForChild("KnifeDisplay", 10) and child:WaitForChild("GunDisplay", 10) then
-			RemoveDisplays(child)
-		end
-	end)
-
-	connections[current - 2] = player:WaitForChild("Backpack").ChildAdded:Connect(function(child)
+	for _, child in pairs(backpack:GetChildren()) do
 		if child.ClassName == "Tool" then
-			if child.Name == "Knife" then
-				table.insert(roles.Murderer,player)
-			elseif child.Name == "Gun" then
-				if SheriffDied then
-					table.insert(roles.Hero,player)
-				else
-					table.insert(roles.Sheriff,player)
-					SheriffDied = false
-				end
-			end
+			AssignRole(child)
 		end
-		UpdateChamsOnAllPlayers()
-	end)
-	if humanoid then
-		addhumanoiddiedconnection(humanoid)
 	end
+	for _, child in pairs(character:GetChildren()) do
+		if child.ClassName == "Tool" then
+			AssignRole(child)
+		end
+	end
+
+	print("Initialized",tostring(player))
 end
+
+-- Library
 
 local Window = Library:CreateWindow({
 	Name = "Murder Mystery 2";
@@ -325,7 +467,7 @@ local Window = Library:CreateWindow({
 	LoadingSubtitle = "by CITY512";
 	ConfigurationSaving = {
 		Enabled = true;
-		FolderName = "Murder Mystery 2"; -- Create a custom folder for your hub/game
+		FolderName = nil; -- Create a custom folder for your hub/game
 		FileName = "MM2CHEATSBYCITY512"
 	};
 	Discord = {
@@ -345,27 +487,30 @@ local Window = Library:CreateWindow({
 	}
 })
 
-local Main = Window:CreateTab("Main", 4483362458) -- Title, Image
+local Main = Window:CreateTab("Main", 10814531047) -- Title, Image
 local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458) -- Title, Image
-local Visuals = Window:CreateTab("Visuals", 4483362458) -- Title, Image
-local Others = Window:CreateTab("Others", 4483362458) -- Title, Image
+local Visuals = Window:CreateTab("Visuals", 13080349149) -- Title, Image
+local AutoFarm = Window:CreateTab("Auto Farm (under construction)", 12966420667) -- Title, Image
+local Others = Window:CreateTab("Others", 11385220704) -- Title, Image
 
 local Section = Main:CreateSection("Aimbot", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
 local GunAimbot = Main:CreateToggle({
 	Name = "Gun Aimbot";
 	CurrentValue = false;
-	Flag = "Gun Aimbot"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Gun Aimbot";
 	Callback = function(value)
 		configs.GunAimbot = value
+		print("Gun Aimbot has been set to",value)
 	end;
 })
 local KnifeAimbot = Main:CreateToggle({
 	Name = "Knife Aimbot";
 	CurrentValue = false;
-	Flag = "Knife Aimbot"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Knife Aimbot";
 	Callback = function(value)
 		configs.KnifeAimbot = value
+		print("Knife Aimbot has been set to",value)
 	end;
 })
 local PingPrediction = Main:CreateSlider({
@@ -374,28 +519,22 @@ local PingPrediction = Main:CreateSlider({
 	Increment = 1;
 	Suffix = "ms";
 	CurrentValue = 50;
-	Flag = "Ping Prediction"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Ping Prediction";
 	Callback = function(value)
 		configs.Prediction = value
+		print("Prediction has been set to",value)
 	end;
 })
 local Dropdown = Main:CreateDropdown({
 	Name = "Aimbot Method";
-	Options = {"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter"};
-	CurrentOption = "ClosestPlayerToCursor";
+	Options = {"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter","Murderer/Target"};
+	CurrentOption = "Murderer/Target";
 	MultiSelection = false; -- If MultiSelections is allowed
-	Flag = "Aimbot Method"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Aimbot Method";
 	Callback = function(option)
 		configs.AimbotMethod = option
+		print("Aimbot Method has been set to",option)
 	end,
-})
-local ShowCalculations = Main:CreateToggle({
-	Name = "Show Calculations";
-	CurrentValue = false;
-	Flag = "Show Calculations"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(value)
-		configs.ShowCalculations = value
-	end;
 })
 local FOV = Main:CreateSlider({
 	Name = "FOV";
@@ -403,13 +542,14 @@ local FOV = Main:CreateSlider({
 	Increment = 1;
 	Suffix = "";
 	CurrentValue = 350;
-	Flag = "FOV"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "FOV";
 	Callback = function(value)
 		configs.FOV = value
 		if Drawing then
 			Drawing1.Radius = configs.FOV
 			Drawing2.Radius = configs.FOV
 		end
+		print("FOV has been set to",value)
 	end;
 })
 
@@ -418,9 +558,10 @@ local Section = Main:CreateSection("Kill Aura", true) -- The 2nd argument is to 
 local KillAura = Main:CreateToggle({
 	Name = "Kill Aura";
 	CurrentValue = false;
-	Flag = "Kill Aura"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Kill Aura";
 	Callback = function(value)
 		configs.KillAura = value
+		print("Kill Aura has been set to",value)
 	end;
 })
 local KillAuraRange = Main:CreateSlider({
@@ -429,33 +570,49 @@ local KillAuraRange = Main:CreateSlider({
 	Increment = 0.1;
 	Suffix = "studs";
 	CurrentValue = 15;
-	Flag = "FOV"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "FOV";
 	Callback = function(value)
 		configs.KillAuraRange = value
+		print("Kill Aura Range has been set to",value)
 	end;
 })
 local FaceTarget = Main:CreateToggle({
 	Name = "Face Target";
 	CurrentValue = false;
-	Flag = "Face Target"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Face Target";
 	Callback = function(value)
 		configs.FaceTarget = value
+		print("Face Target has been set to",value)
 	end;
 })
 local WalkSpeedToggle = LocalPlayerTab:CreateToggle({
 	Name = "Toggle WalkSpeed";
 	CurrentValue = false;
-	Flag = "Toggle WalkSpeed"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Toggle WalkSpeed";
 	Callback = function(value)
 		configs.ToggleWalkSpeed = value
+		if not configs.ToggleWalkSpeed and LocalPlayer.Character then
+			local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if humanoid then
+				humanoid.WalkSpeed = 16
+			end
+		end
+		print("WalkSpeed Enabled has been set to",value)
 	end;
 })
 local JumpPowerToggle = LocalPlayerTab:CreateToggle({
 	Name = "Toggle JumpPower";
 	CurrentValue = false;
-	Flag = "Toggle JumpPower"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Toggle JumpPower";
 	Callback = function(value)
 		configs.ToggleJumpPower = value
+		if not configs.ToggleJumpPower and LocalPlayer.Character then
+			local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if humanoid then
+				humanoid.JumpPower = 50
+			end
+		end
+		print("JumpPower Enabled has been set to",value)
 	end;
 })
 local WalkSpeed = LocalPlayerTab:CreateSlider({
@@ -464,9 +621,16 @@ local WalkSpeed = LocalPlayerTab:CreateSlider({
 	Increment = 1;
 	Suffix = "";
 	CurrentValue = 16;
-	Flag = "WalkSpeed"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "WalkSpeed";
 	Callback = function(value)
 		configs.WalkSpeed = value
+		if configs.ToggleWalkSpeed and LocalPlayer.Character then
+			local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if humanoid then
+				humanoid.WalkSpeed = configs.WalkSpeed
+			end
+		end
+		print("WalkSpeed has been set to",value)
 	end;
 })
 local JumpPower = LocalPlayerTab:CreateSlider({
@@ -475,9 +639,16 @@ local JumpPower = LocalPlayerTab:CreateSlider({
 	Increment = 1;
 	Suffix = "";
 	CurrentValue = 50;
-	Flag = "JumpPower"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "JumpPower";
 	Callback = function(value)
 		configs.JumpPower = value
+		if configs.ToggleJumpPower and LocalPlayer.Character then
+			local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if humanoid then
+				humanoid.JumpPower = configs.JumpPower
+			end
+		end
+		print("JumpPower has been set to",value)
 	end;
 })
 
@@ -486,96 +657,80 @@ local Section = Visuals:CreateSection("Chams", true) -- The 2nd argument is to t
 local PlayerChams = Visuals:CreateToggle({
 	Name = "Player Chams";
 	CurrentValue = false;
-	Flag = "Player Chams"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Player Chams";
 	Callback = function(value)
 		configs.Chams = value
-		local lplrchar = LocalPlayer.Character
-		for _, player in pairs(Players:GetChildren()) do
-			local character = workspace:FindFirstChild(player.Name)
-			if character and character ~= lplrchar then
-				if configs.Chams then
-					AddChams(character,Color3.new(1,1,1),false)
-				else
-					for _, child in pairs(character:GetChildren()) do
-						local BHA = child:FindFirstChildOfClass("BoxHandleAdornment")
-						if BHA then
-							BHA:Destroy()
-						end
-					end
-				end
-			end
+		if value then
+			ChamPlayerRoles()
+		else
+			UnchamPlayers()				
 		end
-		UpdateChamsOnAllPlayers()
+		print("Player Chams has been set to",value)
 	end;
 })
 local ShowGunDrop = Visuals:CreateToggle({
 	Name = "Show Gun Drop";
 	CurrentValue = false;
-	Flag = "Show Gun Drop"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Show Gun Drop";
 	Callback = function(value)
 		configs.ShowGunDrop = value
-	end;
-})
-local AlwaysOnTop = Visuals:CreateToggle({
-	Name = "Always On Top";
-	CurrentValue = false;
-	Flag = "Always On Top"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(value)
-		configs.AlwaysOnTop = value
+		print("Show Gun Drop has been set to",value)
 	end;
 })
 local MurdererColor = Visuals:CreateColorPicker({
 	Name = "Murderer Color";
 	Color = configs.MurdererColor;
-	Flag = "Murderer Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Murderer Color";
 	Callback = function(value)
 		configs.MurdererColor = value
-		UpdateChamsOnAllPlayers()
+		UpdateAllChams()
 	end
 })
 local HeroColor = Visuals:CreateColorPicker({
 	Name = "Hero Color";
 	Color = configs.HeroColor;
-	Flag = "Hero Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Hero Color";
 	Callback = function(value)
 		configs.HeroColor = value
-		UpdateChamsOnAllPlayers()
+		UpdateAllChams()
 	end
 })
 local InnocentColor = Visuals:CreateColorPicker({
 	Name = "Innocent Color";
 	Color = configs.InnocentColor;
-	Flag = "Innocent Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Innocent Color";
 	Callback = function(value)
 		configs.InnocentColor = value
-		UpdateChamsOnAllPlayers()
+		UpdateAllChams()
 	end
 })
 local SheriffColor = Visuals:CreateColorPicker({
 	Name = "Sheriff Color";
 	Color = configs.SheriffColor;
-	Flag = "Sheriff Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Sheriff Color";
 	Callback = function(value)
 		configs.SheriffColor = value
-		UpdateChamsOnAllPlayers()
+		UpdateAllChams()
 	end
 })
 local GunDropColor = Visuals:CreateColorPicker({
 	Name = "Gun Drop Color";
 	Color = configs.GunDropColor;
-	Flag = "Gun Drop Color"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Gun Drop Color";
 	Callback = function(value)
 		configs.GunDropColor = value
+		UpdateAllChams()
 	end
 })
 if Drawing then
 	local ShowFOVCircle = Visuals:CreateToggle({
 		Name = "Show FOV Circle";
 		CurrentValue = false;
-		Flag = "Show FOV Circle"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+		Flag = "Show FOV Circle";
 		Callback = function(value)
 			Drawing1.Visible = value
 			Drawing2.Visible = value
+			print("Show FOV Circle has been set to",value)
 		end;
 	})
 end
@@ -585,8 +740,8 @@ local Section = Visuals:CreateSection("World", true) -- The 2nd argument is to t
 local RemoveMapLag = Visuals:CreateButton({
 	Name = "Remove Map Lag";
 	Callback = function()
-		if not antilagalreadyexecuted then
-			antilagalreadyexecuted = true
+		if not scriptvariables.antilagalreadyexecuted then
+			scriptvariables.antilagalreadyexecuted = true
 
 			local Terrain = workspace.Terrain
 			Terrain.WaterWaveSize = 0
@@ -636,44 +791,89 @@ local RemoveMapLag = Visuals:CreateButton({
 				RemoveLagFromObject(descendant)
 			end)
 		end
+		print("Remove Map Lag Activated")
 	end;
 })
 local RemoveAccessoryLag = Visuals:CreateButton({
 	Name = "Remove Accessory Lag";
 	Callback = function()
 		local lplrchar = LocalPlayer.Character
-		for _, player in pairs(Players:GetChildren()) do
-			local character = workspace:FindFirstChild(player.Name)
+		for _, player in pairs(Players:GetPlayers()) do
+			local character = player.Character
 			if character and (configs.IncludeLocalPlayer or character ~= lplrchar) then
 				RemoveDisplays(character)
 			end
 		end
+		print("Remove Accessory Lag Activated")
 	end;
 })
 local AutoRemoveLag = Visuals:CreateToggle({
 	Name = "Auto Remove Lag";
 	CurrentValue = false;
-	Flag = "Auto Remove Lag"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Auto Remove Lag";
 	Callback = function(value)
 		configs.AutoRemoveLag = value
+		print("Auto Remove Lag has been set to",value)
 	end;
 })
 local IncludeHats = Visuals:CreateToggle({
 	Name = "Include Hats";
 	CurrentValue = false;
-	Flag = "Include Hats"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Include Hats";
 	Callback = function(value)
 		configs.IncludeAccessories = value
+		print("Include Hats has been set to",value)
 	end;
 })
 local IncludeLocalPlayer = Visuals:CreateToggle({
 	Name = "Include LocalPlayer";
 	CurrentValue = false;
-	Flag = "Include LocalPlayer"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Flag = "Include LocalPlayer";
 	Callback = function(value)
 		configs.IncludeLocalPlayer = value
+		print("Include LocalPlayer has been set to",value)
 	end;
 })
+
+local CoinFarm = AutoFarm:CreateToggle({
+	Name = "Coin Farm";
+	CurrentValue = false;
+	Flag = "Coin Farm";
+	Callback = function(value)
+		configs.CoinFarm = value
+		print("Coin Farm has been set to",value)
+	end;
+})
+local XPFarm = AutoFarm:CreateToggle({
+	Name = "XP Farm";
+	CurrentValue = false;
+	Flag = "XP Farm";
+	Callback = function(value)
+		configs.XPFarm = value
+		print("XP Farm has been set to",value)
+	end;
+})
+local AutoUnbox = AutoFarm:CreateToggle({
+	Name = "Auto Unbox";
+	CurrentValue = false;
+	Flag = "Auto Unbox";
+	Callback = function(value)
+		configs.AutoUnbox = value
+		print("Auto Unbox has been set to",value)
+	end;
+})
+local AutoUnboxCrate = AutoFarm:CreateDropdown({
+	Name = "Auto Unbox Crate";
+	Options = {"Crate #1","Crate #2","Crate #3"};
+	CurrentOption = "Crate #1";
+	MultiSelection = true; -- If MultiSelections is allowed
+	Flag = "Auto Unbox Crate";
+	Callback = function(option)
+		configs.AutoUnboxCrate = option
+		print("Auto Unbox Crate has been set to",table.unpack(option))
+	end,
+})
+
 local Dupe = Others:CreateButton({
 	Name = "Dupe";
 	Callback = function()
@@ -683,208 +883,148 @@ local Dupe = Others:CreateButton({
 local Rejoin = Others:CreateButton({
 	Name = "Rejoin";
 	Callback = function()
-		game:GetService("TeleportService"):Teleport(game.PlaceId, LocalPlayer)
+		Window:Notify({
+			Title = "Info";
+			Content = "Rejoining";
+			Duration = 5;
+			Image = "";
+		})
+		TeleportService:Teleport(game.PlaceId, LocalPlayer)
 	end;
 })
 local Unload = Others:CreateButton({
 	Name = "Unload";
 	Callback = function()
 		_G.mm2hacksalreadyloadedbyCITY512 = false
-		scriptactivated = false
+		scriptvariables.scriptactivated = false
 		Library:Destroy()
 	end;
 })
+local KeepGUI = Others:CreateToggle({
+	Name = "Keep GUI";
+	CurrentValue = false;
+	Flag = "Keep GUI";
+	Callback = function(value)
+		if scriptvariables.queueonteleport then
+			scriptvariables.executeonteleport = value
+			print("Keep GUI has been set to",value)
+		else
+			Window:Notify({
+				Title = "Error";
+				Content = 'The function "queue_on_teleport" is not supported on this executor';
+				Duration = 5;
+				Image = "";
+			})
+		end
+	end;
+})
 
-workspace.ChildAdded:Connect(function(child)
-	local lplrchar = LocalPlayer.Character
-	if configs.ShowGunDrop and child.ClassName == "Part" and child.Name == "GunDrop" then
-		AddChams(child,configs.GunDropColor,true)
+-- Events
+
+eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(instance)
+	if instance:IsA("BasePart") and instance.Name == "GunDrop" then
+		AddChams(instance,false,{
+			Color = configs.GunDropColor;
+		})
+	elseif instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
+		match.SheriffDied = false
 	end
 end)
-
-if Drawing then
-	UserInputService.InputChanged:Connect(function(input)
-		if scriptactivated and input.UserInputType == Enum.UserInputType.MouseMovement then
-			local mouselocation = UserInputService:GetMouseLocation()
-			Drawing1.Position = mouselocation
-			Drawing2.Position = mouselocation
-		end
-	end)
-end
-
-for _, player in pairs(Players:GetChildren()) do
-	local backpack = player:WaitForChild("Backpack")
-	local char = player.Character
-	if backpack then
-		if char:FindFirstChild("Knife") then
-			table.insert(roles.Murderer,player)
-		elseif char:FindFirstChild("Gun") then
-			table.insert(roles.Sheriff,player)
-		end
-	elseif char then
-		if char:FindFirstChild("Knife") then
-			table.insert(roles.Murderer,player)
-		elseif char:FindFirstChild("Gun") then
-			table.insert(roles.Sheriff,player)
-		end
+eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(instance)
+	if instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
+		match.SheriffDied = false
 	end
-	AddEvents(player)
-end
-Players.ChildAdded:Connect(function(player)
-	AddEvents(player)
 end)
+eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
+	if scriptvariables.scriptactivated and not scriptvariables.tpcheck and scriptvariables.queueonteleport and scriptvariables.executeonteleport then
+		scriptvariables.tpcheck = true
+		scriptvariables.queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20hack.lua"))()')
+	end
+end)
+eventfunctions.PlayerAdded = Players.PlayerAdded:Connect(function(player)
+	print(tostring(player),"has joined the game")
+	eventfunctions.Initialize(player)
+end)
+
+-- Hooks
 
 local namecall
-namecall = hookmetamethod(game,"__namecall",function(self,...)
+namecall = hookmetamethod(game,"__namecall", function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
-	if scriptactivated and not checkcaller() and LocalPlayer.Character then
+		
+	if scriptvariables.scriptactivated and not checkcaller() and LocalPlayer.Character then
+		local lplrchar = LocalPlayer.Character
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
-			local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 			local closest = GetClosestPlayer(configs.FOV,500)
-			if closest then
-				local attachment = Instance.new("Attachment", HumanoidRootPart)
-				attachment.Position = Vector3.new(1.6, 1.2, -3)
 
-				local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,nil,true,configs.Prediction,nil,true)
-				attachment:Destroy()
+			if not closest then return self.InvokeServer(self,...) end
 
-				if aimpos then
-					spawn(function()
-						if configs.ShowCalculations then
-							local hue = 0
-							local prevatt
-							local container = Instance.new("Part", workspace)
-							container.Anchored = true
-							container.CanCollide = false
-							container.Transparency = 1
-							for _, i in pairs(path) do
-								local att = Instance.new("Attachment", container)
-								att.WorldPosition = i
+			local HumanoidRootPart = lplrchar.HumanoidRootPart
+			local attachment = Instance.new("Attachment", HumanoidRootPart)
+			attachment.Position = Vector3.new(1.6, 1.2, -3)
 
-								if prevatt then
-									local beam = Instance.new("Beam", container)
-									beam.Attachment0 = prevatt
-									beam.Attachment1 = att
-									beam.FaceCamera = true
-									beam.Width0 = 0.1
-									beam.Width1 = 0.1
-									beam.Segments = 1
-									beam.Transparency = 0
-									beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.443137, 1))
-								end
+			local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,nil,true,configs.Prediction,nil,true)
+			attachment:Destroy()
 
-								hue += 3
-								if hue >= 360 then
-									hue = 0
-								end
+			args[2] = aimpos
+			return aimpos and self.InvokeServer(self,table.unpack(args)) or self.InvokeServer(self,...)
 
-								prevatt = att
-							end
-							task.wait(3)
-							container:Destroy()
-						end
-					end)
-					args[2] = aimpos
-					return self.InvokeServer(self,table.unpack(args))
-				end
-			end
 		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
-			local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 			local closest = GetClosestPlayer(configs.FOV,500)
-			if closest then
-				local attachment = Instance.new("Attachment", HumanoidRootPart)
-				attachment.Position = Vector3.new(1.5, 1.9, 1)
-				local path, aimpos
-				if sleight then
-					path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,nil,true,configs.Prediction,nil,false)
-				else
-					path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,80,0,nil,true,configs.Prediction,nil,false)
-				end
-				attachment:Destroy()
 
-				if aimpos then
-					spawn(function()
-						if configs.ShowCalculations then
-							local hue = 0
-							local prevatt
-							local container = Instance.new("Part", workspace)
-							container.Anchored = true
-							container.CanCollide = false
-							container.Transparency = 1
-							for _, i in pairs(path) do
-								local att = Instance.new("Attachment", container)
-								att.WorldPosition = i
+			if not closest then return self.FireServer(self,...) end
 
-								if prevatt then
-									local beam = Instance.new("Beam", container)
-									beam.Attachment0 = prevatt
-									beam.Attachment1 = att
-									beam.FaceCamera = true
-									beam.Width0 = 0.1
-									beam.Width1 = 0.1
-									beam.Segments = 1
-									beam.Transparency = 0
-									beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.443137, 1))
-								end
-
-								hue += 3
-								if hue >= 360 then
-									hue = 0
-								end
-
-								prevatt = att
-							end
-							task.wait(3)
-							container:Destroy()
-						end
-					end)
-					args[1] = CFrame.new(aimpos,aimpos)
-					return self.FireServer(self,table.unpack(args))
-				end
+			local HumanoidRootPart = lplrchar.HumanoidRootPart
+			local attachment = Instance.new("Attachment", HumanoidRootPart)
+			attachment.Position = Vector3.new(1.5, 1.9, 1)
+			local aimpos
+			if powers.Sleight then
+				_, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,nil,true,configs.Prediction,nil,false)
+			else
+				_, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,80,0,nil,true,configs.Prediction,nil,false)
 			end
+			powers.Sleight = false
+			attachment:Destroy()
+
+			args[1] = CFrame.new(aimpos,aimpos)
+			return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
 		elseif configs.KnifeAimbot and tostring(self) == "Sleight" and tostring(method) == "FireServer" then
-			sleight = true
+			powers.Sleight = true
 		end
 	end
 	return namecall(self,...)
 end)
 
-StarterGui:SetCore("SendNotification" ,{
-	Title = "Info";
-	Text = "Successfully Loaded!";
-})
+-- Loops
+for _, player in pairs(Players:GetPlayers()) do
+	eventfunctions.Initialize(player)
+end
 
 local prevtarget
 while true do
-	if prevtarget and prevtarget:FindFirstChild("HumanoidRootPart") then
-		local PrevTargetRoot = prevtarget.HumanoidRootPart
-		PrevTargetRoot.Size = Vector3.new(2,2,1)
+	if prevtarget then
+		local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
+		if PrevTargetRoot and PrevTargetRoot:IsA("BasePart") then
+			local PrevTargetRoot = prevtarget.HumanoidRootPart
+			PrevTargetRoot.Size = Vector3.new(2,2,1)
+		end
 		prevtarget = nil
 	end
-	if not scriptactivated then break end
-
-	local Character = LocalPlayer.Character
-	if Character then
-		local Humanoid = Character:FindFirstChildOfClass("Humanoid")
-		if Humanoid then
-			if configs.ToggleWalkSpeed then
-				Humanoid.WalkSpeed = configs.WalkSpeed
-			end
-			if configs.ToggleJumpPower then
-				Humanoid.JumpPower = configs.JumpPower
-			end
-		end
-		if configs.KillAura then
-			local HumanoidRootPart = Character:FindFirstChild("HumanoidRootPart")
-			local Knife = Character:FindFirstChild("Knife")
-			if HumanoidRootPart and Knife and Knife.ClassName == "Tool" then
+	if not scriptvariables.scriptactivated then break end
+	
+	if configs.KillAura then
+		local lplrchar = LocalPlayer.Character
+		if lplrchar then
+			local HumanoidRootPart = lplrchar:FindFirstChild("HumanoidRootPart")
+			local Knife = lplrchar:FindFirstChild("Knife")
+			if HumanoidRootPart and HumanoidRootPart:IsA("BasePart") and Knife and Knife.ClassName == "Tool" then
 				local closest
-				for _, player in pairs(Players:GetChildren()) do
-					local character = workspace:FindFirstChild(player.Name)
-					if character and character ~= Character then
+				for _, player in pairs(Players:GetPlayers()) do
+					local character = player.Character
+					if character and character ~= lplrchar then
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
-						if NPCRoot then
+						if NPCRoot and NPCRoot:IsA("BasePart") then
 							local distance = (NPCRoot.Position - HumanoidRootPart.Position).Magnitude
 							if distance < configs.KillAuraRange then
 								if not closest or distance < closest[2] then
@@ -896,7 +1036,7 @@ while true do
 				end
 				if closest then
 					prevtarget = closest[1]
-
+	
 					local TargetRoot = prevtarget.HumanoidRootPart
 					if configs.FaceTarget then
 						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,TargetRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
