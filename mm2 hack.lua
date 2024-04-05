@@ -490,7 +490,7 @@ local Window = Library:CreateWindow({
 local Main = Window:CreateTab("Main", 10814531047) -- Title, Image
 local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458) -- Title, Image
 local Visuals = Window:CreateTab("Visuals", 13080349149) -- Title, Image
-local AutoFarm = Window:CreateTab("Auto Farm (under construction)", 12966420667) -- Title, Image
+local AutoFarm = Window:CreateTab("Auto Farm", 12966420667) -- Title, Image
 local Others = Window:CreateTab("Others", 11385220704) -- Title, Image
 
 local Section = Main:CreateSection("Aimbot", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
