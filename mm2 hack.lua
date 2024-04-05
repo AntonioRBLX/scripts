@@ -128,6 +128,7 @@ else
 	notify("Info","Drawing is not supported on this executor, functions such as ShowFOVCircle will not work.")
 end
 
+---------------------------------------------------------------------------
 -- Functions
 
 function AddChams(object,isacharmodel,chamsettings) -- Adds ESP
@@ -375,7 +376,6 @@ function eventfunctions.Initialize(player)
 				match.SheriffDied = true
 			end
 			players[player.Name].Role = "Innocent"
-			print(tostring(player),"has died.")
 		end)
 	end
 	local function AssignRole(Tool)
@@ -433,7 +433,6 @@ function eventfunctions.Initialize(player)
 	end
 
 	connections[b - 2] = player.CharacterAdded:Connect(function(character)
-		print(tostring(player).."'s character has been added.")
 		CharacterAdded(character)
 	end)
 	connections[b - 3] = Players.PlayerRemoving:Connect(function(removedplayer)
@@ -441,7 +440,6 @@ function eventfunctions.Initialize(player)
 			players[player.Name] = nil
 			Disconnect()
 		end
-		print(tostring(removedplayer),"has left the game")
 	end)
 	CharacterAdded(character)
 
@@ -455,10 +453,9 @@ function eventfunctions.Initialize(player)
 			AssignRole(child)
 		end
 	end
-
-	print("Initialized",tostring(player))
 end
 
+---------------------------------------------------------------------------
 -- Library
 
 local Window = Library:CreateWindow({
@@ -494,6 +491,7 @@ local Blatant = Window:CreateTab("Blatant", 10653372160) -- Title, Image
 local AutoFarm = Window:CreateTab("Auto Farm", 12966420667) -- Title, Image
 local Others = Window:CreateTab("Others", 11385220704) -- Title, Image
 
+---------------------------------------------------------------------------
 local Section = Main:CreateSection("Aimbot", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
 local GunAimbot = Main:CreateToggle({
@@ -502,7 +500,6 @@ local GunAimbot = Main:CreateToggle({
 	Flag = "Gun Aimbot";
 	Callback = function(value)
 		configs.GunAimbot = value
-		print("Gun Aimbot has been set to",value)
 	end;
 })
 local KnifeAimbot = Main:CreateToggle({
@@ -511,7 +508,6 @@ local KnifeAimbot = Main:CreateToggle({
 	Flag = "Knife Aimbot";
 	Callback = function(value)
 		configs.KnifeAimbot = value
-		print("Knife Aimbot has been set to",value)
 	end;
 })
 local PingPrediction = Main:CreateSlider({
@@ -523,7 +519,6 @@ local PingPrediction = Main:CreateSlider({
 	Flag = "Ping Prediction";
 	Callback = function(value)
 		configs.Prediction = value
-		print("Prediction has been set to",value)
 	end;
 })
 local Dropdown = Main:CreateDropdown({
@@ -534,7 +529,6 @@ local Dropdown = Main:CreateDropdown({
 	Flag = "Aimbot Method";
 	Callback = function(option)
 		configs.AimbotMethod = option
-		print("Aimbot Method has been set to",option)
 	end,
 })
 local FOV = Main:CreateSlider({
@@ -550,7 +544,6 @@ local FOV = Main:CreateSlider({
 			Drawing1.Radius = configs.FOV
 			Drawing2.Radius = configs.FOV
 		end
-		print("FOV has been set to",value)
 	end;
 })
 
@@ -562,7 +555,6 @@ local KillAura = Main:CreateToggle({
 	Flag = "Kill Aura";
 	Callback = function(value)
 		configs.KillAura = value
-		print("Kill Aura has been set to",value)
 	end;
 })
 local KillAuraRange = Main:CreateSlider({
@@ -574,7 +566,6 @@ local KillAuraRange = Main:CreateSlider({
 	Flag = "FOV";
 	Callback = function(value)
 		configs.KillAuraRange = value
-		print("Kill Aura Range has been set to",value)
 	end;
 })
 local FaceTarget = Main:CreateToggle({
@@ -583,9 +574,9 @@ local FaceTarget = Main:CreateToggle({
 	Flag = "Face Target";
 	Callback = function(value)
 		configs.FaceTarget = value
-		print("Face Target has been set to",value)
 	end;
 })
+---------------------------------------------------------------------------
 local WalkSpeedToggle = LocalPlayerTab:CreateToggle({
 	Name = "Toggle WalkSpeed";
 	CurrentValue = false;
@@ -598,7 +589,6 @@ local WalkSpeedToggle = LocalPlayerTab:CreateToggle({
 				humanoid.WalkSpeed = 16
 			end
 		end
-		print("WalkSpeed Enabled has been set to",value)
 	end;
 })
 local JumpPowerToggle = LocalPlayerTab:CreateToggle({
@@ -613,7 +603,6 @@ local JumpPowerToggle = LocalPlayerTab:CreateToggle({
 				humanoid.JumpPower = 50
 			end
 		end
-		print("JumpPower Enabled has been set to",value)
 	end;
 })
 local WalkSpeed = LocalPlayerTab:CreateSlider({
@@ -631,7 +620,6 @@ local WalkSpeed = LocalPlayerTab:CreateSlider({
 				humanoid.WalkSpeed = configs.WalkSpeed
 			end
 		end
-		print("WalkSpeed has been set to",value)
 	end;
 })
 local JumpPower = LocalPlayerTab:CreateSlider({
@@ -649,10 +637,9 @@ local JumpPower = LocalPlayerTab:CreateSlider({
 				humanoid.JumpPower = configs.JumpPower
 			end
 		end
-		print("JumpPower has been set to",value)
 	end;
 })
-
+---------------------------------------------------------------------------
 local Section = Visuals:CreateSection("Chams", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
 local PlayerChams = Visuals:CreateToggle({
@@ -666,7 +653,6 @@ local PlayerChams = Visuals:CreateToggle({
 		else
 			UnchamPlayers()				
 		end
-		print("Player Chams has been set to",value)
 	end;
 })
 local ShowGunDrop = Visuals:CreateToggle({
@@ -675,7 +661,6 @@ local ShowGunDrop = Visuals:CreateToggle({
 	Flag = "Show Gun Drop";
 	Callback = function(value)
 		configs.ShowGunDrop = value
-		print("Show Gun Drop has been set to",value)
 	end;
 })
 local MurdererColor = Visuals:CreateColorPicker({
@@ -731,7 +716,6 @@ if Drawing then
 		Callback = function(value)
 			Drawing1.Visible = value
 			Drawing2.Visible = value
-			print("Show FOV Circle has been set to",value)
 		end;
 	})
 end
@@ -792,8 +776,6 @@ local RemoveMapLag = Visuals:CreateButton({
 				RemoveLagFromObject(descendant)
 			end)
 		end
-		print("Remove Map Lag Activated")
-	end;
 })
 local RemoveAccessoryLag = Visuals:CreateButton({
 	Name = "Remove Accessory Lag";
@@ -805,7 +787,6 @@ local RemoveAccessoryLag = Visuals:CreateButton({
 				RemoveDisplays(character)
 			end
 		end
-		print("Remove Accessory Lag Activated")
 	end;
 })
 local AutoRemoveLag = Visuals:CreateToggle({
@@ -814,7 +795,6 @@ local AutoRemoveLag = Visuals:CreateToggle({
 	Flag = "Auto Remove Lag";
 	Callback = function(value)
 		configs.AutoRemoveLag = value
-		print("Auto Remove Lag has been set to",value)
 	end;
 })
 local IncludeHats = Visuals:CreateToggle({
@@ -823,7 +803,6 @@ local IncludeHats = Visuals:CreateToggle({
 	Flag = "Include Hats";
 	Callback = function(value)
 		configs.IncludeAccessories = value
-		print("Include Hats has been set to",value)
 	end;
 })
 local IncludeLocalPlayer = Visuals:CreateToggle({
@@ -832,17 +811,75 @@ local IncludeLocalPlayer = Visuals:CreateToggle({
 	Flag = "Include LocalPlayer";
 	Callback = function(value)
 		configs.IncludeLocalPlayer = value
-		print("Include LocalPlayer has been set to",value)
 	end;
 })
-
+---------------------------------------------------------------------------
+local AnnounceRoles = Blatant:CreateKeybind({
+   Name = "Announce Roles",
+   CurrentKeybind = "C",
+   HoldToInteract = false,
+   Flag = "Announce Roles", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Keybind)
+   -- The function that takes place when the keybind is pressed
+   -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+   end,
+})
+local GrabGun = Blatant:CreateKeybind({
+   Name = "Grab Gun",
+   CurrentKeybind = "G",
+   HoldToInteract = false,
+   Flag = "Grab Gun", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Keybind)
+   -- The function that takes place when the keybind is pressed
+   -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+   end,
+})
+local AutoGrabGun = Blatant:CreateToggle({
+	Name = "Auto Grab Gun";
+	CurrentValue = false;
+	Flag = "Auto Grab Gun";
+	Callback = function(value)
+		configs.AutoGrabGun = value
+	end;
+})
+local KillAll = Blatant:CreateKeybind({
+   Name = "Kill All",
+   CurrentKeybind = "K",
+   HoldToInteract = false,
+   Flag = "Kill All", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Keybind)
+   -- The function that takes place when the keybind is pressed
+   -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+   end,
+})
+local FlingPlayer = Blatant:CreateKeybind({
+   Name = "Fling Player",
+   CurrentKeybind = "F",
+   HoldToInteract = false,
+   Flag = "Fling Player", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Keybind)
+   -- The function that takes place when the keybind is pressed
+   -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+   end,
+})
+local FlingPlayerType = FlingPlayer:CreateDropdown({
+   Name = "Player",
+   Options = {"Nikilis"},
+   CurrentOption = "Nikilis"
+   MultiSelection = false, -- If MultiSelections is allowed
+   Flag = "Fling Player", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+   Callback = function(Option)
+   -- The function that takes place when the selected option is changed
+   -- The variable (Option) is a string for the value that the dropdown was changed to
+   end,
+})
+---------------------------------------------------------------------------
 local CoinFarm = AutoFarm:CreateToggle({
 	Name = "Coin Farm";
 	CurrentValue = false;
 	Flag = "Coin Farm";
 	Callback = function(value)
 		configs.CoinFarm = value
-		print("Coin Farm has been set to",value)
 	end;
 })
 local XPFarm = AutoFarm:CreateToggle({
@@ -851,7 +888,6 @@ local XPFarm = AutoFarm:CreateToggle({
 	Flag = "XP Farm";
 	Callback = function(value)
 		configs.XPFarm = value
-		print("XP Farm has been set to",value)
 	end;
 })
 local AutoUnbox = AutoFarm:CreateToggle({
@@ -860,7 +896,6 @@ local AutoUnbox = AutoFarm:CreateToggle({
 	Flag = "Auto Unbox";
 	Callback = function(value)
 		configs.AutoUnbox = value
-		print("Auto Unbox has been set to",value)
 	end;
 })
 local AutoUnboxCrate = AutoFarm:CreateDropdown({
@@ -871,10 +906,9 @@ local AutoUnboxCrate = AutoFarm:CreateDropdown({
 	Flag = "Auto Unbox Crate";
 	Callback = function(option)
 		configs.AutoUnboxCrate = option
-		print("Auto Unbox Crate has been set to",table.unpack(option))
 	end,
 })
-
+---------------------------------------------------------------------------
 local Dupe = Others:CreateButton({
 	Name = "Dupe";
 	Callback = function()
@@ -908,7 +942,6 @@ local KeepGUI = Others:CreateToggle({
 	Callback = function(value)
 		if scriptvariables.queueonteleport then
 			scriptvariables.executeonteleport = value
-			print("Keep GUI has been set to",value)
 		else
 			Window:Notify({
 				Title = "Error";
@@ -920,6 +953,7 @@ local KeepGUI = Others:CreateToggle({
 	end;
 })
 
+---------------------------------------------------------------------------
 -- Events
 
 eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(instance)
@@ -943,10 +977,10 @@ eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
 	end
 end)
 eventfunctions.PlayerAdded = Players.PlayerAdded:Connect(function(player)
-	print(tostring(player),"has joined the game")
 	eventfunctions.Initialize(player)
 end)
 
+---------------------------------------------------------------------------
 -- Hooks
 
 local namecall
@@ -997,7 +1031,9 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 	return namecall(self,...)
 end)
 
+---------------------------------------------------------------------------
 -- Loops
+
 for _, player in pairs(Players:GetPlayers()) do
 	eventfunctions.Initialize(player)
 end
