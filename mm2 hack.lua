@@ -490,6 +490,7 @@ local Window = Library:CreateWindow({
 local Main = Window:CreateTab("Main", 10814531047) -- Title, Image
 local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458) -- Title, Image
 local Visuals = Window:CreateTab("Visuals", 13080349149) -- Title, Image
+local Blatant = Window:CreateTab("Blatant", 10653372160) -- Title, Image
 local AutoFarm = Window:CreateTab("Auto Farm", 12966420667) -- Title, Image
 local Others = Window:CreateTab("Others", 11385220704) -- Title, Image
 
