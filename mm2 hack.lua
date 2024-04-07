@@ -237,7 +237,7 @@ function GetClosestPlayer(FOV,maxdist)
 				getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y - 58)/2)
 			elseif configs.AimbotMethod == "Murderer/Target" then
 				if game.PlaceId == "636649648" then
-					
+
 				elseif players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
 				else
@@ -248,7 +248,7 @@ function GetClosestPlayer(FOV,maxdist)
 								local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 								if NPCRoot and NPCRoot:IsA("BasePart") then
 									local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
-	
+
 									if not closest or distancefromplayer < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
 										closest = character
 									end
@@ -776,6 +776,7 @@ local RemoveMapLag = Visuals:CreateButton({
 				RemoveLagFromObject(descendant)
 			end)
 		end
+	end
 })
 local RemoveAccessoryLag = Visuals:CreateButton({
 	Name = "Remove Accessory Lag";
@@ -815,24 +816,24 @@ local IncludeLocalPlayer = Visuals:CreateToggle({
 })
 ---------------------------------------------------------------------------
 local AnnounceRoles = Blatant:CreateKeybind({
-   Name = "Announce Roles",
-   CurrentKeybind = "C",
-   HoldToInteract = false,
-   Flag = "Announce Roles", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Keybind)
-   -- The function that takes place when the keybind is pressed
-   -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
-   end,
+	Name = "Announce Roles",
+	CurrentKeybind = "C",
+	HoldToInteract = false,
+	Flag = "Announce Roles", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Keybind)
+		-- The function that takes place when the keybind is pressed
+		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+	end,
 })
 local GrabGun = Blatant:CreateKeybind({
-   Name = "Grab Gun",
-   CurrentKeybind = "G",
-   HoldToInteract = false,
-   Flag = "Grab Gun", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Keybind)
-   -- The function that takes place when the keybind is pressed
-   -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
-   end,
+	Name = "Grab Gun",
+	CurrentKeybind = "G",
+	HoldToInteract = false,
+	Flag = "Grab Gun", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Keybind)
+		-- The function that takes place when the keybind is pressed
+		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+	end,
 })
 local AutoGrabGun = Blatant:CreateToggle({
 	Name = "Auto Grab Gun";
@@ -843,35 +844,35 @@ local AutoGrabGun = Blatant:CreateToggle({
 	end;
 })
 local KillAll = Blatant:CreateKeybind({
-   Name = "Kill All",
-   CurrentKeybind = "K",
-   HoldToInteract = false,
-   Flag = "Kill All", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Keybind)
-   -- The function that takes place when the keybind is pressed
-   -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
-   end,
+	Name = "Kill All",
+	CurrentKeybind = "K",
+	HoldToInteract = false,
+	Flag = "Kill All", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Keybind)
+		-- The function that takes place when the keybind is pressed
+		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+	end,
 })
 local FlingPlayer = Blatant:CreateKeybind({
-   Name = "Fling Player",
-   CurrentKeybind = "F",
-   HoldToInteract = false,
-   Flag = "Fling Player", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Keybind)
-   -- The function that takes place when the keybind is pressed
-   -- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
-   end,
+	Name = "Fling Player",
+	CurrentKeybind = "F",
+	HoldToInteract = false,
+	Flag = "Fling Player", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Keybind)
+		-- The function that takes place when the keybind is pressed
+		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+	end,
 })
 local FlingPlayerType = FlingPlayer:CreateDropdown({
-   Name = "Player",
-   Options = {"Nikilis"},
-   CurrentOption = "Nikilis"
-   MultiSelection = false, -- If MultiSelections is allowed
-   Flag = "Fling Player", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-   Callback = function(Option)
-   -- The function that takes place when the selected option is changed
-   -- The variable (Option) is a string for the value that the dropdown was changed to
-   end,
+	Name = "Player",
+	Options = {"Nikilis"},
+	CurrentOption = "Nikilis";
+	MultiSelection = false, -- If MultiSelections is allowed
+	Flag = "Fling Player", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Option)
+		-- The function that takes place when the selected option is changed
+		-- The variable (Option) is a string for the value that the dropdown was changed to
+	end,
 })
 ---------------------------------------------------------------------------
 local CoinFarm = AutoFarm:CreateToggle({
@@ -987,7 +988,7 @@ local namecall
 namecall = hookmetamethod(game,"__namecall", function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
-		
+
 	if scriptvariables.scriptactivated and not checkcaller() and LocalPlayer.Character then
 		local lplrchar = LocalPlayer.Character
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
@@ -1049,7 +1050,7 @@ while true do
 		prevtarget = nil
 	end
 	if not scriptvariables.scriptactivated then break end
-	
+
 	if configs.KillAura then
 		local lplrchar = LocalPlayer.Character
 		if lplrchar then
@@ -1073,7 +1074,7 @@ while true do
 				end
 				if closest then
 					prevtarget = closest[1]
-	
+
 					local TargetRoot = prevtarget.HumanoidRootPart
 					if configs.FaceTarget then
 						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,TargetRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
