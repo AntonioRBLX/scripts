@@ -863,7 +863,7 @@ local FlingPlayer = Blatant:CreateKeybind({
 		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
 	end,
 })
-local FlingPlayerType = FlingPlayer:CreateDropdown({
+local FlingPlayerType = Blatant:CreateDropdown({
 	Name = "Player",
 	Options = {"Nikilis"},
 	CurrentOption = "Nikilis";
