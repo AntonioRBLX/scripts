@@ -65,6 +65,8 @@ local configs = { -- Library Configurations
 	AutoUnbox = false;
 	AutoUnboxCrate = {};
 
+	AutoGrabGun = false;
+
 	Chams = false;
 	ShowGunDrop = false;
 	MurdererColor = Color3.fromRGB(255, 112, 112);
@@ -962,6 +964,18 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 		AddChams(instance,false,{
 			Color = configs.GunDropColor;
 		})
+		if configs.AutoGrabGun then
+			local lplrchar = LocalPlayer.Character
+			if lplrchar then
+				local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
+				if lplrhrp then
+					local prevCFrame = lplrhrp.CFrame
+					lplrhrp.CFrame = instance.Position
+					task.wait(0.5)
+					lplrhrp.CFrame = prevCFrame
+				end
+			end
+		end
 	elseif instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
 		match.SheriffDied = false
 	end
