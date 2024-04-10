@@ -911,7 +911,7 @@ local AutoUnboxCrate = AutoFarm:CreateDropdown({
 })
 ---------------------------------------------------------------------------
 local Dupe = Others:CreateButton({
-	Name = "Dupe";
+	Name = "Dupe V2";
 	Callback = function()
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20dupe"))()
 	end;
