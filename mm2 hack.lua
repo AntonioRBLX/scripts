@@ -1039,8 +1039,6 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 
 			args[1] = CFrame.new(aimpos)
 			return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
-		elseif configs.KnifeAimbot and tostring(self) == "Stealth" and tostring(method) == "FireServer" then
-			powers.Sleight = true
 		end
 	end
 	return namecall(self,...)
