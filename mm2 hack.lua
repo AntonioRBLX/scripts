@@ -66,6 +66,7 @@ local configs = { -- Library Configurations
 	AutoUnboxCrate = {};
 
 	AutoGrabGun = false;
+	FlingPlayer = false;
 
 	Chams = false;
 	ShowGunDrop = false;
@@ -100,11 +101,12 @@ local powers = {
 }
 local eventfunctions = {}
 local scriptvariables = {
-	antilagalreadyexecuted = true;
-	scriptactivated = true;
-	executeonteleport = false;
-	tpcheck = false;
-	queueonteleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport;
+	AlreadyFlinging = false;
+	AntiLagAlreadyExecuted = true;
+	ScriptActivated = true;
+	ExecuteOnTeleport = false;
+	TPCheck = false;
+	QueueOnTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport;
 }
 local connections = {}
 local a = 0
@@ -355,7 +357,7 @@ function eventfunctions.Initialize(player)
 	a += 4
 	local b = a
 
-	local function Disconnect()
+	players[player.Name].Disconnect = function()
 		if connections[b] then
 			connections[b]:Disconnect()
 		end
@@ -364,9 +366,6 @@ function eventfunctions.Initialize(player)
 		end
 		if connections[b - 2] then
 			connections[b - 2]:Disconnect()
-		end
-		if connections[b - 3] then
-			connections[b - 3]:Disconnect()
 		end
 	end
 	local function HumanoidDiedEvent(humanoid)
@@ -437,12 +436,6 @@ function eventfunctions.Initialize(player)
 	connections[b - 2] = player.CharacterAdded:Connect(function(character)
 		CharacterAdded(character)
 	end)
-	connections[b - 3] = Players.PlayerRemoving:Connect(function(removedplayer)
-		if removedplayer == player then
-			players[player.Name] = nil
-			Disconnect()
-		end
-	end)
 	CharacterAdded(character)
 
 	for _, child in pairs(backpack:GetChildren()) do
@@ -464,7 +457,6 @@ local ScreenGui = Instance.new("ScreenGui")
 local TextButton = Instance.new("TextButton")
 
 ScreenGui.Parent = CoreGui
-ScreenGui.IgnoreGuiInset = true
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 TextButton.Parent = ScreenGui
@@ -474,7 +466,7 @@ TextButton.BackgroundTransparency = 0.500
 TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
 TextButton.BorderSizePixel = 0
 TextButton.Position = UDim2.new(0.5, 0, 0, 0)
-TextButton.Size = UDim2.new(0, 200, 0, 20)
+TextButton.Size = UDim2.new(0, 200, 0, 30)
 TextButton.Font = Enum.Font.SourceSans
 TextButton.Text = "Cheat Menu"
 TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
@@ -756,8 +748,8 @@ local Section = Visuals:CreateSection("World", true) -- The 2nd argument is to t
 local RemoveMapLag = Visuals:CreateButton({
 	Name = "Remove Map Lag";
 	Callback = function()
-		if not scriptvariables.antilagalreadyexecuted then
-			scriptvariables.antilagalreadyexecuted = true
+		if not scriptvariables.AntiLagAlreadyExecuted then
+			scriptvariables.AntiLagAlreadyExecuted = true
 
 			local Terrain = workspace.Terrain
 			Terrain.WaterWaveSize = 0
@@ -846,22 +838,16 @@ local IncludeLocalPlayer = Visuals:CreateToggle({
 	end;
 })
 ---------------------------------------------------------------------------
-local AnnounceRoles = Blatant:CreateKeybind({
-	Name = "Announce Roles",
-	CurrentKeybind = "C",
-	HoldToInteract = false,
-	Flag = "Announce Roles", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Keybind)
+local AnnounceRoles = Blatant:CreateButton({
+	Name = "Announce Roles";
+	Callback = function()
 		-- The function that takes place when the keybind is pressed
 		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
 	end,
 })
-local GrabGun = Blatant:CreateKeybind({
+local GrabGun = Blatant:CreateButton({
 	Name = "Grab Gun",
-	CurrentKeybind = "G",
-	HoldToInteract = false,
-	Flag = "Grab Gun", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Keybind)
+	Callback = function()
 		-- The function that takes place when the keybind is pressed
 		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
 	end,
@@ -874,36 +860,54 @@ local AutoGrabGun = Blatant:CreateToggle({
 		configs.AutoGrabGun = value
 	end;
 })
-local KillAll = Blatant:CreateKeybind({
-	Name = "Kill All",
-	CurrentKeybind = "K",
-	HoldToInteract = false,
-	Flag = "Kill All", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Keybind)
+local KillAll = Blatant:CreateButton({
+	Name = "Kill All";
+	Callback = function()
 		-- The function that takes place when the keybind is pressed
 		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
-	end,
+	end;
 })
-local FlingPlayer = Blatant:CreateKeybind({
-	Name = "Fling Player",
-	CurrentKeybind = "F",
-	HoldToInteract = false,
-	Flag = "Fling Player", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
-	Callback = function(Keybind)
-		-- The function that takes place when the keybind is pressed
-		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
-	end,
-})
+
+local Section = Main:CreateSection("Fling", true)
+
 local FlingPlayerType = Blatant:CreateDropdown({
 	Name = "Player",
 	Options = {"Nikilis"},
 	CurrentOption = "Nikilis";
-	MultiSelection = false, -- If MultiSelections is allowed
-	Flag = "Fling Player", -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	MultiSelection = false; -- If MultiSelections is allowed
+	Flag = "Fling Player"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Option)
-		-- The function that takes place when the selected option is changed
-		-- The variable (Option) is a string for the value that the dropdown was changed to
-	end,
+		configs.FlingPlayer = Option
+	end;
+})
+local FlingPlayer = Blatant:CreateButton({
+	Name = "Fling Player";
+	Callback = function()
+		local lplrchar = LocalPlayer.Character
+		if not scriptvariables.AlreadyFlinging and configs.FlingPlayer and lplrchar then
+			local npc = Players:FindFirstChild(configs.FlingPlayer)
+			local lplrhrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+			if npc and lplrhrp then
+				local npchrp = npc:FindFirstChild("HumanoidRootPart")
+				if npchrp then
+					scriptvariables.AlreadyFlinging = true
+					
+					local bav = Instance.new("BodyAngularVelocity", lplrhrp)
+					bav.AngularVelocity = Vector3.new(0,500000,0)
+					bav.MaxTorque = Vector3.new(0,math.huge,0)
+					bav.P = math.huge	
+					
+					while true do
+						if not npchrp.Parent then scriptvariables.AlreadyFlinging = false break end
+						
+						lplrhrp.Position = npchrp.Position
+						lplrhrp.Velocity = Vector3.new(0,0,0)
+						task.wait()
+					end
+				end
+			end
+		end
+	end;
 })
 ---------------------------------------------------------------------------
 local CoinFarm = AutoFarm:CreateToggle({
@@ -963,7 +967,7 @@ local Unload = Others:CreateButton({
 	Name = "Unload";
 	Callback = function()
 		_G.mm2hacksalreadyloadedbyCITY512 = false
-		scriptvariables.scriptactivated = false
+		scriptvariables.ScriptActivated = false
 		Library:Destroy()
 	end;
 })
@@ -972,8 +976,8 @@ local KeepGUI = Others:CreateToggle({
 	CurrentValue = false;
 	Flag = "Keep GUI";
 	Callback = function(value)
-		if scriptvariables.queueonteleport then
-			scriptvariables.executeonteleport = value
+		if scriptvariables.QueueOnTeleport then
+			scriptvariables.ExecuteOnTeleport = value
 		else
 			Window:Notify({
 				Title = "Error";
@@ -1015,13 +1019,21 @@ eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(i
 	end
 end)
 eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
-	if scriptvariables.scriptactivated and not scriptvariables.tpcheck and scriptvariables.queueonteleport and scriptvariables.executeonteleport then
-		scriptvariables.tpcheck = true
-		scriptvariables.queueonteleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20hack.lua"))()')
+	if scriptvariables.ScriptActivated and not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and scriptvariables.ExecuteOnTeleport then
+		scriptvariables.TPCheck = true
+		scriptvariables.QueueOnTeleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20hack.lua"))()')
 	end
 end)
 eventfunctions.PlayerAdded = Players.PlayerAdded:Connect(function(player)
+	FlingPlayerType:Add(player.Name)
 	eventfunctions.Initialize(player)
+end)
+eventfunctions.PlayerRemoved = Players.PlayerRemoving:Connect(function(removedplayer)
+	if players[removedplayer.Name] then
+		players[removedplayer.Name].Disconnect()
+		players[removedplayer.Name] = nil
+	end
+	FlingPlayerType:Remove(removedplayer.Name)
 end)
 
 ---------------------------------------------------------------------------
@@ -1032,7 +1044,7 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
 
-	if scriptvariables.scriptactivated and not checkcaller() and LocalPlayer.Character then
+	if scriptvariables.ScriptActivated and not checkcaller() and LocalPlayer.Character then
 		local lplrchar = LocalPlayer.Character
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
@@ -1090,7 +1102,7 @@ while true do
 		end
 		prevtarget = nil
 	end
-	if not scriptvariables.scriptactivated then break end
+	if not scriptvariables.ScriptActivated then break end
 
 	if configs.KillAura then
 		local lplrchar = LocalPlayer.Character
