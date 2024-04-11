@@ -457,6 +457,7 @@ local ScreenGui = Instance.new("ScreenGui")
 local TextButton = Instance.new("TextButton")
 
 ScreenGui.Parent = CoreGui
+ScreenGui.IgnoreGuiInset = true
 ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
 
 TextButton.Parent = ScreenGui
@@ -466,7 +467,7 @@ TextButton.BackgroundTransparency = 0.500
 TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
 TextButton.BorderSizePixel = 0
 TextButton.Position = UDim2.new(0.5, 0, 0, 0)
-TextButton.Size = UDim2.new(0, 200, 0, 30)
+TextButton.Size = UDim2.new(0, 200, 0, 20)
 TextButton.Font = Enum.Font.SourceSans
 TextButton.Text = "Cheat Menu"
 TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
