@@ -458,6 +458,34 @@ function eventfunctions.Initialize(player)
 end
 
 ---------------------------------------------------------------------------
+-- GUI
+
+local ScreenGui = Instance.new("ScreenGui")
+local TextButton = Instance.new("TextButton")
+
+ScreenGui.Parent = CoreGui
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+TextButton.Parent = ScreenGui
+TextButton.AnchorPoint = Vector2.new(0.5, 0)
+TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.BackgroundTransparency = 0.500
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.5, 0, 0, 0)
+TextButton.Size = UDim2.new(0, 200, 0, 30)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = "Cheat Menu"
+TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.TextSize = 14.000
+
+TextButton.MouseButton1Click:Connect(function()
+	keypress(0xA1)
+	task.wait()
+	keyrelease(0xA1)
+end)
+
+---------------------------------------------------------------------------
 -- Library
 
 local Window = Library:CreateWindow({
