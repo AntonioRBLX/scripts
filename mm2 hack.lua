@@ -469,7 +469,7 @@ TextButton.BorderSizePixel = 0
 TextButton.Position = UDim2.new(0.5, 0, 0, 0)
 TextButton.Size = UDim2.new(0, 200, 0, 20)
 TextButton.Font = Enum.Font.SourceSans
-TextButton.Text = "Cheat Menu"
+TextButton.Text = "Open GUI"
 TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
 TextButton.TextSize = 14.000
 
