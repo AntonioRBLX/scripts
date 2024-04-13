@@ -1056,7 +1056,7 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 			local attachment = Instance.new("Attachment", HumanoidRootPart)
 			attachment.Position = Vector3.new(1.6, 1.2, -3)
 
-			local _, aimpos = aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
+			local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
 				IgnoreList = nil;
 				Ping = configs.Prediction;
 				PredictSpamJump = true;
@@ -1077,13 +1077,13 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 			attachment.Position = Vector3.new(1.5, 1.9, 1)
 			local aimpos
 			if powers.Sleight then
-				_, aimpos = aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
+				_, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
 					IgnoreList = nil;
 					Ping = configs.Prediction;
 					PredictSpamJump = true;
 				})
 			else
-				_, aimpos = aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
+				_, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
 					IgnoreList = nil;
 					Ping = configs.Prediction;
 					PredictSpamJump = true;
