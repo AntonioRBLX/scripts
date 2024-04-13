@@ -873,8 +873,8 @@ local Section = Main:CreateSection("Fling", true)
 
 local FlingPlayerType = Blatant:CreateDropdown({
 	Name = "Player",
-	Options = {"Nikilis"},
-	CurrentOption = "Nikilis";
+	Options = "",
+	CurrentOption = "";
 	MultiSelection = false; -- If MultiSelections is allowed
 	Flag = "Fling Player"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Option)
