@@ -1090,6 +1090,7 @@ end)
 -- Loops
 
 for _, player in pairs(Players:GetPlayers()) do
+	FlingPlayerType:Add(player.Name)
 	eventfunctions.Initialize(player)
 end
 
