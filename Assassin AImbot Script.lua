@@ -59,7 +59,7 @@ local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY51
 
 local index 
 index = hookmetamethod(game, '__index', function(obj, idx)
-	if configs.AimbotEnabled and idx:lower() == 'unitray' and LocalPlayer.Character then
+	if configs.AimbotEnabled and idx == 'UnitRay' and LocalPlayer.Character then
 		local closest = GetClosestPlayer(configs.FOV,1000)
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 
