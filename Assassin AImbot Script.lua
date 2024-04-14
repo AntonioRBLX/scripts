@@ -7,14 +7,6 @@ local configs = {
 	PingPrediction = 50;
 	FOV = 500
 }
-
-function checkcharhaschildren(char)
-	if char:FindFirstChild("HumanoidRootPart") and char:FindFirstChildOfClass("Humanoid") then
-		return true
-	else
-		return false
-	end
-end
 function GetClosestPlayer(FOV,maxdist)
 	if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
 	local lplrchar = LocalPlayer.Character
@@ -67,7 +59,7 @@ local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY51
 
 local index 
 index = hookmetamethod(game, '__index', function(obj, idx)
-	if configs.AimbotEnabled and idx:lower() == 'unitray' and LocalPlayer.Character and checkcharhaschildren(LocalPlayer.Character) then
+	if configs.AimbotEnabled and idx:lower() == 'unitray' and LocalPlayer.Character then
 		local closest = GetClosestPlayer(configs.FOV,1000)
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 
