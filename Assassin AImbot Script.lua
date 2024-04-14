@@ -66,7 +66,7 @@ end
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
 local index 
-index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
+index = hookmetamethod(game, '__index', function(obj, idx)
 	if configs.AimbotEnabled and idx:lower() == 'unitray' and LocalPlayer.Character and checkcharhaschildren(LocalPlayer.Character) then
 		local closest = GetClosestPlayer(configs.FOV,1000)
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
@@ -90,7 +90,7 @@ index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
 		end
 	end
 	return index(obj, idx)
-end))
+end)
 game.StarterGui:SetCore("SendNotification", {
 	Title = "Loaded";
 	Text = "too lazy to make an interface. roblox: CITY512 / discord: Luc#9803"
