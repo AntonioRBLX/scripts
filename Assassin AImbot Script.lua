@@ -87,3 +87,8 @@ game.StarterGui:SetCore("SendNotification", {
 	Title = "Loaded";
 	Text = "too lazy to make an interface. roblox: CITY512 / discord: Luc#9803"
 })
+
+while true do
+	print(LocalPlayer.Character)
+	task.wait()
+end
