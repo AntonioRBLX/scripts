@@ -59,7 +59,7 @@ end
 
 local index 
 index = hookmetamethod(game, '__index', function(obj, idx)
-	if configs.AimbotEnabled and idx == "UnitRay" then
+	if configs.AimbotEnabled and idx == "UnitRay" and LocalPlayer.Character then
 		local closest = GetClosestPlayer(configs.FOV,1000)
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 
@@ -79,6 +79,11 @@ index = hookmetamethod(game, '__index', function(obj, idx)
 				Origin = origin.Origin,
 				Direction = CFrame.new(origin.Origin,aimpos).LookVector
 			}
+		else
+			local sound = Instance.new("Sound", workspace)
+			sound.SoundId = "rbxassetid://9082114925"
+			sound.PlayOnRemove = true
+			sound:Destroy()
 		end
 	end
 	return index(obj, idx)
