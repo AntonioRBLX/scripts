@@ -697,7 +697,7 @@ local MurdererColor = Visuals:CreateColorPicker({
 	end
 })
 local HeroColor = Visuals:CreateColorPicker({
-	Name = "Hero Color";
+	Name = "Hero/Target Color";
 	Color = configs.HeroColor;
 	Flag = "Hero Color";
 	Callback = function(value)
