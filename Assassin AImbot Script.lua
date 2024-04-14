@@ -1,6 +1,8 @@
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
+local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
+
 local configs = {
 	AimbotEnabled = true;
 	AimbotMethod = "ClosestPlayerToScreenCenter";
@@ -55,8 +57,6 @@ function GetClosestPlayer(FOV,maxdist)
 	return nil
 end
 
-local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
-
 local index 
 index = hookmetamethod(game, '__index', function(obj, idx)
 	if configs.AimbotEnabled and idx == 'UnitRay' and LocalPlayer.Character then
@@ -87,8 +87,3 @@ game.StarterGui:SetCore("SendNotification", {
 	Title = "Loaded";
 	Text = "too lazy to make an interface. roblox: CITY512 / discord: Luc#9803"
 })
-
-while true do
-	print(LocalPlayer.Character)
-	task.wait()
-end
