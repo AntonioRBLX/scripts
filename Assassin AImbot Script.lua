@@ -3,7 +3,7 @@ local LocalPlayer = Players.LocalPlayer
 
 local configs = {
 	AimbotEnabled = true;
-	AimbotMethod = "ClosestPlayerToCharacter";
+	AimbotMethod = "ClosestPlayerToScreenCenter";
 	PingPrediction = 50;
 	FOV = 500
 }
@@ -75,7 +75,11 @@ index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
 			local attachment = Instance.new("Attachment", HumanoidRootPart)
 			attachment.Position = Vector3.new(1.6, 1.2, -3)
 
-			local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,290,60,nil,true,configs.PingPrediction,nil,false)
+			local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,290,60,{
+				IgnoreList = nil;
+				Ping = configs.PingPrediction;
+				PredictSpamJump = true;
+			})
 			local origin = index(obj, idx)
 			attachment:Destroy()
 
