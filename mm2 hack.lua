@@ -75,6 +75,7 @@ local configs = { -- Library Configurations
 	InnocentColor = Color3.fromRGB(143, 255, 112);
 	SheriffColor = Color3.fromRGB(112, 136, 255);
 	GunDropColor = Color3.fromRGB(141, 112, 255);
+	ShowAimbotVisuals = false;
 }
 local players = {} --[[
 					Nikilis = {
@@ -449,6 +450,9 @@ function eventfunctions.Initialize(player)
 		end
 	end
 end
+function AimbotVisuals()
+
+end
 
 ---------------------------------------------------------------------------
 -- GUI
@@ -743,6 +747,14 @@ if Drawing then
 		end;
 	})
 end
+local ShowAimbotVisuals = Visuals:CreateToggle({
+	Name = "Show Aimbot Visuals";
+	CurrentValue = false;
+	Flag = "Show Aimbot Visuals";
+	Callback = function(value)
+		configs.ShowAimbotVisuals = value
+	end;
+})
 
 local Section = Visuals:CreateSection("World", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
@@ -869,7 +881,7 @@ local KillAll = Blatant:CreateButton({
 	end;
 })
 
-local Section = Main:CreateSection("Fling", true)
+local Section = Blatant:CreateSection("Fling", true)
 
 local FlingPlayerType = Blatant:CreateDropdown({
 	Name = "Player",
@@ -1056,12 +1068,15 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 			local attachment = Instance.new("Attachment", HumanoidRootPart)
 			attachment.Position = Vector3.new(1.6, 1.2, -3)
 
-			local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
+			local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
 				IgnoreList = nil;
 				Ping = configs.Prediction;
 				PredictSpamJump = true;
 				IsAGun = true;
 			})
+			if configs.ShowAimbotVisuals then
+				coroutine.wrap(AimbotVisuals)(path)
+			end
 			attachment:Destroy()
 
 			args[2] = aimpos
@@ -1075,20 +1090,24 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 			local HumanoidRootPart = lplrchar.HumanoidRootPart
 			local attachment = Instance.new("Attachment", HumanoidRootPart)
 			attachment.Position = Vector3.new(1.5, 1.9, 1)
-			local aimpos
+			local path, aimpos
 			if powers.Sleight then
-				_, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
+				path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
 					IgnoreList = nil;
 					Ping = configs.Prediction;
 					PredictSpamJump = true;
 				})
 			else
-				_, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
+				path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
 					IgnoreList = nil;
 					Ping = configs.Prediction;
 					PredictSpamJump = true;
 				})
 			end
+			if configs.ShowAimbotVisuals then
+				coroutine.wrap(AimbotVisuals)(path)
+			end
+			
 			powers.Sleight = false
 			attachment:Destroy()
 
@@ -1116,6 +1135,11 @@ while true do
 			PrevTargetRoot.Size = Vector3.new(2,2,1)
 		end
 		prevtarget = nil
+	end
+	if Drawing and configs.ShowFOVCircle then
+		local mousepos = Vector2.new(Mouse.X,Mouse.Y)
+		Drawing1.Position = mousepos
+		Drawing2.Position = mousepos
 	end
 	if not scriptvariables.ScriptActivated then break end
 
