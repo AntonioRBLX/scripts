@@ -45,7 +45,8 @@ local Mouse = LocalPlayer:GetMouse()
 local configs = { -- Library Configurations
 	GunAimbot = false;
 	KnifeAimbot = false;
-	Prediction = 50;
+	GunPrediction = 150;
+	KnifePrediction = 100;
 	AimbotMethod = "Murderer/Target";
 	FOV = 350;
 	KillAura = false;
@@ -530,6 +531,17 @@ local GunAimbot = Main:CreateToggle({
 		configs.GunAimbot = value
 	end;
 })
+local GunPrediction = Main:CreateSlider({
+	Name = "Gun Prediction";
+	Range = {0, 1000};
+	Increment = 1;
+	Suffix = "ms";
+	CurrentValue = 150;
+	Flag = "Ping Prediction";
+	Callback = function(value)
+		configs.GunPrediction = value
+	end;
+})
 local KnifeAimbot = Main:CreateToggle({
 	Name = "Knife Aimbot";
 	CurrentValue = false;
@@ -538,15 +550,15 @@ local KnifeAimbot = Main:CreateToggle({
 		configs.KnifeAimbot = value
 	end;
 })
-local PingPrediction = Main:CreateSlider({
-	Name = "Ping Prediction";
+local KnifePrediction = Main:CreateSlider({
+	Name = "Knife Prediction";
 	Range = {0, 1000};
 	Increment = 1;
 	Suffix = "ms";
-	CurrentValue = 50;
-	Flag = "Ping Prediction";
+	CurrentValue = 100;
+	Flag = "Knife Prediction";
 	Callback = function(value)
-		configs.Prediction = value
+		configs.KnifePrediction = value
 	end;
 })
 local Dropdown = Main:CreateDropdown({
@@ -1081,7 +1093,7 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 
 			local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
 				IgnoreList = nil;
-				Ping = configs.Prediction;
+				Ping = configs.GunPrediction;
 				PredictSpamJump = true;
 				IsAGun = true;
 			})
@@ -1105,13 +1117,13 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 			if powers.Sleight then
 				path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
 					IgnoreList = nil;
-					Ping = configs.Prediction;
+					Ping = configs.KnifePrediction;
 					PredictSpamJump = true;
 				})
 			else
 				path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
 					IgnoreList = nil;
-					Ping = configs.Prediction;
+					Ping = configs.KnifePrediction;
 					PredictSpamJump = true;
 				})
 			end
