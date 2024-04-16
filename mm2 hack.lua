@@ -15,7 +15,7 @@ if not game:IsLoaded() then
 	game.Loaded:Wait()
 	message:Destroy()
 end
-if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod then -- Checks if executor is supported
+if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod or not getgenv then -- Checks if executor is supported
 	notify("Error","Incompatible Executor! Functions are not supported by this executor.")
 	return
 end
@@ -995,6 +995,7 @@ local Rejoin = Others:CreateButton({
 			Content = "Rejoining";
 			Duration = 5;
 			Image = "";
+			Actions = {};
 		})
 		TeleportService:Teleport(game.PlaceId, LocalPlayer)
 	end;
