@@ -689,6 +689,17 @@ local ShowGunDrop = Visuals:CreateToggle({
 	Flag = "Show Gun Drop";
 	Callback = function(value)
 		configs.ShowGunDrop = value
+		for _, child in pairs(workspace:GetChildren()) do
+			if child:IsA("BasePart") and child.Name == "GunDrop" then
+				if configs.ShowGunDrop then
+					AddChams(child,false,{
+						Color = configs.GunDropColor;
+					})
+				else
+					RemoveChams(child,false)
+				end
+			end
+		end
 	end;
 })
 local MurdererColor = Visuals:CreateColorPicker({
