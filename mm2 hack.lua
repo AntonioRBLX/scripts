@@ -1021,6 +1021,7 @@ local KeepGUI = Others:CreateToggle({
 				Content = 'The function "queue_on_teleport" is not supported on this executor';
 				Duration = 5;
 				Image = "";
+				Actions = {};
 			})
 		end
 	end;
