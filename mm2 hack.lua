@@ -531,6 +531,14 @@ local GunAimbot = Main:CreateToggle({
 		configs.GunAimbot = value
 	end;
 })
+local KnifeAimbot = Main:CreateToggle({
+	Name = "Knife Aimbot";
+	CurrentValue = false;
+	Flag = "Knife Aimbot";
+	Callback = function(value)
+		configs.KnifeAimbot = value
+	end;
+})
 local GunPrediction = Main:CreateSlider({
 	Name = "Gun Prediction";
 	Range = {0, 1000};
@@ -540,14 +548,6 @@ local GunPrediction = Main:CreateSlider({
 	Flag = "Ping Prediction";
 	Callback = function(value)
 		configs.GunPrediction = value
-	end;
-})
-local KnifeAimbot = Main:CreateToggle({
-	Name = "Knife Aimbot";
-	CurrentValue = false;
-	Flag = "Knife Aimbot";
-	Callback = function(value)
-		configs.KnifeAimbot = value
 	end;
 })
 local KnifePrediction = Main:CreateSlider({
