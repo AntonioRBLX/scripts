@@ -71,7 +71,9 @@ local configs = { -- Library Configurations
 
 	Chams = false;
 	ShowGunDrop = false;
+	TrapESP = false;
 	MurdererColor = Color3.fromRGB(255, 112, 112);
+	TrapColor = Color3.fromRGB(255, 172, 112);
 	HeroColor = Color3.fromRGB(255, 231, 112);
 	InnocentColor = Color3.fromRGB(143, 255, 112);
 	SheriffColor = Color3.fromRGB(112, 136, 255);
@@ -714,12 +716,40 @@ local ShowGunDrop = Visuals:CreateToggle({
 		end
 	end;
 })
+local ShowTraps = Visuals:CreateToggle({
+	Name = "Show Gun Drop";
+	CurrentValue = false;
+	Flag = "Show Gun Drop";
+	Callback = function(value)
+		configs.TrapESP = value
+		for _, descendant in pairs(workspace:GetDescendants()) do
+			if descendant:IsA("BasePart") and descendant.Name == "Trap" then
+				if configs.TrapESP then
+					AddChams(descendant,false,{
+						Color = configs.TrapColor;
+					})
+				else
+					RemoveChams(descendant,false)
+				end
+			end
+		end
+	end;
+})
 local MurdererColor = Visuals:CreateColorPicker({
 	Name = "Murderer Color";
 	Color = configs.MurdererColor;
 	Flag = "Murderer Color";
 	Callback = function(value)
 		configs.MurdererColor = value
+		UpdateAllChams()
+	end
+})
+local TrapColor = Visuals:CreateColorPicker({
+	Name = "Trap Color";
+	Color = configs.HeroColor;
+	Flag = "Trap Color";
+	Callback = function(value)
+		configs.TrapColor = value
 		UpdateAllChams()
 	end
 })
@@ -831,9 +861,6 @@ local RemoveMapLag = Visuals:CreateButton({
 			for _, descendant in pairs(workspace:GetDescendants()) do
 				RemoveLagFromObject(descendant)
 			end
-			workspace.DescendantAdded:Connect(function(descendant)
-				RemoveLagFromObject(descendant)
-			end)
 		end
 	end
 })
@@ -1054,6 +1081,13 @@ end)
 eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(instance)
 	if instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
 		match.SheriffDied = false
+	end
+end)
+eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
+	if descendant:IsA("BasePart") and descendant.Name == "Trap" then
+		.
+	elseif scriptvariables.AntiLagAlreadyExecuted then
+		RemoveLagFromObject(descendant)
 	end
 end)
 eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
