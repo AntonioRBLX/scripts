@@ -419,6 +419,14 @@ function eventfunctions.Initialize(player)
 		backpack = bp
 		local NPCHum = char:WaitForChild("Humanoid")
 		if NPCHum.ClassName == "Humanoid" then
+			if player == LocalPlayer then
+				if configs.ToggleWalkSpeed then
+					NPCHum.WalkSpeed = configs.WalkSpeed
+				end
+				if configs.ToggleJumpPower then
+					NPCHum.JumpPower = configs.JumpPower
+				end
+			end
 			HumanoidDiedEvent(NPCHum)
 		end
 		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or player ~= LocalPlayer) then
