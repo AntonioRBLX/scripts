@@ -1,4 +1,5 @@
 local CoreGui = game:GetService("CoreGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
@@ -964,8 +965,30 @@ local IncludeLocalPlayer = Visuals:CreateToggle({
 local AnnounceRoles = Blatant:CreateButton({
 	Name = "Announce Roles";
 	Callback = function()
-		-- The function that takes place when the keybind is pressed
-		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+		local murderer
+		local sheriff
+		local str = ""
+		for _, player in pairs(Players:GetPlayers()) do
+			if players[player.Name] then
+				if players[player.Name].Role == "Murderer" then
+					murderer = player.Name
+				elseif players[player.Name].Role == "Sheriff" then
+					sheriff = player.Name
+				end
+			end
+		end
+		if murderer and sheriff then
+			str = "The murderer is "..murderer.." and the sheriff is "..sheriff
+		elseif murderer then
+			str = "The murderer is "..murderer
+		elseif sheriff then
+			str = "The sheriff is "..murderer
+		end
+		local args = {
+			[1] = str;
+			[2] = "normalchat"
+		}
+		ReplicatedStorage:WaitForChild("DefaultChatSystemEvents"):WaitForChild("SayMessageRequest"):FireServer(table.unpack(args))
 	end,
 })
 local GrabGun = Blatant:CreateButton({
