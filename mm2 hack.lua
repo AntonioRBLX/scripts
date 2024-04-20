@@ -771,7 +771,7 @@ local MurdererColor = Visuals:CreateColorPicker({
 })
 local TrapColor = Visuals:CreateColorPicker({
 	Name = "Trap Color";
-	Color = configs.HeroColor;
+	Color = configs.TrapColor;
 	Flag = "Trap Color";
 	Callback = function(value)
 		configs.TrapColor = value
