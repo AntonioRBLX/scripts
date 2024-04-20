@@ -1313,7 +1313,7 @@ while true do
 								local startpos = lplrchar.Gun.Handle.Position
 
 								local params = RaycastParams.new()
-								params.FilterDescendantsInstances = {character}
+								params.FilterDescendantsInstances = {character,lplrchar}
 								params.FilterType = Enum.RaycastFilterType.Exclude
 
 								local raycast = workspace:Raycast(startpos, NPCRoot.Position - startpos, params)
