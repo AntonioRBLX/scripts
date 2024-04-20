@@ -742,9 +742,9 @@ local ShowGunDrop = Visuals:CreateToggle({
 	end;
 })
 local ShowTraps = Visuals:CreateToggle({
-	Name = "Show Gun Drop";
+	Name = "Show Traps";
 	CurrentValue = false;
-	Flag = "Show Gun Drop";
+	Flag = "Show Traps";
 	Callback = function(value)
 		configs.TrapESP = value
 		for _, descendant in pairs(workspace:GetDescendants()) do
