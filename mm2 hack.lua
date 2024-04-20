@@ -478,8 +478,37 @@ local function RemoveLagFromObject(object)
 		end
 	end
 end
-function AimbotVisuals()
+function AimbotVisuals(path)
+	task.wait()
+	local prevatt
+	local hue = 0
 
+	local container = Instance.new("Part", workspace)
+	container.Anchored = true
+	container.CanCollide = false
+	container.Transparency = 1
+
+	for _, i in path do
+		local att = Instance.new("Attachment", container)
+		att.WorldPosition = i
+
+		if prevatt then
+			local beam = Instance.new("Beam", container)
+			beam.Attachment0 = prevatt
+			beam.Attachment1 = att
+			beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.560784, 1),Color3.fromHSV((hue + 3)/360, 0.560784, 1))
+			beam.Segments = 1
+			beam.Width0 = 0.3
+			beam.Width1 = 0.3
+		end
+		hue += 3
+		if hue >= 360 then
+			hue = 0
+		end
+		prevatt = att
+	end
+	task.wait(5)
+	container:Destroy()
 end
 
 ---------------------------------------------------------------------------
