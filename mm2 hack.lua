@@ -1292,7 +1292,7 @@ while true do
 					end
 				end
 			end
-			if configs.AutoEquip and players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == "Sheriff" and not lplrchar:FindFirstChild("Gun") then
+			if configs.AutoEquip and players[LocalPlayer.Name] and (players[LocalPlayer.Name].Role == "Sheriff" or players[LocalPlayer.Name].Role == "Hero") and not lplrchar:FindFirstChild("Gun") then
 				local bp = LocalPlayer:FindFirstChild("Backpack")
 				if bp then
 					for _, child in pairs(bp:GetChildren()) do
