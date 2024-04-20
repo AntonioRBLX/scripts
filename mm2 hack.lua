@@ -49,6 +49,8 @@ local configs = { -- Library Configurations
 	KnifePrediction = 100;
 	AimbotMethod = "Murderer/Target";
 	FOV = 350;
+	AutoEquip = true;
+	AutoShoot = true;
 	KillAura = false;
 	KillAuraRange = 15;
 	FaceTarget = false;
@@ -1253,7 +1255,7 @@ while true do
 		Drawing2.Position = mousepos
 	end
 	if not scriptvariables.ScriptActivated then break end
-	
+
 	local lplrchar = LocalPlayer.Character
 	if lplrchar then
 		local HumanoidRootPart = lplrchar:FindFirstChild("HumanoidRootPart")
@@ -1279,7 +1281,7 @@ while true do
 					end
 					if closest then
 						prevtarget = closest[1]
-		
+
 						local TargetRoot = prevtarget.HumanoidRootPart
 						if configs.FaceTarget then
 							HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,TargetRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
@@ -1290,12 +1292,12 @@ while true do
 					end
 				end
 			end
-			if configs.AutoEquip and players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == "Sheriff" then
+			if configs.AutoEquip and players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == "Sheriff" and not lplrchar:FindFirstChild("Gun") then
 				local bp = LocalPlayer:FindFirstChild("Backpack")
 				if bp then
 					for _, child in pairs(bp:GetChildren()) do
-						if child.Name == "Gun" then
-							Humanoid
+						if child.ClassName == "Tool" and child.Name == "Gun" then
+							Humanoid:EquipTool(child)
 						end
 					end
 				end
