@@ -234,9 +234,9 @@ function GetClosestPlayer(FOV,maxdist)
 				for _, player in pairs(Players:GetPlayers()) do
 					local character = player.Character
 					if character and character ~= lplrchar  then
-						local characterroot = character:FindFirstChild("HumanoidRootPart")
-						if characterroot and characterroot:IsA("BasePart") then
-							local distance = (characterroot.Position - lplrhrp.Position).Magnitude
+						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+						if NPCRoot and NPCRoot:IsA("BasePart") then
+							local distance = (NPCRoot.Position - lplrhrp.Position).Magnitude
 							if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distance <= maxdist then
 								closest = character
 							end
@@ -417,9 +417,9 @@ function eventfunctions.Initialize(player)
 
 		local bp = player:WaitForChild("Backpack")
 		backpack = bp
-		local humanoid = char:WaitForChild("Humanoid")
-		if humanoid.ClassName == "Humanoid" then
-			HumanoidDiedEvent(humanoid)
+		local NPCHum = char:WaitForChild("Humanoid")
+		if NPCHum.ClassName == "Humanoid" then
+			HumanoidDiedEvent(NPCHum)
 		end
 		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or player ~= LocalPlayer) then
 			RemoveDisplays(char)
@@ -703,9 +703,9 @@ local WalkSpeedToggle = LocalPlayerTab:CreateToggle({
 	Callback = function(value)
 		configs.ToggleWalkSpeed = value
 		if not configs.ToggleWalkSpeed and LocalPlayer.Character then
-			local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-			if humanoid then
-				humanoid.WalkSpeed = 16
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if lplrhum then
+				lplrhum.WalkSpeed = 16
 			end
 		end
 	end;
@@ -717,9 +717,9 @@ local JumpPowerToggle = LocalPlayerTab:CreateToggle({
 	Callback = function(value)
 		configs.ToggleJumpPower = value
 		if not configs.ToggleJumpPower and LocalPlayer.Character then
-			local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-			if humanoid then
-				humanoid.JumpPower = 50
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if lplrhum then
+				lplrhum.JumpPower = 50
 			end
 		end
 	end;
@@ -734,9 +734,9 @@ local WalkSpeed = LocalPlayerTab:CreateSlider({
 	Callback = function(value)
 		configs.WalkSpeed = value
 		if configs.ToggleWalkSpeed and LocalPlayer.Character then
-			local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-			if humanoid then
-				humanoid.WalkSpeed = configs.WalkSpeed
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if lplrhum then
+				lplrhum.WalkSpeed = configs.WalkSpeed
 			end
 		end
 	end;
@@ -751,9 +751,9 @@ local JumpPower = LocalPlayerTab:CreateSlider({
 	Callback = function(value)
 		configs.JumpPower = value
 		if configs.ToggleJumpPower and LocalPlayer.Character then
-			local humanoid = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
-			if humanoid then
-				humanoid.JumpPower = configs.JumpPower
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if lplrhum then
+				lplrhum.JumpPower = configs.JumpPower
 			end
 		end
 	end;
@@ -1000,11 +1000,11 @@ local FlingPlayer = Blatant:CreateButton({
 	Callback = function()
 		local lplrchar = LocalPlayer.Character
 		if not scriptvariables.AlreadyFlinging and configs.FlingPlayer and lplrchar then
-			local npc = Players:FindFirstChild(configs.FlingPlayer)
+			local player = Players:FindFirstChild(configs.FlingPlayer)
 			local lplrhrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-			if npc and lplrhrp then
-				local npchrp = npc:FindFirstChild("HumanoidRootPart")
-				if npchrp then
+			if player and lplrhrp then
+				local NPCRoot = player:FindFirstChild("HumanoidRootPart")
+				if NPCRoot then
 					scriptvariables.AlreadyFlinging = true
 
 					local bav = Instance.new("BodyAngularVelocity", lplrhrp)
@@ -1013,9 +1013,9 @@ local FlingPlayer = Blatant:CreateButton({
 					bav.P = math.huge	
 
 					while true do
-						if not npchrp.Parent then scriptvariables.AlreadyFlinging = false break end
+						if not NPCRoot.Parent then scriptvariables.AlreadyFlinging = false break end
 
-						lplrhrp.Position = npchrp.Position
+						lplrhrp.Position = NPCRoot.Position
 						lplrhrp.Velocity = Vector3.new(0,0,0)
 						task.wait()
 					end
@@ -1177,8 +1177,8 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 
 			if not closest then return self.InvokeServer(self,...) end
 
-			local HumanoidRootPart = lplrchar.HumanoidRootPart
-			local attachment = Instance.new("Attachment", HumanoidRootPart)
+			local lplrhrp = lplrchar.HumanoidRootPart
+			local attachment = Instance.new("Attachment", lplrhrp)
 			attachment.Position = Vector3.new(1.6, 1.2, -3)
 
 			local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
@@ -1200,8 +1200,8 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 
 			if not closest then return self.FireServer(self,...) end
 
-			local HumanoidRootPart = lplrchar.HumanoidRootPart
-			local attachment = Instance.new("Attachment", HumanoidRootPart)
+			local lplrhrp = lplrchar.HumanoidRootPart
+			local attachment = Instance.new("Attachment", lplrhrp)
 			attachment.Position = Vector3.new(1.5, 1.9, 1)
 			local path, aimpos
 			if powers.Sleight then
@@ -1258,9 +1258,9 @@ while true do
 
 	local lplrchar = LocalPlayer.Character
 	if lplrchar then
-		local HumanoidRootPart = lplrchar:FindFirstChild("HumanoidRootPart")
-		local Humanoid = lplrchar:FindFirstChildOfClass("Humanoid")
-		if Humanoid and HumanoidRootPart and Humanoid.Health > 0 and HumanoidRootPart:IsA("BasePart") then
+		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
+		local lplrhum = lplrchar:FindFirstChildOfClass("Humanoid")
+		if lplrhum and lplrhrp and lplrhum.Health > 0 and lplrhrp:IsA("BasePart") then
 			if configs.KillAura then
 				local Knife = lplrchar:FindFirstChild("Knife")
 				if Knife and Knife.ClassName == "Tool" then
@@ -1270,7 +1270,7 @@ while true do
 						if character and character ~= lplrchar then
 							local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 							if NPCRoot and NPCRoot:IsA("BasePart") then
-								local distance = (NPCRoot.Position - HumanoidRootPart.Position).Magnitude
+								local distance = (NPCRoot.Position - lplrhrp.Position).Magnitude
 								if distance < configs.KillAuraRange then
 									if not closest or distance < closest[2] then
 										closest = {character,distance}
@@ -1284,7 +1284,7 @@ while true do
 
 						local TargetRoot = prevtarget.HumanoidRootPart
 						if configs.FaceTarget then
-							HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,TargetRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
+							lplrhrp.CFrame = CFrame.new(lplrhrp.Position,TargetRoot.Position * Vector3.new(1,0,1) + lplrhrp.Position * Vector3.new(0,1,0))
 						end
 						TargetRoot.CanCollide = false
 						TargetRoot.Size = Vector3.new(configs.KillAuraRange,configs.KillAuraRange,configs.KillAuraRange)
@@ -1299,24 +1299,27 @@ while true do
 					if bp then
 						for _, child in pairs(bp:GetChildren()) do
 							if child.ClassName == "Tool" and child.Name == "Gun" then
-								Humanoid:EquipTool(child)
+								lplrhum:EquipTool(child)
 							end
 						end
 					end
 				end
 				if configs.AutoShoot and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeServer") and Gun.KnifeServer:FindFirstChild("ShootGun") then
 					for _, player in pairs(Players:GetPlayers()) do
-						local plrhrp = player.Character:FindFirstChild("HumanoidRootPart") 
-						if players[player.Name].Role == "Murderer" and player.Character and plrhrp then
-							local startpos = lplrchar.Gun.Handle.Position
+						local character = player.Character
+						if character then
+							local NPCRoot = character:FindFirstChild("HumanoidRootPart") 
+							if NPCRoot and NPCRoot:IsA("BasePart") and players[player.Name] and players[player.Name].Role == "Murderer" then
+								local startpos = lplrchar.Gun.Handle.Position
 
-							local params = RaycastParams.new()
-							params.FilterDescendantsInstances = {player.Character}
-							params.FilterType = Enum.RaycastFilterType.Exclude
+								local params = RaycastParams.new()
+								params.FilterDescendantsInstances = {character}
+								params.FilterType = Enum.RaycastFilterType.Exclude
 
-							local raycast = workspace:Raycast(startpos, startpos - plrhrp.Position, params)
-							if not raycast or not raycast.Position then
-								lplrchar.Gun.KnifeServer.ShootGun:InvokeServer()
+								local raycast = workspace:Raycast(startpos, startpos - NPCRoot.Position, params)
+								if not raycast or not raycast.Position then
+									lplrchar.Gun.KnifeServer.ShootGun:InvokeServer()
+								end
 							end
 						end
 					end
