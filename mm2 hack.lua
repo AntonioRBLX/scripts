@@ -971,7 +971,7 @@ local AnnounceRoles = Blatant:CreateButton({
 			if players[player.Name] then
 				if players[player.Name].Role == "Murderer" then
 					murderer = player.Name
-				elseif players[player.Name].Role == "Sheriff" then
+				elseif players[player.Name].Role == "Sheriff" or players[player.Name].Role == "Hero" then
 					sheriff = player.Name
 				end
 			end
