@@ -494,6 +494,7 @@ function AimbotVisuals(path)
 
 		if prevatt then
 			local beam = Instance.new("Beam", container)
+			beam.FaceCamera = true
 			beam.Attachment0 = prevatt
 			beam.Attachment1 = att
 			beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.560784, 1),Color3.fromHSV((hue + 3)/360, 0.560784, 1))
@@ -643,6 +644,25 @@ local FOV = Main:CreateSlider({
 	end;
 })
 
+local Section = Main:CreateSection("Gun Mods", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
+local AutoEquip = Main:CreateToggle({
+	Name = "Auto Equip";
+	CurrentValue = false;
+	Flag = "Auto Equip";
+	Callback = function(value)
+		configs.AutoEquip = value
+	end;
+})
+local AutoShoot = Main:CreateToggle({
+	Name = "Auto Shoot";
+	CurrentValue = false;
+	Flag = "Auto Shoot";
+	Callback = function(value)
+		configs.AutoEquip = value
+	end;
+})
+
 local Section = Main:CreateSection("Kill Aura", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
 local KillAura = Main:CreateToggle({
@@ -672,6 +692,7 @@ local FaceTarget = Main:CreateToggle({
 		configs.FaceTarget = value
 	end;
 })
+
 ---------------------------------------------------------------------------
 local WalkSpeedToggle = LocalPlayerTab:CreateToggle({
 	Name = "Toggle WalkSpeed";
@@ -1232,38 +1253,51 @@ while true do
 		Drawing2.Position = mousepos
 	end
 	if not scriptvariables.ScriptActivated then break end
-
-	if configs.KillAura then
-		local lplrchar = LocalPlayer.Character
-		if lplrchar then
-			local HumanoidRootPart = lplrchar:FindFirstChild("HumanoidRootPart")
-			local Knife = lplrchar:FindFirstChild("Knife")
-			if HumanoidRootPart and HumanoidRootPart:IsA("BasePart") and Knife and Knife.ClassName == "Tool" then
-				local closest
-				for _, player in pairs(Players:GetPlayers()) do
-					local character = player.Character
-					if character and character ~= lplrchar then
-						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
-						if NPCRoot and NPCRoot:IsA("BasePart") then
-							local distance = (NPCRoot.Position - HumanoidRootPart.Position).Magnitude
-							if distance < configs.KillAuraRange then
-								if not closest or distance < closest[2] then
-									closest = {character,distance}
+	
+	local lplrchar = LocalPlayer.Character
+	if lplrchar then
+		local HumanoidRootPart = lplrchar:FindFirstChild("HumanoidRootPart")
+		local Humanoid = lplrchar:FindFirstChildOfClass("Humanoid")
+		if Humanoid and HumanoidRootPart and Humanoid.Health > 0 and HumanoidRootPart:IsA("BasePart") then
+			if configs.KillAura then
+				local Knife = lplrchar:FindFirstChild("Knife")
+				if Knife and Knife.ClassName == "Tool" then
+					local closest
+					for _, player in pairs(Players:GetPlayers()) do
+						local character = player.Character
+						if character and character ~= lplrchar then
+							local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+							if NPCRoot and NPCRoot:IsA("BasePart") then
+								local distance = (NPCRoot.Position - HumanoidRootPart.Position).Magnitude
+								if distance < configs.KillAuraRange then
+									if not closest or distance < closest[2] then
+										closest = {character,distance}
+									end
 								end
 							end
 						end
 					end
-				end
-				if closest then
-					prevtarget = closest[1]
-
-					local TargetRoot = prevtarget.HumanoidRootPart
-					if configs.FaceTarget then
-						HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,TargetRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
+					if closest then
+						prevtarget = closest[1]
+		
+						local TargetRoot = prevtarget.HumanoidRootPart
+						if configs.FaceTarget then
+							HumanoidRootPart.CFrame = CFrame.new(HumanoidRootPart.Position,TargetRoot.Position * Vector3.new(1,0,1) + HumanoidRootPart.Position * Vector3.new(0,1,0))
+						end
+						TargetRoot.CanCollide = false
+						TargetRoot.Size = Vector3.new(configs.KillAuraRange,configs.KillAuraRange,configs.KillAuraRange)
+						Knife:Activate()
 					end
-					TargetRoot.CanCollide = false
-					TargetRoot.Size = Vector3.new(configs.KillAuraRange,configs.KillAuraRange,configs.KillAuraRange)
-					Knife:Activate()
+				end
+			end
+			if configs.AutoEquip and players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == "Sheriff" then
+				local bp = LocalPlayer:FindFirstChild("Backpack")
+				if bp then
+					for _, child in pairs(bp:GetChildren()) do
+						if child.Name == "Gun" then
+							Humanoid
+						end
+					end
 				end
 			end
 		end
