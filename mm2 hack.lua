@@ -453,6 +453,31 @@ function eventfunctions.Initialize(player)
 		end
 	end
 end
+local function RemoveLagFromObject(object)
+	if not object:FindFirstAncestorOfClass("Model") or not object:FindFirstAncestorOfClass("Model"):FindFirstChildOfClass("Humanoid") then
+		if object:IsA("MeshPart") then
+			object.Material = Enum.Material.SmoothPlastic
+			object.TextureID = ""
+		elseif object:IsA("UnionOperation") then
+			object.Material = Enum.Material.SmoothPlastic
+		elseif object:IsA("Decal") then
+			object:Destroy()
+		elseif object.ClassName == "SpecialMesh" and object.MeshType == Enum.MeshType.FileMesh then
+			object.TextureId = ""
+		elseif object:IsA("ParticleEmitter") or object:IsA("Trail") then
+			object:Destroy()
+		elseif object:IsA("BasePart") then
+			object.Material = Enum.Material.SmoothPlastic
+			object.Reflectance = 0
+			object.TopSurface = Enum.SurfaceType.Smooth
+			object.BottomSurface = Enum.SurfaceType.Smooth
+			object.FrontSurface = Enum.SurfaceType.Smooth
+			object.BackSurface = Enum.SurfaceType.Smooth
+			object.LeftSurface = Enum.SurfaceType.Smooth
+			object.RightSurface = Enum.SurfaceType.Smooth
+		end
+	end
+end
 function AimbotVisuals()
 
 end
@@ -828,31 +853,6 @@ local RemoveMapLag = Visuals:CreateButton({
 			Lighting.FogEnd = 9e9
 			settings().Rendering.QualityLevel = 1
 
-			local function RemoveLagFromObject(object)
-				if not object:FindFirstAncestorOfClass("Model") or not object:FindFirstAncestorOfClass("Model"):FindFirstChildOfClass("Humanoid") then
-					if object:IsA("MeshPart") then
-						object.Material = Enum.Material.SmoothPlastic
-						object.TextureID = ""
-					elseif object:IsA("UnionOperation") then
-						object.Material = Enum.Material.SmoothPlastic
-					elseif object:IsA("Decal") then
-						object:Destroy()
-					elseif object.ClassName == "SpecialMesh" and object.MeshType == Enum.MeshType.FileMesh then
-						object.TextureId = ""
-					elseif object:IsA("ParticleEmitter") or object:IsA("Trail") then
-						object:Destroy()
-					elseif object:IsA("BasePart") then
-						object.Material = Enum.Material.SmoothPlastic
-						object.Reflectance = 0
-						object.TopSurface = Enum.SurfaceType.Smooth
-						object.BottomSurface = Enum.SurfaceType.Smooth
-						object.FrontSurface = Enum.SurfaceType.Smooth
-						object.BackSurface = Enum.SurfaceType.Smooth
-						object.LeftSurface = Enum.SurfaceType.Smooth
-						object.RightSurface = Enum.SurfaceType.Smooth
-					end
-				end
-			end
 			for _, child in pairs(Lighting:GetChildren()) do
 				if child:IsA("BlurEffect") or child:IsA("SunRaysEffect") or child:IsA("ColorCorrectionEffect") or child:IsA("BloomEffect") or child:IsA("DepthOfFieldEffect") then
 					child:Destroy()
@@ -954,15 +954,15 @@ local FlingPlayer = Blatant:CreateButton({
 				local npchrp = npc:FindFirstChild("HumanoidRootPart")
 				if npchrp then
 					scriptvariables.AlreadyFlinging = true
-					
+
 					local bav = Instance.new("BodyAngularVelocity", lplrhrp)
 					bav.AngularVelocity = Vector3.new(0,500000,0)
 					bav.MaxTorque = Vector3.new(0,math.huge,0)
 					bav.P = math.huge	
-					
+
 					while true do
 						if not npchrp.Parent then scriptvariables.AlreadyFlinging = false break end
-						
+
 						lplrhrp.Position = npchrp.Position
 						lplrhrp.Velocity = Vector3.new(0,0,0)
 						task.wait()
@@ -1085,7 +1085,7 @@ eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(i
 end)
 eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
 	if descendant:IsA("BasePart") and descendant.Name == "Trap" then
-		.UpdateChams(child,false,{
+		UpdateChams(descendant,false,{
 			Color = configs.TrapColor;
 		})
 	elseif scriptvariables.AntiLagAlreadyExecuted then
@@ -1168,7 +1168,7 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 			if configs.ShowAimbotVisuals then
 				coroutine.wrap(AimbotVisuals)(path)
 			end
-			
+
 			powers.Sleight = false
 			attachment:Destroy()
 
