@@ -965,9 +965,8 @@ local IncludeLocalPlayer = Visuals:CreateToggle({
 local AnnounceRoles = Blatant:CreateButton({
 	Name = "Announce Roles";
 	Callback = function()
-		local murderer
-		local sheriff
-		local str = ""
+		local murderer = "nobody"
+		local sheriff = "nobody"
 		for _, player in pairs(Players:GetPlayers()) do
 			if players[player.Name] then
 				if players[player.Name].Role == "Murderer" then
@@ -977,15 +976,8 @@ local AnnounceRoles = Blatant:CreateButton({
 				end
 			end
 		end
-		if murderer and sheriff then
-			str = "The murderer is "..murderer.." and the sheriff is "..sheriff
-		elseif murderer then
-			str = "The murderer is "..murderer
-		elseif sheriff then
-			str = "The sheriff is "..murderer
-		end
 		local args = {
-			[1] = str;
+			[1] = "The murderer is "..murderer.." and the sheriff is "..sheriff;
 			[2] = "normalchat"
 		}
 		ReplicatedStorage:WaitForChild("DefaultChatSystemEvents"):WaitForChild("SayMessageRequest"):FireServer(table.unpack(args))
