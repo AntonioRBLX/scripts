@@ -1316,7 +1316,7 @@ while true do
 								params.FilterDescendantsInstances = {character}
 								params.FilterType = Enum.RaycastFilterType.Exclude
 
-								local raycast = workspace:Raycast(startpos, startpos - NPCRoot.Position, params)
+								local raycast = workspace:Raycast(startpos, NPCRoot.Position - startpos, params)
 								if not raycast or not raycast.Position then
 									lplrchar.Gun.KnifeServer.ShootGun:InvokeServer()
 								end
