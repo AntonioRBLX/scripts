@@ -661,7 +661,7 @@ local AutoShoot = Main:CreateToggle({
 	CurrentValue = false;
 	Flag = "Auto Shoot";
 	Callback = function(value)
-		configs.AutoEquip = value
+		configs.AutoShoot = value
 	end;
 })
 
@@ -1172,7 +1172,7 @@ namecall = hookmetamethod(game,"__namecall", function(self,...)
 
 	if scriptvariables.ScriptActivated and not checkcaller() and LocalPlayer.Character then
 		local lplrchar = LocalPlayer.Character
-		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
+		if (configs.GunAimbot or configs.AutoShoot) and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local closest = GetClosestPlayer(configs.FOV,500)
 
 			if not closest then return self.InvokeServer(self,...) end
@@ -1292,12 +1292,32 @@ while true do
 					end
 				end
 			end
-			if configs.AutoEquip and players[LocalPlayer.Name] and (players[LocalPlayer.Name].Role == "Sheriff" or players[LocalPlayer.Name].Role == "Hero") and not lplrchar:FindFirstChild("Gun") then
-				local bp = LocalPlayer:FindFirstChild("Backpack")
-				if bp then
-					for _, child in pairs(bp:GetChildren()) do
-						if child.ClassName == "Tool" and child.Name == "Gun" then
-							Humanoid:EquipTool(child)
+			if players[LocalPlayer.Name] and (players[LocalPlayer.Name].Role == "Sheriff" or players[LocalPlayer.Name].Role == "Hero") and not lplrchar:FindFirstChild("Gun") then
+				local Gun = lplrchar:FindFirstChild("Gun")
+				if configs.AutoEquip and (not Gun or Gun.ClassName ~= "Tool") then
+					local bp = LocalPlayer:FindFirstChild("Backpack")
+					if bp then
+						for _, child in pairs(bp:GetChildren()) do
+							if child.ClassName == "Tool" and child.Name == "Gun" then
+								Humanoid:EquipTool(child)
+							end
+						end
+					end
+				end
+				if configs.AutoShoot and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeServer") and Gun.KnifeServer:FindFirstChild("ShootGun") then
+					for _, player in pairs(Players:GetPlayers()) do
+						local plrhrp = player.Character:FindFirstChild("HumanoidRootPart") 
+						if players[player.Name].Role == "Murderer" and player.Character and plrhrp then
+							local startpos = lplrchar.Gun.Handle.Position
+
+							local params = RaycastParams.new()
+							params.FilterDescendantsInstances = {player.Character}
+							params.FilterType = Enum.RaycastFilterType.Exclude
+
+							local raycast = workspace:Raycast(startpos, startpos - plrhrp.Position, params)
+							if not raycast or not raycast.Position then
+								lplrchar.Gun.KnifeServer.ShootGun:InvokeServer()
+							end
 						end
 					end
 				end
