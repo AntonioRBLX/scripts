@@ -1160,7 +1160,7 @@ eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(i
 end)
 eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
 	if descendant:IsA("BasePart") and descendant.Name == "Trap" then
-		UpdateChams(descendant,false,{
+		AddChams(descendant,false,{
 			Color = configs.TrapColor;
 		})
 	elseif scriptvariables.AntiLagAlreadyExecuted then
