@@ -23,7 +23,7 @@ function GetClosestPlayer(FOV,maxdist)
 			if character and character ~= lplrchar then
 				local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 				if NPCRoot then
-					local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
+					local viewportpoint, onscreen = camera:WorldToViewportPoint(NPCRoot.Position)
 					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
 					local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
