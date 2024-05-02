@@ -4,8 +4,8 @@ local LocalPlayer = Players.LocalPlayer
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
 local configs = {
-	AimbotEnabled = true;
-	AimbotMethod = "ClosestPlayerToScreenCenter";
+	AimbotEnabled = false;
+	AimbotMethod = "ClosestPlayerToCursor";
 	PingPrediction = 75;
 	FOV = 500
 }
@@ -102,7 +102,3 @@ index = hookmetamethod(game, '__index', function(obj, idx)
 	end
 	return index(obj, idx)
 end)
-game.StarterGui:SetCore("SendNotification", {
-	Title = "Loaded";
-	Text = "too lazy to make an interface. roblox: CITY512 / discord: Luc#9803"
-})
