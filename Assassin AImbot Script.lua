@@ -6,9 +6,10 @@ local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY51
 local configs = {
 	AimbotEnabled = true;
 	AimbotMethod = "ClosestPlayerToScreenCenter";
-	PingPrediction = 225;
+	PingPrediction = 75;
 	FOV = 500
 }
+
 function GetClosestPlayer(FOV,maxdist)
 	if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
 	local lplrchar = LocalPlayer.Character
@@ -56,6 +57,19 @@ function GetClosestPlayer(FOV,maxdist)
 	end
 	return nil
 end
+
+local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/dirt",true))()
+
+local window = Lib:CreateWindow("Assassin")
+window:Section("Aimbot")
+window:Toggle("Aimbot",{location = configs, flag = "AimbotEnabled"},function()
+end)
+window:Slider("FOV",{location = configs, min = 1, max = 1250, default = 500, precise = false --[[ 0.00 instead of 0 ]], flag = "FOV"},function()
+end)
+window:Slider("Ping Prediction",{location = configs, min = 1, max = 1000, default = 75, precise = false --[[ 0.00 instead of 0 ]], flag = "PingPrediction"},function()
+end)
+window:Dropdown("Aimbot Method",{location = configs,flag = "AimbotMethod",search = true, list = {"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter"}, PlayerList = false},function()
+end)
 
 local index 
 index = hookmetamethod(game, '__index', function(obj, idx)
