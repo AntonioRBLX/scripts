@@ -4,7 +4,7 @@ local LocalPlayer = Players.LocalPlayer
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
 
 local configs = {
-	AimbotEnabled = false;
+	AimbotEnabled = true;
 	AimbotMethod = "ClosestPlayerToCursor";
 	PingPrediction = 75;
 	FOV = 500
