@@ -1,7 +1,7 @@
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
-local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
+local Aimbot = loadstring(game:HttpGet("https://github.com/CITY512/modules/blob/main/Projectile%20Aimbot.lua"))()
 
 local configs = {
 	AimbotEnabled = true;
