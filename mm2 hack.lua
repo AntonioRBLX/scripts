@@ -34,7 +34,7 @@ _G.mm2hacksalreadyloadedbyCITY512 = true
 -- Modules
 
 local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
-local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/aimbot.lua"))()
+local Aimbot = loadstring(game:HttpGet("https://github.com/CITY512/modules/blob/main/Projectile%20Aimbot.lua"))()
 
 repeat task.wait() until game.Players.LocalPlayer -- Waits for LocalPlayer to load in.
 -- Variables
