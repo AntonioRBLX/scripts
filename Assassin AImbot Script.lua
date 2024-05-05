@@ -7,7 +7,7 @@ local configs = {
 	AimbotEnabled = true;
 	AimbotMethod = "ClosestPlayerToScreenCenter";
 	PingPrediction = 75;
-	FOV = 1500
+	FOV = 1500;
 }
 
 function GetClosestPlayer(FOV,maxdist)
@@ -58,22 +58,9 @@ function GetClosestPlayer(FOV,maxdist)
 	return nil
 end
 
-local Lib = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/dirt",true))()
-
-local window = Lib:CreateWindow("Assassin")
-window:Section("Aimbot")
-window:Toggle("Aimbot",{location = configs, flag = "AimbotEnabled"},function()
-end)
-window:Slider("FOV",{location = configs, min = 1, max = 1250, default = 500, precise = false --[[ 0.00 instead of 0 ]], flag = "FOV"},function()
-end)
-window:Slider("Ping Prediction",{location = configs, min = 1, max = 1000, default = 75, precise = false --[[ 0.00 instead of 0 ]], flag = "PingPrediction"},function()
-end)
-window:Dropdown("Aimbot Method",{location = configs,flag = "AimbotMethod",search = true, list = {"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter"}, PlayerList = false},function()
-end)
-
 local index 
 index = hookmetamethod(game, '__index', function(obj, idx)
-	if configs.AimbotEnabled and idx == "UnitRay" and LocalPlayer.Character then
+	if configs.AimbotEnabled and idx:lower() == "unitray" and LocalPlayer.Character then
 		local closest = GetClosestPlayer(configs.FOV,1000)
 		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 
@@ -102,3 +89,7 @@ index = hookmetamethod(game, '__index', function(obj, idx)
 	end
 	return index(obj, idx)
 end)
+game:GetService("StarterGui"):SetCore("SendNotification",{
+	Title = "Notification"; -- Required
+	Text = "Aimbot Successfully Loaded"; -- Required
+})
