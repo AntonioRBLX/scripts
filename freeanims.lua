@@ -70,6 +70,8 @@ end
 
 addanims(char)
 
-lplr.CharacterAdded:Connect(function(char)
-	addanims(char)
+workspace.ChildAdded:Connect(function(char)
+	if char:IsA("Model") and char.Name == lplr.Name then
+		addanims(char)
+	end
 end)
