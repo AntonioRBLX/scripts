@@ -84,8 +84,8 @@ while true do
 					coroutine.wrap(slash)(Tool)
 				end
 			end
+			att:Destroy()
 		end
-		att:Destroy()
 	end
 	task.wait()
 	if npchrp then
