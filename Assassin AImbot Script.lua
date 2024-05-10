@@ -8,7 +8,7 @@ local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY51
 
 local configs = {
 	AimbotEnabled = true;
-	AimbotMethod = "ClosestPlayerToScreenCenter";
+	AimbotMethod = "ClosestPlayerToCursor";
 	PingPrediction = 75;
 	FOV = 1500;
 }
