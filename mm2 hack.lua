@@ -380,7 +380,7 @@ function eventfunctions.Initialize(player)
 			connections[b]:Disconnect()
 		end
 		connections[b] = humanoid.Died:Connect(function()
-			if players[player.Name].Role == weapons.Gun.Role[1] or players[player.Name].Role == weapons.Gun.Role[2] then
+			if players[player.Name].Role == weapons.Gun.Role[1] then
 				match.SheriffDied = true
 			end
 			players[player.Name].Role = "Innocent"
@@ -969,9 +969,9 @@ local AnnounceRoles = Blatant:CreateButton({
 		local sheriff = "nobody"
 		for _, player in pairs(Players:GetPlayers()) do
 			if players[player.Name] then
-				if players[player.Name].Role == "Murderer" then
+				if players[player.Name].Role == weapons.Knife.Role[1] then
 					murderer = player.Name
-				elseif players[player.Name].Role == "Sheriff" or players[player.Name].Role == "Hero" then
+				elseif players[player.Name].Role == weapons.Gun.Role[1] or players[player.Name].Role == weapons.Gun.Role[2] then
 					sheriff = player.Name
 				end
 			end
@@ -1315,7 +1315,7 @@ while true do
 					end
 				end
 			end
-			if players[LocalPlayer.Name] and (players[LocalPlayer.Name].Role == "Sheriff" or players[LocalPlayer.Name].Role == "Hero") and not lplrchar:FindFirstChild("Gun") then
+			if players[LocalPlayer.Name] and (players[LocalPlayer.Name].Role == weapons.Gun.Role[1] or players[LocalPlayer.Name].Role == weapons.Gun.Role[2]) and not lplrchar:FindFirstChild("Gun") then
 				local Gun = lplrchar:FindFirstChild("Gun")
 				if configs.AutoEquip and (not Gun or Gun.ClassName ~= "Tool") then
 					local bp = LocalPlayer:FindFirstChild("Backpack")
@@ -1332,7 +1332,7 @@ while true do
 						local character = player.Character
 						if character then
 							local NPCRoot = character:FindFirstChild("HumanoidRootPart") 
-							if NPCRoot and NPCRoot:IsA("BasePart") and players[player.Name] and players[player.Name].Role == "Murderer" then
+							if NPCRoot and NPCRoot:IsA("BasePart") and players[player.Name] and players[player.Name].Role == weapons.Knife.Role[1] then
 								local startpos = lplrchar.Gun.Handle.Position
 
 								local params = RaycastParams.new()
