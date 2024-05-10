@@ -65,6 +65,7 @@ local index
 index = hookmetamethod(game, '__index', function(obj, idx)
 	if configs.AimbotEnabled then
 		if not checkcaller() and (idx:lower() == "hit" or idx:lower() == "unitray") and LocalPlayer.Character then
+			print("Knife Throw Index")
 			local closest = GetClosestPlayer(configs.FOV,1000)
 			if closest then
 				local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
