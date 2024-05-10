@@ -64,7 +64,7 @@ end
 local index 
 index = hookmetamethod(game, '__index', function(obj, idx)
 	if configs.AimbotEnabled then
-		if not checkcaller() and (idx:lower() == "hit" or idx:lower() == "unitray") and LocalPlayer.Character then
+		if not checkcaller() and (idx:lower() == "hit" or idx:lower() == "target" or idx:lower() == "unitray") and LocalPlayer.Character then
 			print("Knife Throw Index")
 			local closest = GetClosestPlayer(configs.FOV,1000)
 			if closest then
@@ -82,6 +82,13 @@ index = hookmetamethod(game, '__index', function(obj, idx)
 				if aimpos then
 					if idx:lower() == "hit" then
 						return CFrame.new(aimpos)
+					elseif idx:lower() == "hit" then
+						aimposPart = Instance.new("Part", workspace)
+						aimposPart.Anchored = true
+						aimposPart.CanCollide = false
+						aimposPart.Position = aimpos
+						aimposPart.Size = Vector3.new()
+						return aimposPart
 					elseif idx:lower() == "unitray" then
 						local origin = index(obj, idx)
 						return {
