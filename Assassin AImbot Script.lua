@@ -19,7 +19,7 @@ function GetClosestPlayer(FOV,maxdist)
 	local closest
 
 	local function getclosestplayertoscreenpoint(point)
-		for _, player in pairs(Players:GetChildren()) do
+		for _, player in pairs(Players:GetPlayers()) do
 			local character = workspace:FindFirstChild(player.Name)
 			if character and character ~= lplrchar then
 				local NPCRoot = character:FindFirstChild("HumanoidRootPart")
