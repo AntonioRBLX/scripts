@@ -43,7 +43,7 @@ lplr.CharacterAdded:Connect(function(char)
 end)
 while true do
 	if lplrchar and lplrhrp then
-		local Tool = lplrhrp:FindFirstChildOfClass("Tool")
+		local Tool = lplrchar:FindFirstChildOfClass("Tool")
 		if Tool then
 			local att = Instance.new("Attachment", lplrhrp)
 			att.Position = Vector3.new(1.5, 0.5, -1.5)
