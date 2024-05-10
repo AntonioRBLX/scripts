@@ -23,17 +23,19 @@ function GetClosestPlayer(FOV,maxdist)
 
 	local function getclosestplayertoscreenpoint(point)
 		for _, player in pairs(Players:GetPlayers()) do
-			local character = workspace:FindFirstChild(player.Name)
-			if character and character ~= lplrchar then
-				local NPCRoot = character:FindFirstChild("HumanoidRootPart")
-				if NPCRoot then
-					local viewportpoint, onscreen = camera:WorldToViewportPoint(NPCRoot.Position)
-					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
-					local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
-
-					if onscreen and distance <= FOV then
-						if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
-							closest = character
+			if player ~= LocalPlayer then
+				local character = workspace:FindFirstChild(player.Name)
+				if character then
+					local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+					if NPCRoot then
+						local viewportpoint, onscreen = camera:WorldToViewportPoint(NPCRoot.Position)
+						local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
+						local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
+	
+						if onscreen and distance <= FOV then
+							if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
+								closest = character
+							end
 						end
 					end
 				end
@@ -45,11 +47,13 @@ function GetClosestPlayer(FOV,maxdist)
 		return closest
 	elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
 		for _, player in pairs(Players:GetPlayers()) do
-			local character = workspace:FindFirstChild(player.Name)
-			if character and character ~= lplrchar and character:FindFirstChild("HumanoidRootPart") then
-				local distance = (character.HumanoidRootPart.Position - lplrhrp.Position).Magnitude
-				if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distance <= maxdist then
-					closest = character
+			if player ~= LocalPlayer then
+				local character = workspace:FindFirstChild(player.Name)
+				if character and character:FindFirstChild("HumanoidRootPart") then
+					local distance = (character.HumanoidRootPart.Position - lplrhrp.Position).Magnitude
+					if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distance <= maxdist then
+						closest = character
+					end
 				end
 			end
 		end
@@ -82,7 +86,7 @@ index = hookmetamethod(game, '__index', function(obj, idx)
 				if aimpos then
 					if idx:lower() == "hit" then
 						return CFrame.new(aimpos)
-					elseif idx:lower() == "hit" then
+					elseif idx:lower() == "target" then
 						aimposPart = Instance.new("Part", workspace)
 						aimposPart.Anchored = true
 						aimposPart.CanCollide = false
