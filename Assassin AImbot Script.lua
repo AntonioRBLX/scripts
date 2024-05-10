@@ -41,7 +41,7 @@ function GetClosestPlayer(FOV,maxdist)
 		getclosestplayertoscreenpoint(Vector2.new(mouse.X,mouse.Y))
 		return closest
 	elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
-		for _, player in pairs(Players:GetChildren()) do
+		for _, player in pairs(Players:GetPlayers()) do
 			local character = workspace:FindFirstChild(player.Name)
 			if character and character ~= lplrchar and character:FindFirstChild("HumanoidRootPart") then
 				local distance = (character.HumanoidRootPart.Position - lplrhrp.Position).Magnitude
@@ -62,9 +62,8 @@ local index
 index = hookmetamethod(game, '__index', function(obj, idx)
 	if configs.AimbotEnabled and idx:lower() == "unitray" and LocalPlayer.Character then
 		local closest = GetClosestPlayer(configs.FOV,1000)
-		local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-
 		if closest then
+			local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
 			local attachment = Instance.new("Attachment", HumanoidRootPart)
 			attachment.Position = Vector3.new(1.6, 1.2, -3)
 
