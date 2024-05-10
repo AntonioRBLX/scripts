@@ -8,7 +8,7 @@ local Configs = {
 }
 local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wizard"))()
 
-local PhantomForcesWindow = Library:NewWindow("Combat")#
+local PhantomForcesWindow = Library:NewWindow("Combat")
 
 local MainCheats = PhantomForcesWindow:NewSection("Main")
 
@@ -81,7 +81,7 @@ while true do
 						coroutine.wrap(slash)(Tool)
 					end
 				end
-				
+
 				att:Destroy()
 			end
 		end
