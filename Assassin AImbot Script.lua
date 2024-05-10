@@ -84,13 +84,18 @@ index = hookmetamethod(game, '__index', newcclosure(function(self, idx)
 					
 				attachment:Destroy()
 				if aimpos then
+					local origin = index(self, idx)
+							
 					local aimposPart = Instance.new("Part", workspace)
 					aimposPart.Anchored = true
 					aimposPart.CanCollide = false
 					aimposPart.Position = aimpos
 					aimposPart.Size = Vector3.new(0.25,0.25,0.25)
 					
-					return Ray.new(self.Origin, (aimpos - self.Origin).Unit)
+					return {
+						Origin = origin.Origin,
+						Direction = CFrame.new(origin.Origin,aimpos).LookVector
+					}
 				end
 			else
 				local sound = Instance.new("Sound", workspace)
