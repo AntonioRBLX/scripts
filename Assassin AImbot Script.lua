@@ -1,3 +1,6 @@
+if getgenv().AlreadyExecuted then return end
+getgenv.AlreadyExecuted = true
+
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
 
