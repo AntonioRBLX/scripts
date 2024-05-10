@@ -66,7 +66,7 @@ function GetClosestPlayer(FOV,maxdist)
 end
 
 local index 
-index = hookmetamethod(game, '__index', newcclosure(function(self, idx)
+index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
 	if configs.AimbotEnabled then
 		if not checkcaller() and idx:lower() == "unitray" and LocalPlayer.Character then
 			print("Knife Throw Index")
@@ -83,19 +83,15 @@ index = hookmetamethod(game, '__index', newcclosure(function(self, idx)
 				})
 					
 				attachment:Destroy()
+				
 				if aimpos then
-					local origin = index(self, idx)
-							
 					local aimposPart = Instance.new("Part", workspace)
 					aimposPart.Anchored = true
 					aimposPart.CanCollide = false
 					aimposPart.Position = aimpos
 					aimposPart.Size = Vector3.new(0.25,0.25,0.25)
 					
-					return {
-						Origin = origin.Origin,
-						Direction = CFrame.new(origin.Origin,aimpos).LookVector
-					}
+					return Ray.new(obj.Origin, (obj.Hit - obj.Origin).Unit)
 				end
 			else
 				local sound = Instance.new("Sound", workspace)
@@ -105,7 +101,7 @@ index = hookmetamethod(game, '__index', newcclosure(function(self, idx)
 			end
 		end
 	end
-	return index(self, idx)
+	return index(obj, idx)
 end))
 game:GetService("StarterGui"):SetCore("SendNotification",{
 	Title = "Notification"; -- Required
