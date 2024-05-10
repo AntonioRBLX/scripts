@@ -66,9 +66,9 @@ function GetClosestPlayer(FOV,maxdist)
 end
 
 local index 
-index = hookmetamethod(game, '__index', function(obj, idx)
+index = hookmetamethod(game, '__index', newcclosure(function(self, idx)
 	if configs.AimbotEnabled then
-		if not checkcaller() and (idx:lower() == "hit" or idx:lower() == "target" or idx:lower() == "unitray") and LocalPlayer.Character then
+		if not checkcaller() and idx:lower() == "unitray" and LocalPlayer.Character then
 			print("Knife Throw Index")
 			local closest = GetClosestPlayer(configs.FOV,1000)
 			if closest then
@@ -84,22 +84,13 @@ index = hookmetamethod(game, '__index', function(obj, idx)
 					
 				attachment:Destroy()
 				if aimpos then
-					if idx:lower() == "hit" then
-						return CFrame.new(aimpos)
-					elseif idx:lower() == "target" then
-						aimposPart = Instance.new("Part", workspace)
-						aimposPart.Anchored = true
-						aimposPart.CanCollide = false
-						aimposPart.Position = aimpos
-						aimposPart.Size = Vector3.new()
-						return aimposPart
-					elseif idx:lower() == "unitray" then
-						local origin = index(obj, idx)
-						return {
-							Origin = origin.Origin,
-							Direction = CFrame.new(origin.Origin,aimpos).LookVector
-						}
-					end
+					local aimposPart = Instance.new("Part", workspace)
+					aimposPart.Anchored = true
+					aimposPart.CanCollide = false
+					aimposPart.Position = aimpos
+					aimposPart.Size = Vector3.new(0.25,0.25,0.25)
+					
+					return Ray.new(self.Origin, (aimpos - self.Origin).Unit)
 				end
 			else
 				local sound = Instance.new("Sound", workspace)
@@ -109,8 +100,8 @@ index = hookmetamethod(game, '__index', function(obj, idx)
 			end
 		end
 	end
-	return index(obj, idx)
-end)
+	return index(self, idx)
+end))
 game:GetService("StarterGui"):SetCore("SendNotification",{
 	Title = "Notification"; -- Required
 	Text = "Aimbot Successfully Loaded"; -- Required
