@@ -1,1937 +1,1354 @@
-local MarketplaceService = game:GetService("MarketplaceService")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
+local CoreGui = game:GetService("CoreGui")
+local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
-
-repeat task.wait() until Players.LocalPlayer
-
-local lplr = Players.LocalPlayer
-local mouse = lplr:GetMouse()
-local lplrchar = lplr.Character or lplr.CharacterAdded:Wait()
-
--- Gui to Lua
--- Version: 3.2
-
--- Instances:
-
-local ScreenGui = Instance.new("ScreenGui")
-local Title = Instance.new("TextLabel")
-local Animations = Instance.new("Frame")
-local Container = Instance.new("Frame")
-local UIListLayout = Instance.new("UIListLayout")
-local Superhero = Instance.new("TextButton")
-local SuperheroUICorner = Instance.new("UICorner")
-local SuperheroOutline = Instance.new("Frame")
-local SuperheroOutlineUICorner = Instance.new("UICorner")
-local Levitation = Instance.new("TextButton")
-local LevitationUICorner = Instance.new("UICorner")
-local LevitationOutline = Instance.new("Frame")
-local LevitationOutlineUICorner = Instance.new("UICorner")
-local Rthro = Instance.new("TextButton")
-local RthroUICorner = Instance.new("UICorner")
-local RthroOutline = Instance.new("Frame")
-local RthroOutlineUICorner = Instance.new("UICorner")
-local RBLXAnimationsSeparator = Instance.new("TextLabel")
-local Toy = Instance.new("TextButton")
-local ToyUICorner = Instance.new("UICorner")
-local ToyOutline = Instance.new("Frame")
-local ToyOutlineUICorner = Instance.new("UICorner")
-local Vampire = Instance.new("TextButton")
-local VampireUICorner = Instance.new("UICorner")
-local VampireOutline = Instance.new("Frame")
-local VampireOutlineUICorner = Instance.new("UICorner")
-local Mage = Instance.new("TextButton")
-local MageUICorner = Instance.new("UICorner")
-local MageOutline = Instance.new("Frame")
-local MageOutlineUICorner = Instance.new("UICorner")
-local Bubbly = Instance.new("TextButton")
-local BubblyUICorner = Instance.new("UICorner")
-local BubblyOutline = Instance.new("Frame")
-local BubblyOutlineUICorner = Instance.new("UICorner")
-local Ninja = Instance.new("TextButton")
-local NinjaUICorner = Instance.new("UICorner")
-local NinjaOutline = Instance.new("Frame")
-local NinjaOutlineUICorner = Instance.new("UICorner")
-local Cartoony = Instance.new("TextButton")
-local CartoonyUICorner = Instance.new("UICorner")
-local CartoonyOutline = Instance.new("Frame")
-local CartoonyOutlineUICorner = Instance.new("UICorner")
-local Bold = Instance.new("TextButton")
-local BoldUICorner = Instance.new("UICorner")
-local BoldOutline = Instance.new("Frame")
-local BoldOutlineUICorner = Instance.new("UICorner")
-local Stylish = Instance.new("TextButton")
-local StylishUICorner = Instance.new("UICorner")
-local StylishOutline = Instance.new("Frame")
-local StylishOutlineUICorner = Instance.new("UICorner")
-local Zombie = Instance.new("TextButton")
-local ZombieUICorner = Instance.new("UICorner")
-local ZombieOutline = Instance.new("Frame")
-local ZombieOutlineUICorner = Instance.new("UICorner")
-local Elder = Instance.new("TextButton")
-local ElderUICorner = Instance.new("UICorner")
-local ElderOutline = Instance.new("Frame")
-local ElderOutlineUICorner = Instance.new("UICorner")
-local Pirate = Instance.new("TextButton")
-local PirateUICorner = Instance.new("UICorner")
-local PirateOutline = Instance.new("Frame")
-local PirateOutlineUICorner = Instance.new("UICorner")
-local Knight = Instance.new("TextButton")
-local KnightUICorner = Instance.new("UICorner")
-local KnightOutline = Instance.new("Frame")
-local KnightOutlineUICorner = Instance.new("UICorner")
-local GirlCombo1 = Instance.new("TextButton")
-local GirlCombo1UICorner = Instance.new("UICorner")
-local GirlCombo1Outline = Instance.new("Frame")
-local GirlCombo1OutlineUICorner = Instance.new("UICorner")
-local Werewolf = Instance.new("TextButton")
-local WerewolfUICorner = Instance.new("UICorner")
-local WerewolfOutline = Instance.new("Frame")
-local WerewolfOutlineUICorner = Instance.new("UICorner")
-local OldSchool = Instance.new("TextButton")
-local OldSchoolUICorner = Instance.new("UICorner")
-local OldSchoolOutline = Instance.new("Frame")
-local OldSchoolOutlineUICorner = Instance.new("UICorner")
-local CombosSeparator = Instance.new("TextLabel")
-local Astronaut = Instance.new("TextButton")
-local AstronautUICorner = Instance.new("UICorner")
-local AstronautOutline = Instance.new("Frame")
-local AstronautOutlineUICorner = Instance.new("UICorner")
-local BoyCombo = Instance.new("TextButton")
-local BoyComboUICorner = Instance.new("UICorner")
-local BoyComboOutline = Instance.new("Frame")
-local BoyComboOutlineUICorner = Instance.new("UICorner")
-local CombosSeparator_2 = Instance.new("TextLabel")
-local TryhardCombo1 = Instance.new("TextButton")
-local TryhardCombo1UICorner = Instance.new("UICorner")
-local TryhardCombo1Outline = Instance.new("Frame")
-local TryhardCombo1OutlineUICorner = Instance.new("UICorner")
-local TryhardCombo3 = Instance.new("TextButton")
-local TryhardCombo3UICorner = Instance.new("UICorner")
-local TryhardCombo3Outline = Instance.new("Frame")
-local TryhardCombo3OutlineUICorner = Instance.new("UICorner")
-local TryhardCombo4 = Instance.new("TextButton")
-local TryhardCombo4UICorner = Instance.new("UICorner")
-local TryhardCombo4Outline = Instance.new("Frame")
-local TryhardCombo4OutlineUICorner = Instance.new("UICorner")
-local GirlCombo2 = Instance.new("TextButton")
-local GirlCombo2UICorner = Instance.new("UICorner")
-local GirlCombo2Outline = Instance.new("Frame")
-local GirlCombo2OutlineUICorner = Instance.new("UICorner")
-local TryhardCombo2 = Instance.new("TextButton")
-local TryhardCombo2UICorner = Instance.new("UICorner")
-local TryhardCombo2Outline = Instance.new("Frame")
-local TryhardCombo2OutlineUICorner = Instance.new("UICorner")
-local Walk = Instance.new("TextBox")
-local WalkUICorner = Instance.new("UICorner")
-local WalkOutline = Instance.new("Frame")
-local WalkOutlineUICorner = Instance.new("UICorner")
-local Run = Instance.new("TextBox")
-local RunUICorner = Instance.new("UICorner")
-local RunOutline = Instance.new("Frame")
-local RunOutlineUICorner = Instance.new("UICorner")
-local SwimIdle = Instance.new("TextBox")
-local SwimIdleUICorner = Instance.new("UICorner")
-local SwimIdleOutline = Instance.new("Frame")
-local SwimIdleOutlineUICorner = Instance.new("UICorner")
-local Idle1 = Instance.new("TextBox")
-local Idle1UICorner = Instance.new("UICorner")
-local Idle1Outline = Instance.new("Frame")
-local Idle1OutlineUICorner = Instance.new("UICorner")
-local Idle2 = Instance.new("TextBox")
-local Idle2UICorner = Instance.new("UICorner")
-local Idle2Outline = Instance.new("Frame")
-local Idle2OutlineUICorner = Instance.new("UICorner")
-local Fall = Instance.new("TextBox")
-local FallUICorner = Instance.new("UICorner")
-local FallOutline = Instance.new("Frame")
-local FallOutlineUICorner = Instance.new("UICorner")
-local Jump = Instance.new("TextBox")
-local JumpUICorner = Instance.new("UICorner")
-local JumpOutline = Instance.new("Frame")
-local JumpOutlineUICorner = Instance.new("UICorner")
-local Climb = Instance.new("TextBox")
-local ClimbUICorner = Instance.new("UICorner")
-local ClimbOutline = Instance.new("Frame")
-local ClimbOutlineUICorner = Instance.new("UICorner")
-local Swim = Instance.new("TextBox")
-local SwimUICorner = Instance.new("UICorner")
-local SwimOutline = Instance.new("Frame")
-local SwimOutlineUICorner = Instance.new("UICorner")
-
---Properties:
-
-ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
-ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
-
-Title.Name = "Title"
-Title.Parent = ScreenGui
-Title.BackgroundColor3 = Color3.fromRGB(81, 81, 81)
-Title.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Title.BorderSizePixel = 0
-Title.Position = UDim2.new(0, 15, 0, 15)
-Title.Size = UDim2.new(0, 100, 0, 25)
-Title.Font = Enum.Font.SourceSansBold
-Title.Text = "FE Free Animations <stroke color=\"#1F1F1F\"><font color=\"rgb(171,171,171)\">By CITY512</font></stroke>"
-Title.TextColor3 = Color3.fromRGB(255, 255, 255)
-Title.TextSize = 13.000
-Title.TextStrokeTransparency = 0.000
-Title.TextWrapped = true
-Title.TextYAlignment = Enum.TextYAlignment.Top
-Title.RichText = true
-
-Animations.Name = "Animations"
-Animations.Parent = Title
-Animations.BackgroundColor3 = Color3.fromRGB(81, 81, 81)
-Animations.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Animations.BorderSizePixel = 0
-Animations.Position = UDim2.new(0, 0, 1, 0)
-Animations.Size = UDim2.new(0, 100, 0, 575)
-Animations.ZIndex = 2
-
-Container.Name = "Container"
-Container.Parent = Animations
-Container.AnchorPoint = Vector2.new(0.5, 0.5)
-Container.BackgroundColor3 = Color3.fromRGB(81, 81, 81)
-Container.BackgroundTransparency = 1.000
-Container.BorderColor3 = Color3.fromRGB(0, 0, 0)
-Container.BorderSizePixel = 0
-Container.Position = UDim2.new(0.5, 0, 0.5, 0)
-Container.Size = UDim2.new(1, -20, 1, -10)
-Container.ZIndex = 3
-
-UIListLayout.Parent = Container
-UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-UIListLayout.Padding = UDim.new(0, 3)
-
-Superhero.Name = "Superhero"
-Superhero.Parent = Container
-Superhero.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Superhero.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Superhero.LayoutOrder = 2
-Superhero.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Superhero.Size = UDim2.new(1, 0, 0, 12)
-Superhero.ZIndex = 5
-Superhero.AutoButtonColor = false
-Superhero.Font = Enum.Font.SourceSansBold
-Superhero.Text = "Superhero"
-Superhero.TextColor3 = Color3.fromRGB(255, 255, 255)
-Superhero.TextScaled = true
-Superhero.TextSize = 13.000
-Superhero.TextStrokeTransparency = 0.000
-Superhero.TextWrapped = true
-
-SuperheroUICorner.CornerRadius = UDim.new(0, 4)
-SuperheroUICorner.Name = "Superhero UICorner"
-SuperheroUICorner.Parent = Superhero
-
-SuperheroOutline.Name = "Superhero Outline"
-SuperheroOutline.Parent = Superhero
-SuperheroOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-SuperheroOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-SuperheroOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-SuperheroOutline.Size = UDim2.new(1, 2, 1, 2)
-SuperheroOutline.ZIndex = 4
-
-SuperheroOutlineUICorner.CornerRadius = UDim.new(0, 4)
-SuperheroOutlineUICorner.Name = "Superhero Outline UICorner"
-SuperheroOutlineUICorner.Parent = SuperheroOutline
-
-Levitation.Name = "Levitation"
-Levitation.Parent = Container
-Levitation.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Levitation.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Levitation.LayoutOrder = 3
-Levitation.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Levitation.Size = UDim2.new(1, 0, 0, 12)
-Levitation.ZIndex = 5
-Levitation.AutoButtonColor = false
-Levitation.Font = Enum.Font.SourceSansBold
-Levitation.Text = "Levitation"
-Levitation.TextColor3 = Color3.fromRGB(255, 255, 255)
-Levitation.TextScaled = true
-Levitation.TextSize = 13.000
-Levitation.TextStrokeTransparency = 0.000
-Levitation.TextWrapped = true
-
-LevitationUICorner.CornerRadius = UDim.new(0, 4)
-LevitationUICorner.Name = "Levitation UICorner"
-LevitationUICorner.Parent = Levitation
-
-LevitationOutline.Name = "Levitation Outline"
-LevitationOutline.Parent = Levitation
-LevitationOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-LevitationOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-LevitationOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-LevitationOutline.Size = UDim2.new(1, 2, 1, 2)
-LevitationOutline.ZIndex = 4
-
-LevitationOutlineUICorner.CornerRadius = UDim.new(0, 4)
-LevitationOutlineUICorner.Name = "Levitation Outline UICorner"
-LevitationOutlineUICorner.Parent = LevitationOutline
-
-Rthro.Name = "Rthro"
-Rthro.Parent = Container
-Rthro.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Rthro.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Rthro.LayoutOrder = 1
-Rthro.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Rthro.Size = UDim2.new(1, 0, 0, 12)
-Rthro.ZIndex = 5
-Rthro.AutoButtonColor = false
-Rthro.Font = Enum.Font.SourceSansBold
-Rthro.Text = "Rthro"
-Rthro.TextColor3 = Color3.fromRGB(255, 255, 255)
-Rthro.TextScaled = true
-Rthro.TextSize = 13.000
-Rthro.TextStrokeTransparency = 0.000
-Rthro.TextWrapped = true
-
-RthroUICorner.CornerRadius = UDim.new(0, 4)
-RthroUICorner.Name = "Rthro UICorner"
-RthroUICorner.Parent = Rthro
-
-RthroOutline.Name = "Rthro Outline"
-RthroOutline.Parent = Rthro
-RthroOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-RthroOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-RthroOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-RthroOutline.Size = UDim2.new(1, 2, 1, 2)
-RthroOutline.ZIndex = 4
-
-RthroOutlineUICorner.CornerRadius = UDim.new(0, 4)
-RthroOutlineUICorner.Name = "Rthro Outline UICorner"
-RthroOutlineUICorner.Parent = RthroOutline
-
-RBLXAnimationsSeparator.Name = "RBLX Animations Separator"
-RBLXAnimationsSeparator.Parent = Container
-RBLXAnimationsSeparator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-RBLXAnimationsSeparator.BackgroundTransparency = 1.000
-RBLXAnimationsSeparator.BorderColor3 = Color3.fromRGB(0, 0, 0)
-RBLXAnimationsSeparator.BorderSizePixel = 0
-RBLXAnimationsSeparator.Size = UDim2.new(1, 0, 0, 15)
-RBLXAnimationsSeparator.ZIndex = 5
-RBLXAnimationsSeparator.Font = Enum.Font.SourceSansSemibold
-RBLXAnimationsSeparator.Text = "Roblox Animations"
-RBLXAnimationsSeparator.TextColor3 = Color3.fromRGB(255, 255, 255)
-RBLXAnimationsSeparator.TextSize = 13.000
-RBLXAnimationsSeparator.TextStrokeTransparency = 0.000
-
-Toy.Name = "Toy"
-Toy.Parent = Container
-Toy.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Toy.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Toy.LayoutOrder = 4
-Toy.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Toy.Size = UDim2.new(1, 0, 0, 12)
-Toy.ZIndex = 5
-Toy.AutoButtonColor = false
-Toy.Font = Enum.Font.SourceSansBold
-Toy.Text = "Toy"
-Toy.TextColor3 = Color3.fromRGB(255, 255, 255)
-Toy.TextScaled = true
-Toy.TextSize = 13.000
-Toy.TextStrokeTransparency = 0.000
-Toy.TextWrapped = true
-
-ToyUICorner.CornerRadius = UDim.new(0, 4)
-ToyUICorner.Name = "Toy UICorner"
-ToyUICorner.Parent = Toy
-
-ToyOutline.Name = "Toy Outline"
-ToyOutline.Parent = Toy
-ToyOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-ToyOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-ToyOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-ToyOutline.Size = UDim2.new(1, 2, 1, 2)
-ToyOutline.ZIndex = 4
-
-ToyOutlineUICorner.CornerRadius = UDim.new(0, 4)
-ToyOutlineUICorner.Name = "Toy Outline UICorner"
-ToyOutlineUICorner.Parent = ToyOutline
-
-Vampire.Name = "Vampire"
-Vampire.Parent = Container
-Vampire.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Vampire.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Vampire.LayoutOrder = 5
-Vampire.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Vampire.Size = UDim2.new(1, 0, 0, 12)
-Vampire.ZIndex = 5
-Vampire.AutoButtonColor = false
-Vampire.Font = Enum.Font.SourceSansBold
-Vampire.Text = "Vampire"
-Vampire.TextColor3 = Color3.fromRGB(255, 255, 255)
-Vampire.TextScaled = true
-Vampire.TextSize = 13.000
-Vampire.TextStrokeTransparency = 0.000
-Vampire.TextWrapped = true
-
-VampireUICorner.CornerRadius = UDim.new(0, 4)
-VampireUICorner.Name = "Vampire UICorner"
-VampireUICorner.Parent = Vampire
-
-VampireOutline.Name = "Vampire Outline"
-VampireOutline.Parent = Vampire
-VampireOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-VampireOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-VampireOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-VampireOutline.Size = UDim2.new(1, 2, 1, 2)
-VampireOutline.ZIndex = 4
-
-VampireOutlineUICorner.CornerRadius = UDim.new(0, 4)
-VampireOutlineUICorner.Name = "Vampire Outline UICorner"
-VampireOutlineUICorner.Parent = VampireOutline
-
-Mage.Name = "Mage"
-Mage.Parent = Container
-Mage.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Mage.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Mage.LayoutOrder = 6
-Mage.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Mage.Size = UDim2.new(1, 0, 0, 12)
-Mage.ZIndex = 5
-Mage.AutoButtonColor = false
-Mage.Font = Enum.Font.SourceSansBold
-Mage.Text = "Mage"
-Mage.TextColor3 = Color3.fromRGB(255, 255, 255)
-Mage.TextScaled = true
-Mage.TextSize = 13.000
-Mage.TextStrokeTransparency = 0.000
-Mage.TextWrapped = true
-
-MageUICorner.CornerRadius = UDim.new(0, 4)
-MageUICorner.Name = "Mage UICorner"
-MageUICorner.Parent = Mage
-
-MageOutline.Name = "Mage Outline"
-MageOutline.Parent = Mage
-MageOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-MageOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-MageOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-MageOutline.Size = UDim2.new(1, 2, 1, 2)
-MageOutline.ZIndex = 4
-
-MageOutlineUICorner.CornerRadius = UDim.new(0, 4)
-MageOutlineUICorner.Name = "Mage Outline UICorner"
-MageOutlineUICorner.Parent = MageOutline
-
-Bubbly.Name = "Bubbly"
-Bubbly.Parent = Container
-Bubbly.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Bubbly.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Bubbly.LayoutOrder = 7
-Bubbly.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Bubbly.Size = UDim2.new(1, 0, 0, 12)
-Bubbly.ZIndex = 5
-Bubbly.AutoButtonColor = false
-Bubbly.Font = Enum.Font.SourceSansBold
-Bubbly.Text = "Bubbly"
-Bubbly.TextColor3 = Color3.fromRGB(255, 255, 255)
-Bubbly.TextScaled = true
-Bubbly.TextSize = 13.000
-Bubbly.TextStrokeTransparency = 0.000
-Bubbly.TextWrapped = true
-
-BubblyUICorner.CornerRadius = UDim.new(0, 4)
-BubblyUICorner.Name = "Bubbly UICorner"
-BubblyUICorner.Parent = Bubbly
-
-BubblyOutline.Name = "Bubbly Outline"
-BubblyOutline.Parent = Bubbly
-BubblyOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-BubblyOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-BubblyOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-BubblyOutline.Size = UDim2.new(1, 2, 1, 2)
-BubblyOutline.ZIndex = 4
-
-BubblyOutlineUICorner.CornerRadius = UDim.new(0, 4)
-BubblyOutlineUICorner.Name = "Bubbly Outline UICorner"
-BubblyOutlineUICorner.Parent = BubblyOutline
-
-Ninja.Name = "Ninja"
-Ninja.Parent = Container
-Ninja.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Ninja.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Ninja.LayoutOrder = 8
-Ninja.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Ninja.Size = UDim2.new(1, 0, 0, 12)
-Ninja.ZIndex = 5
-Ninja.AutoButtonColor = false
-Ninja.Font = Enum.Font.SourceSansBold
-Ninja.Text = "Ninja"
-Ninja.TextColor3 = Color3.fromRGB(255, 255, 255)
-Ninja.TextScaled = true
-Ninja.TextSize = 13.000
-Ninja.TextStrokeTransparency = 0.000
-Ninja.TextWrapped = true
-
-NinjaUICorner.CornerRadius = UDim.new(0, 4)
-NinjaUICorner.Name = "Ninja UICorner"
-NinjaUICorner.Parent = Ninja
-
-NinjaOutline.Name = "Ninja Outline"
-NinjaOutline.Parent = Ninja
-NinjaOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-NinjaOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-NinjaOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-NinjaOutline.Size = UDim2.new(1, 2, 1, 2)
-NinjaOutline.ZIndex = 4
-
-NinjaOutlineUICorner.CornerRadius = UDim.new(0, 4)
-NinjaOutlineUICorner.Name = "Ninja Outline UICorner"
-NinjaOutlineUICorner.Parent = NinjaOutline
-
-Cartoony.Name = "Cartoony"
-Cartoony.Parent = Container
-Cartoony.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Cartoony.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Cartoony.LayoutOrder = 9
-Cartoony.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Cartoony.Size = UDim2.new(1, 0, 0, 12)
-Cartoony.ZIndex = 5
-Cartoony.AutoButtonColor = false
-Cartoony.Font = Enum.Font.SourceSansBold
-Cartoony.Text = "Cartoony"
-Cartoony.TextColor3 = Color3.fromRGB(255, 255, 255)
-Cartoony.TextScaled = true
-Cartoony.TextSize = 13.000
-Cartoony.TextStrokeTransparency = 0.000
-Cartoony.TextWrapped = true
-
-CartoonyUICorner.CornerRadius = UDim.new(0, 4)
-CartoonyUICorner.Name = "Cartoony UICorner"
-CartoonyUICorner.Parent = Cartoony
-
-CartoonyOutline.Name = "Cartoony Outline"
-CartoonyOutline.Parent = Cartoony
-CartoonyOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-CartoonyOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-CartoonyOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-CartoonyOutline.Size = UDim2.new(1, 2, 1, 2)
-CartoonyOutline.ZIndex = 4
-
-CartoonyOutlineUICorner.CornerRadius = UDim.new(0, 4)
-CartoonyOutlineUICorner.Name = "Cartoony Outline UICorner"
-CartoonyOutlineUICorner.Parent = CartoonyOutline
-
-Bold.Name = "Bold"
-Bold.Parent = Container
-Bold.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Bold.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Bold.LayoutOrder = 10
-Bold.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Bold.Size = UDim2.new(1, 0, 0, 12)
-Bold.ZIndex = 5
-Bold.AutoButtonColor = false
-Bold.Font = Enum.Font.SourceSansBold
-Bold.Text = "Bold"
-Bold.TextColor3 = Color3.fromRGB(255, 255, 255)
-Bold.TextScaled = true
-Bold.TextSize = 13.000
-Bold.TextStrokeTransparency = 0.000
-Bold.TextWrapped = true
-
-BoldUICorner.CornerRadius = UDim.new(0, 4)
-BoldUICorner.Name = "Bold UICorner"
-BoldUICorner.Parent = Bold
-
-BoldOutline.Name = "Bold Outline"
-BoldOutline.Parent = Bold
-BoldOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-BoldOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-BoldOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-BoldOutline.Size = UDim2.new(1, 2, 1, 2)
-BoldOutline.ZIndex = 4
-
-BoldOutlineUICorner.CornerRadius = UDim.new(0, 4)
-BoldOutlineUICorner.Name = "Bold Outline UICorner"
-BoldOutlineUICorner.Parent = BoldOutline
-
-Stylish.Name = "Stylish"
-Stylish.Parent = Container
-Stylish.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Stylish.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Stylish.LayoutOrder = 11
-Stylish.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Stylish.Size = UDim2.new(1, 0, 0, 12)
-Stylish.ZIndex = 5
-Stylish.AutoButtonColor = false
-Stylish.Font = Enum.Font.SourceSansBold
-Stylish.Text = "Stylish"
-Stylish.TextColor3 = Color3.fromRGB(255, 255, 255)
-Stylish.TextScaled = true
-Stylish.TextSize = 13.000
-Stylish.TextStrokeTransparency = 0.000
-Stylish.TextWrapped = true
-
-StylishUICorner.CornerRadius = UDim.new(0, 4)
-StylishUICorner.Name = "Stylish UICorner"
-StylishUICorner.Parent = Stylish
-
-StylishOutline.Name = "Stylish Outline"
-StylishOutline.Parent = Stylish
-StylishOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-StylishOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-StylishOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-StylishOutline.Size = UDim2.new(1, 2, 1, 2)
-StylishOutline.ZIndex = 4
-
-StylishOutlineUICorner.CornerRadius = UDim.new(0, 4)
-StylishOutlineUICorner.Name = "Stylish Outline UICorner"
-StylishOutlineUICorner.Parent = StylishOutline
-
-Zombie.Name = "Zombie"
-Zombie.Parent = Container
-Zombie.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Zombie.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Zombie.LayoutOrder = 12
-Zombie.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Zombie.Size = UDim2.new(1, 0, 0, 12)
-Zombie.ZIndex = 5
-Zombie.AutoButtonColor = false
-Zombie.Font = Enum.Font.SourceSansBold
-Zombie.Text = "Zombie"
-Zombie.TextColor3 = Color3.fromRGB(255, 255, 255)
-Zombie.TextScaled = true
-Zombie.TextSize = 13.000
-Zombie.TextStrokeTransparency = 0.000
-Zombie.TextWrapped = true
-
-ZombieUICorner.CornerRadius = UDim.new(0, 4)
-ZombieUICorner.Name = "Zombie UICorner"
-ZombieUICorner.Parent = Zombie
-
-ZombieOutline.Name = "Zombie Outline"
-ZombieOutline.Parent = Zombie
-ZombieOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-ZombieOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-ZombieOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-ZombieOutline.Size = UDim2.new(1, 2, 1, 2)
-ZombieOutline.ZIndex = 4
-
-ZombieOutlineUICorner.CornerRadius = UDim.new(0, 4)
-ZombieOutlineUICorner.Name = "Zombie Outline UICorner"
-ZombieOutlineUICorner.Parent = ZombieOutline
-
-Elder.Name = "Elder"
-Elder.Parent = Container
-Elder.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Elder.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Elder.LayoutOrder = 13
-Elder.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Elder.Size = UDim2.new(1, 0, 0, 12)
-Elder.ZIndex = 5
-Elder.AutoButtonColor = false
-Elder.Font = Enum.Font.SourceSansBold
-Elder.Text = "Elder"
-Elder.TextColor3 = Color3.fromRGB(255, 255, 255)
-Elder.TextScaled = true
-Elder.TextSize = 13.000
-Elder.TextStrokeTransparency = 0.000
-Elder.TextWrapped = true
-
-ElderUICorner.CornerRadius = UDim.new(0, 4)
-ElderUICorner.Name = "Elder UICorner"
-ElderUICorner.Parent = Elder
-
-ElderOutline.Name = "Elder Outline"
-ElderOutline.Parent = Elder
-ElderOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-ElderOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-ElderOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-ElderOutline.Size = UDim2.new(1, 2, 1, 2)
-ElderOutline.ZIndex = 4
-
-ElderOutlineUICorner.CornerRadius = UDim.new(0, 4)
-ElderOutlineUICorner.Name = "Elder Outline UICorner"
-ElderOutlineUICorner.Parent = ElderOutline
-
-Pirate.Name = "Pirate"
-Pirate.Parent = Container
-Pirate.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Pirate.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Pirate.LayoutOrder = 14
-Pirate.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Pirate.Size = UDim2.new(1, 0, 0, 12)
-Pirate.ZIndex = 5
-Pirate.AutoButtonColor = false
-Pirate.Font = Enum.Font.SourceSansBold
-Pirate.Text = "Pirate"
-Pirate.TextColor3 = Color3.fromRGB(255, 255, 255)
-Pirate.TextScaled = true
-Pirate.TextSize = 13.000
-Pirate.TextStrokeTransparency = 0.000
-Pirate.TextWrapped = true
-
-PirateUICorner.CornerRadius = UDim.new(0, 4)
-PirateUICorner.Name = "Pirate UICorner"
-PirateUICorner.Parent = Pirate
-
-PirateOutline.Name = "Pirate Outline"
-PirateOutline.Parent = Pirate
-PirateOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-PirateOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-PirateOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-PirateOutline.Size = UDim2.new(1, 2, 1, 2)
-PirateOutline.ZIndex = 4
-
-PirateOutlineUICorner.CornerRadius = UDim.new(0, 4)
-PirateOutlineUICorner.Name = "Pirate Outline UICorner"
-PirateOutlineUICorner.Parent = PirateOutline
-
-Knight.Name = "Knight"
-Knight.Parent = Container
-Knight.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Knight.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Knight.LayoutOrder = 15
-Knight.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Knight.Size = UDim2.new(1, 0, 0, 12)
-Knight.ZIndex = 5
-Knight.AutoButtonColor = false
-Knight.Font = Enum.Font.SourceSansBold
-Knight.Text = "Knight"
-Knight.TextColor3 = Color3.fromRGB(255, 255, 255)
-Knight.TextScaled = true
-Knight.TextSize = 13.000
-Knight.TextStrokeTransparency = 0.000
-Knight.TextWrapped = true
-
-KnightUICorner.CornerRadius = UDim.new(0, 4)
-KnightUICorner.Name = "Knight UICorner"
-KnightUICorner.Parent = Knight
-
-KnightOutline.Name = "Knight Outline"
-KnightOutline.Parent = Knight
-KnightOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-KnightOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-KnightOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-KnightOutline.Size = UDim2.new(1, 2, 1, 2)
-KnightOutline.ZIndex = 4
-
-KnightOutlineUICorner.CornerRadius = UDim.new(0, 4)
-KnightOutlineUICorner.Name = "Knight Outline UICorner"
-KnightOutlineUICorner.Parent = KnightOutline
-
-GirlCombo1.Name = "Girl Combo #1"
-GirlCombo1.Parent = Container
-GirlCombo1.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-GirlCombo1.BorderColor3 = Color3.fromRGB(31, 31, 31)
-GirlCombo1.LayoutOrder = 21
-GirlCombo1.Position = UDim2.new(0, 0, 0.0903614461, 0)
-GirlCombo1.Size = UDim2.new(1, 0, 0, 12)
-GirlCombo1.ZIndex = 5
-GirlCombo1.AutoButtonColor = false
-GirlCombo1.Font = Enum.Font.SourceSansBold
-GirlCombo1.Text = "Girl Combo #1"
-GirlCombo1.TextColor3 = Color3.fromRGB(255, 255, 255)
-GirlCombo1.TextScaled = true
-GirlCombo1.TextSize = 13.000
-GirlCombo1.TextStrokeTransparency = 0.000
-GirlCombo1.TextWrapped = true
-
-GirlCombo1UICorner.CornerRadius = UDim.new(0, 4)
-GirlCombo1UICorner.Name = "Girl Combo #1 UICorner"
-GirlCombo1UICorner.Parent = GirlCombo1
-
-GirlCombo1Outline.Name = "Girl Combo #1 Outline"
-GirlCombo1Outline.Parent = GirlCombo1
-GirlCombo1Outline.AnchorPoint = Vector2.new(0.5, 0.5)
-GirlCombo1Outline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-GirlCombo1Outline.Position = UDim2.new(0.5, 0, 0.5, 0)
-GirlCombo1Outline.Size = UDim2.new(1, 2, 1, 2)
-GirlCombo1Outline.ZIndex = 4
-
-GirlCombo1OutlineUICorner.CornerRadius = UDim.new(0, 4)
-GirlCombo1OutlineUICorner.Name = "Girl Combo #1 Outline UICorner"
-GirlCombo1OutlineUICorner.Parent = GirlCombo1Outline
-
-Werewolf.Name = "Werewolf"
-Werewolf.Parent = Container
-Werewolf.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Werewolf.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Werewolf.LayoutOrder = 17
-Werewolf.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Werewolf.Size = UDim2.new(1, 0, 0, 12)
-Werewolf.ZIndex = 5
-Werewolf.AutoButtonColor = false
-Werewolf.Font = Enum.Font.SourceSansBold
-Werewolf.Text = "Werewolf"
-Werewolf.TextColor3 = Color3.fromRGB(255, 255, 255)
-Werewolf.TextScaled = true
-Werewolf.TextSize = 13.000
-Werewolf.TextStrokeTransparency = 0.000
-Werewolf.TextWrapped = true
-
-WerewolfUICorner.CornerRadius = UDim.new(0, 4)
-WerewolfUICorner.Name = "Werewolf UICorner"
-WerewolfUICorner.Parent = Werewolf
-
-WerewolfOutline.Name = "Werewolf Outline"
-WerewolfOutline.Parent = Werewolf
-WerewolfOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-WerewolfOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-WerewolfOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-WerewolfOutline.Size = UDim2.new(1, 2, 1, 2)
-WerewolfOutline.ZIndex = 4
-
-WerewolfOutlineUICorner.CornerRadius = UDim.new(0, 4)
-WerewolfOutlineUICorner.Name = "Werewolf Outline UICorner"
-WerewolfOutlineUICorner.Parent = WerewolfOutline
-
-OldSchool.Name = "Old School"
-OldSchool.Parent = Container
-OldSchool.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-OldSchool.BorderColor3 = Color3.fromRGB(31, 31, 31)
-OldSchool.LayoutOrder = 18
-OldSchool.Position = UDim2.new(0, 0, 0.0903614461, 0)
-OldSchool.Size = UDim2.new(1, 0, 0, 12)
-OldSchool.ZIndex = 5
-OldSchool.AutoButtonColor = false
-OldSchool.Font = Enum.Font.SourceSansBold
-OldSchool.Text = "Old School"
-OldSchool.TextColor3 = Color3.fromRGB(255, 255, 255)
-OldSchool.TextScaled = true
-OldSchool.TextSize = 13.000
-OldSchool.TextStrokeTransparency = 0.000
-OldSchool.TextWrapped = true
-
-OldSchoolUICorner.CornerRadius = UDim.new(0, 4)
-OldSchoolUICorner.Name = "Old School UICorner"
-OldSchoolUICorner.Parent = OldSchool
-
-OldSchoolOutline.Name = "Old School Outline"
-OldSchoolOutline.Parent = OldSchool
-OldSchoolOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-OldSchoolOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-OldSchoolOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-OldSchoolOutline.Size = UDim2.new(1, 2, 1, 2)
-OldSchoolOutline.ZIndex = 4
-
-OldSchoolOutlineUICorner.CornerRadius = UDim.new(0, 4)
-OldSchoolOutlineUICorner.Name = "Old School Outline UICorner"
-OldSchoolOutlineUICorner.Parent = OldSchoolOutline
-
-CombosSeparator.Name = "Combos Separator"
-CombosSeparator.Parent = Container
-CombosSeparator.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-CombosSeparator.BackgroundTransparency = 1.000
-CombosSeparator.BorderColor3 = Color3.fromRGB(0, 0, 0)
-CombosSeparator.BorderSizePixel = 0
-CombosSeparator.LayoutOrder = 19
-CombosSeparator.Size = UDim2.new(1, 0, 0, 15)
-CombosSeparator.ZIndex = 5
-CombosSeparator.Font = Enum.Font.SourceSansSemibold
-CombosSeparator.Text = "Combos"
-CombosSeparator.TextColor3 = Color3.fromRGB(255, 255, 255)
-CombosSeparator.TextSize = 13.000
-CombosSeparator.TextStrokeTransparency = 0.000
-
-Astronaut.Name = "Astronaut"
-Astronaut.Parent = Container
-Astronaut.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-Astronaut.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Astronaut.LayoutOrder = 16
-Astronaut.Position = UDim2.new(0, 0, 0.0903614461, 0)
-Astronaut.Size = UDim2.new(1, 0, 0, 12)
-Astronaut.ZIndex = 5
-Astronaut.AutoButtonColor = false
-Astronaut.Font = Enum.Font.SourceSansBold
-Astronaut.Text = "Astronaut"
-Astronaut.TextColor3 = Color3.fromRGB(255, 255, 255)
-Astronaut.TextScaled = true
-Astronaut.TextSize = 13.000
-Astronaut.TextStrokeTransparency = 0.000
-Astronaut.TextWrapped = true
-
-AstronautUICorner.CornerRadius = UDim.new(0, 4)
-AstronautUICorner.Name = "Astronaut UICorner"
-AstronautUICorner.Parent = Astronaut
-
-AstronautOutline.Name = "Astronaut Outline"
-AstronautOutline.Parent = Astronaut
-AstronautOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-AstronautOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-AstronautOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-AstronautOutline.Size = UDim2.new(1, 2, 1, 2)
-AstronautOutline.ZIndex = 4
-
-AstronautOutlineUICorner.CornerRadius = UDim.new(0, 4)
-AstronautOutlineUICorner.Name = "Astronaut Outline UICorner"
-AstronautOutlineUICorner.Parent = AstronautOutline
-
-BoyCombo.Name = "Boy Combo"
-BoyCombo.Parent = Container
-BoyCombo.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-BoyCombo.BorderColor3 = Color3.fromRGB(31, 31, 31)
-BoyCombo.LayoutOrder = 20
-BoyCombo.Position = UDim2.new(0, 0, 0.0903614461, 0)
-BoyCombo.Size = UDim2.new(1, 0, 0, 12)
-BoyCombo.ZIndex = 5
-BoyCombo.AutoButtonColor = false
-BoyCombo.Font = Enum.Font.SourceSansBold
-BoyCombo.Text = "Boy Combo"
-BoyCombo.TextColor3 = Color3.fromRGB(255, 255, 255)
-BoyCombo.TextScaled = true
-BoyCombo.TextSize = 13.000
-BoyCombo.TextStrokeTransparency = 0.000
-BoyCombo.TextWrapped = true
-
-BoyComboUICorner.CornerRadius = UDim.new(0, 4)
-BoyComboUICorner.Name = "Boy Combo UICorner"
-BoyComboUICorner.Parent = BoyCombo
-
-BoyComboOutline.Name = "Boy Combo Outline"
-BoyComboOutline.Parent = BoyCombo
-BoyComboOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-BoyComboOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-BoyComboOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-BoyComboOutline.Size = UDim2.new(1, 2, 1, 2)
-BoyComboOutline.ZIndex = 4
-
-BoyComboOutlineUICorner.CornerRadius = UDim.new(0, 4)
-BoyComboOutlineUICorner.Name = "Boy Combo Outline UICorner"
-BoyComboOutlineUICorner.Parent = BoyComboOutline
-
-CombosSeparator_2.Name = "Combos Separator"
-CombosSeparator_2.Parent = Container
-CombosSeparator_2.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-CombosSeparator_2.BackgroundTransparency = 1.000
-CombosSeparator_2.BorderColor3 = Color3.fromRGB(0, 0, 0)
-CombosSeparator_2.BorderSizePixel = 0
-CombosSeparator_2.LayoutOrder = 27
-CombosSeparator_2.Size = UDim2.new(1, 0, 0, 15)
-CombosSeparator_2.ZIndex = 5
-CombosSeparator_2.Font = Enum.Font.SourceSansSemibold
-CombosSeparator_2.Text = "Customize"
-CombosSeparator_2.TextColor3 = Color3.fromRGB(255, 255, 255)
-CombosSeparator_2.TextSize = 13.000
-CombosSeparator_2.TextStrokeTransparency = 0.000
-
-TryhardCombo1.Name = "Tryhard Combo #1"
-TryhardCombo1.Parent = Container
-TryhardCombo1.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-TryhardCombo1.BorderColor3 = Color3.fromRGB(31, 31, 31)
-TryhardCombo1.LayoutOrder = 23
-TryhardCombo1.Position = UDim2.new(0, 0, 0.0903614461, 0)
-TryhardCombo1.Size = UDim2.new(1, 0, 0, 12)
-TryhardCombo1.ZIndex = 5
-TryhardCombo1.AutoButtonColor = false
-TryhardCombo1.Font = Enum.Font.SourceSansBold
-TryhardCombo1.Text = "Tryhard Combo #1"
-TryhardCombo1.TextColor3 = Color3.fromRGB(255, 255, 255)
-TryhardCombo1.TextScaled = true
-TryhardCombo1.TextSize = 13.000
-TryhardCombo1.TextStrokeTransparency = 0.000
-TryhardCombo1.TextWrapped = true
-
-TryhardCombo1UICorner.CornerRadius = UDim.new(0, 4)
-TryhardCombo1UICorner.Name = "Tryhard Combo #1 UICorner"
-TryhardCombo1UICorner.Parent = TryhardCombo1
-
-TryhardCombo1Outline.Name = "Tryhard Combo #1 Outline"
-TryhardCombo1Outline.Parent = TryhardCombo1
-TryhardCombo1Outline.AnchorPoint = Vector2.new(0.5, 0.5)
-TryhardCombo1Outline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-TryhardCombo1Outline.Position = UDim2.new(0.5, 0, 0.5, 0)
-TryhardCombo1Outline.Size = UDim2.new(1, 2, 1, 2)
-TryhardCombo1Outline.ZIndex = 4
-
-TryhardCombo1OutlineUICorner.CornerRadius = UDim.new(0, 4)
-TryhardCombo1OutlineUICorner.Name = "Tryhard Combo #1 Outline UICorner"
-TryhardCombo1OutlineUICorner.Parent = TryhardCombo1Outline
-
-TryhardCombo3.Name = "Tryhard Combo #3"
-TryhardCombo3.Parent = Container
-TryhardCombo3.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-TryhardCombo3.BorderColor3 = Color3.fromRGB(31, 31, 31)
-TryhardCombo3.LayoutOrder = 25
-TryhardCombo3.Position = UDim2.new(0, 0, 0.0903614461, 0)
-TryhardCombo3.Size = UDim2.new(1, 0, 0, 12)
-TryhardCombo3.ZIndex = 5
-TryhardCombo3.AutoButtonColor = false
-TryhardCombo3.Font = Enum.Font.SourceSansBold
-TryhardCombo3.Text = "Tryhard Combo #3"
-TryhardCombo3.TextColor3 = Color3.fromRGB(255, 255, 255)
-TryhardCombo3.TextScaled = true
-TryhardCombo3.TextSize = 13.000
-TryhardCombo3.TextStrokeTransparency = 0.000
-TryhardCombo3.TextWrapped = true
-
-TryhardCombo3UICorner.CornerRadius = UDim.new(0, 4)
-TryhardCombo3UICorner.Name = "Tryhard Combo #3 UICorner"
-TryhardCombo3UICorner.Parent = TryhardCombo3
-
-TryhardCombo3Outline.Name = "Tryhard Combo #3 Outline"
-TryhardCombo3Outline.Parent = TryhardCombo3
-TryhardCombo3Outline.AnchorPoint = Vector2.new(0.5, 0.5)
-TryhardCombo3Outline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-TryhardCombo3Outline.Position = UDim2.new(0.5, 0, 0.5, 0)
-TryhardCombo3Outline.Size = UDim2.new(1, 2, 1, 2)
-TryhardCombo3Outline.ZIndex = 4
-
-TryhardCombo3OutlineUICorner.CornerRadius = UDim.new(0, 4)
-TryhardCombo3OutlineUICorner.Name = "Tryhard Combo #3 Outline UICorner"
-TryhardCombo3OutlineUICorner.Parent = TryhardCombo3Outline
-
-TryhardCombo4.Name = "Tryhard Combo #4"
-TryhardCombo4.Parent = Container
-TryhardCombo4.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-TryhardCombo4.BorderColor3 = Color3.fromRGB(31, 31, 31)
-TryhardCombo4.LayoutOrder = 26
-TryhardCombo4.Position = UDim2.new(0, 0, 0.0903614461, 0)
-TryhardCombo4.Size = UDim2.new(1, 0, 0, 12)
-TryhardCombo4.ZIndex = 5
-TryhardCombo4.AutoButtonColor = false
-TryhardCombo4.Font = Enum.Font.SourceSansBold
-TryhardCombo4.Text = "Tryhard Combo #4"
-TryhardCombo4.TextColor3 = Color3.fromRGB(255, 255, 255)
-TryhardCombo4.TextScaled = true
-TryhardCombo4.TextSize = 13.000
-TryhardCombo4.TextStrokeTransparency = 0.000
-TryhardCombo4.TextWrapped = true
-
-TryhardCombo4UICorner.CornerRadius = UDim.new(0, 4)
-TryhardCombo4UICorner.Name = "Tryhard Combo #4 UICorner"
-TryhardCombo4UICorner.Parent = TryhardCombo4
-
-TryhardCombo4Outline.Name = "Tryhard Combo #4 Outline"
-TryhardCombo4Outline.Parent = TryhardCombo4
-TryhardCombo4Outline.AnchorPoint = Vector2.new(0.5, 0.5)
-TryhardCombo4Outline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-TryhardCombo4Outline.Position = UDim2.new(0.5, 0, 0.5, 0)
-TryhardCombo4Outline.Size = UDim2.new(1, 2, 1, 2)
-TryhardCombo4Outline.ZIndex = 4
-
-TryhardCombo4OutlineUICorner.CornerRadius = UDim.new(0, 4)
-TryhardCombo4OutlineUICorner.Name = "Tryhard Combo #4 Outline UICorner"
-TryhardCombo4OutlineUICorner.Parent = TryhardCombo4Outline
-
-GirlCombo2.Name = "Girl Combo #2"
-GirlCombo2.Parent = Container
-GirlCombo2.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-GirlCombo2.BorderColor3 = Color3.fromRGB(31, 31, 31)
-GirlCombo2.LayoutOrder = 22
-GirlCombo2.Position = UDim2.new(0, 0, 0.0903614461, 0)
-GirlCombo2.Size = UDim2.new(1, 0, 0, 12)
-GirlCombo2.ZIndex = 5
-GirlCombo2.AutoButtonColor = false
-GirlCombo2.Font = Enum.Font.SourceSansBold
-GirlCombo2.Text = "Girl Combo #2"
-GirlCombo2.TextColor3 = Color3.fromRGB(255, 255, 255)
-GirlCombo2.TextScaled = true
-GirlCombo2.TextSize = 13.000
-GirlCombo2.TextStrokeTransparency = 0.000
-GirlCombo2.TextWrapped = true
-
-GirlCombo2UICorner.CornerRadius = UDim.new(0, 4)
-GirlCombo2UICorner.Name = "Girl Combo #2 UICorner"
-GirlCombo2UICorner.Parent = GirlCombo2
-
-GirlCombo2Outline.Name = "Girl Combo #2 Outline"
-GirlCombo2Outline.Parent = GirlCombo2
-GirlCombo2Outline.AnchorPoint = Vector2.new(0.5, 0.5)
-GirlCombo2Outline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-GirlCombo2Outline.Position = UDim2.new(0.5, 0, 0.5, 0)
-GirlCombo2Outline.Size = UDim2.new(1, 2, 1, 2)
-GirlCombo2Outline.ZIndex = 4
-
-GirlCombo2OutlineUICorner.CornerRadius = UDim.new(0, 4)
-GirlCombo2OutlineUICorner.Name = "Girl Combo #2 Outline UICorner"
-GirlCombo2OutlineUICorner.Parent = GirlCombo2Outline
-
-TryhardCombo2.Name = "Tryhard Combo #2"
-TryhardCombo2.Parent = Container
-TryhardCombo2.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
-TryhardCombo2.BorderColor3 = Color3.fromRGB(31, 31, 31)
-TryhardCombo2.LayoutOrder = 24
-TryhardCombo2.Position = UDim2.new(0, 0, 0.0903614461, 0)
-TryhardCombo2.Size = UDim2.new(1, 0, 0, 12)
-TryhardCombo2.ZIndex = 5
-TryhardCombo2.AutoButtonColor = false
-TryhardCombo2.Font = Enum.Font.SourceSansBold
-TryhardCombo2.Text = "Tryhard Combo #2"
-TryhardCombo2.TextColor3 = Color3.fromRGB(255, 255, 255)
-TryhardCombo2.TextScaled = true
-TryhardCombo2.TextSize = 13.000
-TryhardCombo2.TextStrokeTransparency = 0.000
-TryhardCombo2.TextWrapped = true
-
-TryhardCombo2UICorner.CornerRadius = UDim.new(0, 4)
-TryhardCombo2UICorner.Name = "Tryhard Combo #2 UICorner"
-TryhardCombo2UICorner.Parent = TryhardCombo2
-
-TryhardCombo2Outline.Name = "Tryhard Combo #2 Outline"
-TryhardCombo2Outline.Parent = TryhardCombo2
-TryhardCombo2Outline.AnchorPoint = Vector2.new(0.5, 0.5)
-TryhardCombo2Outline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-TryhardCombo2Outline.Position = UDim2.new(0.5, 0, 0.5, 0)
-TryhardCombo2Outline.Size = UDim2.new(1, 2, 1, 2)
-TryhardCombo2Outline.ZIndex = 4
-
-TryhardCombo2OutlineUICorner.CornerRadius = UDim.new(0, 4)
-TryhardCombo2OutlineUICorner.Name = "Tryhard Combo #2 Outline UICorner"
-TryhardCombo2OutlineUICorner.Parent = TryhardCombo2Outline
-
-Walk.Name = "Walk"
-Walk.Parent = Container
-Walk.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
-Walk.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Walk.LayoutOrder = 30
-Walk.Size = UDim2.new(1, 0, 0, 12)
-Walk.ZIndex = 5
-Walk.Font = Enum.Font.SourceSansBold
-Walk.PlaceholderColor3 = Color3.fromRGB(17, 17, 17)
-Walk.PlaceholderText = "Walk"
-Walk.Text = ""
-Walk.TextColor3 = Color3.fromRGB(255, 255, 255)
-Walk.TextScaled = true
-Walk.TextSize = 14.000
-Walk.TextStrokeTransparency = 4.000
-Walk.TextWrapped = true
-
-WalkUICorner.CornerRadius = UDim.new(0, 4)
-WalkUICorner.Name = "Walk UICorner"
-WalkUICorner.Parent = Walk
-
-WalkOutline.Name = "Walk Outline"
-WalkOutline.Parent = Walk
-WalkOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-WalkOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-WalkOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-WalkOutline.Size = UDim2.new(1, 2, 1, 2)
-WalkOutline.ZIndex = 4
-
-WalkOutlineUICorner.CornerRadius = UDim.new(0, 4)
-WalkOutlineUICorner.Name = "Walk Outline UICorner"
-WalkOutlineUICorner.Parent = WalkOutline
-
-Run.Name = "Run"
-Run.Parent = Container
-Run.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
-Run.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Run.LayoutOrder = 31
-Run.Size = UDim2.new(1, 0, 0, 12)
-Run.ZIndex = 5
-Run.Font = Enum.Font.SourceSansBold
-Run.PlaceholderColor3 = Color3.fromRGB(17, 17, 17)
-Run.PlaceholderText = "Run"
-Run.Text = ""
-Run.TextColor3 = Color3.fromRGB(255, 255, 255)
-Run.TextScaled = true
-Run.TextSize = 14.000
-Run.TextStrokeTransparency = 4.000
-Run.TextWrapped = true
-
-RunUICorner.CornerRadius = UDim.new(0, 4)
-RunUICorner.Name = "Run UICorner"
-RunUICorner.Parent = Run
-
-RunOutline.Name = "Run Outline"
-RunOutline.Parent = Run
-RunOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-RunOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-RunOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-RunOutline.Size = UDim2.new(1, 2, 1, 2)
-RunOutline.ZIndex = 4
-
-RunOutlineUICorner.CornerRadius = UDim.new(0, 4)
-RunOutlineUICorner.Name = "Run Outline UICorner"
-RunOutlineUICorner.Parent = RunOutline
-
-SwimIdle.Name = "SwimIdle"
-SwimIdle.Parent = Container
-SwimIdle.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
-SwimIdle.BorderColor3 = Color3.fromRGB(31, 31, 31)
-SwimIdle.LayoutOrder = 32
-SwimIdle.Size = UDim2.new(1, 0, 0, 12)
-SwimIdle.ZIndex = 5
-SwimIdle.Font = Enum.Font.SourceSansBold
-SwimIdle.PlaceholderColor3 = Color3.fromRGB(17, 17, 17)
-SwimIdle.PlaceholderText = "SwimIdle"
-SwimIdle.Text = ""
-SwimIdle.TextColor3 = Color3.fromRGB(255, 255, 255)
-SwimIdle.TextScaled = true
-SwimIdle.TextSize = 14.000
-SwimIdle.TextStrokeTransparency = 4.000
-SwimIdle.TextWrapped = true
-
-SwimIdleUICorner.CornerRadius = UDim.new(0, 4)
-SwimIdleUICorner.Name = "SwimIdle UICorner"
-SwimIdleUICorner.Parent = SwimIdle
-
-SwimIdleOutline.Name = "SwimIdle Outline"
-SwimIdleOutline.Parent = SwimIdle
-SwimIdleOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-SwimIdleOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-SwimIdleOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-SwimIdleOutline.Size = UDim2.new(1, 2, 1, 2)
-SwimIdleOutline.ZIndex = 4
-
-SwimIdleOutlineUICorner.CornerRadius = UDim.new(0, 4)
-SwimIdleOutlineUICorner.Name = "SwimIdle Outline UICorner"
-SwimIdleOutlineUICorner.Parent = SwimIdleOutline
-
-Idle1.Name = "Idle #1"
-Idle1.Parent = Container
-Idle1.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
-Idle1.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Idle1.LayoutOrder = 28
-Idle1.Size = UDim2.new(1, 0, 0, 12)
-Idle1.ZIndex = 5
-Idle1.Font = Enum.Font.SourceSansBold
-Idle1.PlaceholderColor3 = Color3.fromRGB(17, 17, 17)
-Idle1.PlaceholderText = "Idle #1"
-Idle1.Text = ""
-Idle1.TextColor3 = Color3.fromRGB(255, 255, 255)
-Idle1.TextScaled = true
-Idle1.TextSize = 14.000
-Idle1.TextStrokeTransparency = 4.000
-Idle1.TextWrapped = true
-
-Idle1UICorner.CornerRadius = UDim.new(0, 4)
-Idle1UICorner.Name = "Idle #1 UICorner"
-Idle1UICorner.Parent = Idle1
-
-Idle1Outline.Name = "Idle #1 Outline"
-Idle1Outline.Parent = Idle1
-Idle1Outline.AnchorPoint = Vector2.new(0.5, 0.5)
-Idle1Outline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-Idle1Outline.Position = UDim2.new(0.5, 0, 0.5, 0)
-Idle1Outline.Size = UDim2.new(1, 2, 1, 2)
-Idle1Outline.ZIndex = 4
-
-Idle1OutlineUICorner.CornerRadius = UDim.new(0, 4)
-Idle1OutlineUICorner.Name = "Idle #1 Outline UICorner"
-Idle1OutlineUICorner.Parent = Idle1Outline
-
-Idle2.Name = "Idle #2"
-Idle2.Parent = Container
-Idle2.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
-Idle2.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Idle2.LayoutOrder = 29
-Idle2.Size = UDim2.new(1, 0, 0, 12)
-Idle2.ZIndex = 5
-Idle2.Font = Enum.Font.SourceSansBold
-Idle2.PlaceholderColor3 = Color3.fromRGB(17, 17, 17)
-Idle2.PlaceholderText = "Idle #2"
-Idle2.Text = ""
-Idle2.TextColor3 = Color3.fromRGB(255, 255, 255)
-Idle2.TextScaled = true
-Idle2.TextSize = 14.000
-Idle2.TextStrokeTransparency = 4.000
-Idle2.TextWrapped = true
-
-Idle2UICorner.CornerRadius = UDim.new(0, 4)
-Idle2UICorner.Name = "Idle #2 UICorner"
-Idle2UICorner.Parent = Idle2
-
-Idle2Outline.Name = "Idle #2 Outline"
-Idle2Outline.Parent = Idle2
-Idle2Outline.AnchorPoint = Vector2.new(0.5, 0.5)
-Idle2Outline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-Idle2Outline.Position = UDim2.new(0.5, 0, 0.5, 0)
-Idle2Outline.Size = UDim2.new(1, 2, 1, 2)
-Idle2Outline.ZIndex = 4
-
-Idle2OutlineUICorner.CornerRadius = UDim.new(0, 4)
-Idle2OutlineUICorner.Name = "Idle #2 Outline UICorner"
-Idle2OutlineUICorner.Parent = Idle2Outline
-
-Fall.Name = "Fall"
-Fall.Parent = Container
-Fall.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
-Fall.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Fall.LayoutOrder = 32
-Fall.Size = UDim2.new(1, 0, 0, 12)
-Fall.ZIndex = 5
-Fall.Font = Enum.Font.SourceSansBold
-Fall.PlaceholderColor3 = Color3.fromRGB(17, 17, 17)
-Fall.PlaceholderText = "Fall"
-Fall.Text = ""
-Fall.TextColor3 = Color3.fromRGB(255, 255, 255)
-Fall.TextScaled = true
-Fall.TextSize = 14.000
-Fall.TextStrokeTransparency = 4.000
-Fall.TextWrapped = true
-
-FallUICorner.CornerRadius = UDim.new(0, 4)
-FallUICorner.Name = "Fall UICorner"
-FallUICorner.Parent = Fall
-
-FallOutline.Name = "Fall Outline"
-FallOutline.Parent = Fall
-FallOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-FallOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-FallOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-FallOutline.Size = UDim2.new(1, 2, 1, 2)
-FallOutline.ZIndex = 4
-
-FallOutlineUICorner.CornerRadius = UDim.new(0, 4)
-FallOutlineUICorner.Name = "Fall Outline UICorner"
-FallOutlineUICorner.Parent = FallOutline
-
-Jump.Name = "Jump"
-Jump.Parent = Container
-Jump.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
-Jump.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Jump.LayoutOrder = 32
-Jump.Size = UDim2.new(1, 0, 0, 12)
-Jump.ZIndex = 5
-Jump.Font = Enum.Font.SourceSansBold
-Jump.PlaceholderColor3 = Color3.fromRGB(17, 17, 17)
-Jump.PlaceholderText = "Jump"
-Jump.Text = ""
-Jump.TextColor3 = Color3.fromRGB(255, 255, 255)
-Jump.TextScaled = true
-Jump.TextSize = 14.000
-Jump.TextStrokeTransparency = 4.000
-Jump.TextWrapped = true
-
-JumpUICorner.CornerRadius = UDim.new(0, 4)
-JumpUICorner.Name = "Jump UICorner"
-JumpUICorner.Parent = Jump
-
-JumpOutline.Name = "Jump Outline"
-JumpOutline.Parent = Jump
-JumpOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-JumpOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-JumpOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-JumpOutline.Size = UDim2.new(1, 2, 1, 2)
-JumpOutline.ZIndex = 4
-
-JumpOutlineUICorner.CornerRadius = UDim.new(0, 4)
-JumpOutlineUICorner.Name = "Jump Outline UICorner"
-JumpOutlineUICorner.Parent = JumpOutline
-
-Climb.Name = "Climb"
-Climb.Parent = Container
-Climb.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
-Climb.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Climb.LayoutOrder = 32
-Climb.Size = UDim2.new(1, 0, 0, 12)
-Climb.ZIndex = 5
-Climb.Font = Enum.Font.SourceSansBold
-Climb.PlaceholderColor3 = Color3.fromRGB(17, 17, 17)
-Climb.PlaceholderText = "Climb"
-Climb.Text = ""
-Climb.TextColor3 = Color3.fromRGB(255, 255, 255)
-Climb.TextScaled = true
-Climb.TextSize = 14.000
-Climb.TextStrokeTransparency = 4.000
-Climb.TextWrapped = true
-
-ClimbUICorner.CornerRadius = UDim.new(0, 4)
-ClimbUICorner.Name = "Climb UICorner"
-ClimbUICorner.Parent = Climb
-
-ClimbOutline.Name = "Climb Outline"
-ClimbOutline.Parent = Climb
-ClimbOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-ClimbOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-ClimbOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-ClimbOutline.Size = UDim2.new(1, 2, 1, 2)
-ClimbOutline.ZIndex = 4
-
-ClimbOutlineUICorner.CornerRadius = UDim.new(0, 4)
-ClimbOutlineUICorner.Name = "Climb Outline UICorner"
-ClimbOutlineUICorner.Parent = ClimbOutline
-
-Swim.Name = "Swim"
-Swim.Parent = Container
-Swim.BackgroundColor3 = Color3.fromRGB(58, 58, 58)
-Swim.BorderColor3 = Color3.fromRGB(31, 31, 31)
-Swim.LayoutOrder = 32
-Swim.Size = UDim2.new(1, 0, 0, 12)
-Swim.ZIndex = 5
-Swim.Font = Enum.Font.SourceSansBold
-Swim.PlaceholderColor3 = Color3.fromRGB(17, 17, 17)
-Swim.PlaceholderText = "Swim"
-Swim.Text = ""
-Swim.TextColor3 = Color3.fromRGB(255, 255, 255)
-Swim.TextScaled = true
-Swim.TextSize = 14.000
-Swim.TextStrokeTransparency = 4.000
-Swim.TextWrapped = true
-
-SwimUICorner.CornerRadius = UDim.new(0, 4)
-SwimUICorner.Name = "Swim UICorner"
-SwimUICorner.Parent = Swim
-
-SwimOutline.Name = "Swim Outline"
-SwimOutline.Parent = Swim
-SwimOutline.AnchorPoint = Vector2.new(0.5, 0.5)
-SwimOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
-SwimOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
-SwimOutline.Size = UDim2.new(1, 2, 1, 2)
-SwimOutline.ZIndex = 4
-
-SwimOutlineUICorner.CornerRadius = UDim.new(0, 4)
-SwimOutlineUICorner.Name = "Swim Outline UICorner"
-SwimOutlineUICorner.Parent = SwimOutline
-
-local dragging
-local draginput
-local dragstart
-local startpos
-
-local lastmousepos
-local lastgoalpos
-
+local TeleportService = game:GetService("TeleportService")
+
+function notify(title,msg)
+	game:GetService("StarterGui"):SetCore("SendNotification" ,{
+		Title = title;
+		Text = msg;
+	})
+end
+if not game:IsLoaded() then
+	local message = Instance.new("Hint", CoreGui)
+	message.Text = "Waiting For Game To Load..."
+	game.Loaded:Wait()
+	message:Destroy()
+end
+if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod or not getgenv then -- Checks if executor is supported
+	notify("Error","Incompatible Executor! Functions are not supported by this executor.")
+	return
+end
+if game.PlaceId ~= 142823291 and game.PlaceId ~= 636649648 then 
+	notify("Error","Unsupported game. Supported Games: Murder Mystery 2 / MM2 Assassin")
+	return
+end
+
+if _G.mm2hacksalreadyloadedbyCITY512 then
+	notify("Error","Already Executed!")
+	return
+end -- Checks if the script is already executed
+_G.mm2hacksalreadyloadedbyCITY512 = true
+
+-- Modules
+
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
+local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
+
+repeat task.wait() until game.Players.LocalPlayer -- Waits for LocalPlayer to load in.
+-- Variables
+
+local LocalPlayer = Players.LocalPlayer
+local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local Mouse = LocalPlayer:GetMouse()
+
+local configs = { -- Library Configurations
+	GunAimbot = false;
+	KnifeAimbot = false;
+	GunPrediction = 150;
+	KnifePrediction = 100;
+	AimbotMethod = "Murderer/Target";
+	FOV = 350;
+	AutoEquip = false;
+	AutoShoot = false;
+	KillAura = false;
+	KillAuraRange = 15;
+	FaceTarget = false;
+
+	AutoRemoveLag = false;
+	IncludeAccessories = false;
+	IncludeLocalPlayer = false;
+	ToggleWalkSpeed = false;
+	ToggleJumpPower = false;
+	WalkSpeed = 16;
+	JumpPower = 50;
+
+	CoinFarm = false;
+	XPFarm = false;
+	AutoUnbox = false;
+	AutoUnboxCrate = {};
+
+	AutoGrabGun = false;
+	FlingPlayer = false;
+
+	Chams = false;
+	ShowGunDrop = false;
+	TrapESP = false;
+	MurdererColor = Color3.fromRGB(255, 112, 112);
+	TrapColor = Color3.fromRGB(255, 172, 112);
+	HeroColor = Color3.fromRGB(255, 231, 112);
+	InnocentColor = Color3.fromRGB(143, 255, 112);
+	SheriffColor = Color3.fromRGB(112, 136, 255);
+	GunDropColor = Color3.fromRGB(141, 112, 255);
+	ShowAimbotVisuals = false;
+}
+local players = {} --[[
+					Nikilis = {
+						Role = "Murderer";
+					}
+					--]]
+local weapons = {
+	Knife = {
+		Role = {"Murderer"};
+		Speed = {
+			Normal = 80;
+			Sleight = 100;
+		}
+	};
+	Gun = {
+		Role = {"Sheriff","Hero"};
+	}
+}
+local match = {
+	SheriffDied = false;
+}
+local powers = {
+	Sleight = false;
+}
+local eventfunctions = {}
+local scriptvariables = {
+	AlreadyFlinging = false;
+	AntiLagAlreadyExecuted = false;
+	ScriptActivated = true;
+	ExecuteOnTeleport = false;
+	TPCheck = false;
+	QueueOnTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport;
+}
 local connections = {}
 local a = 0
 
-local currentanims = {}
+local Drawing1
+local Drawing2
 
-local anims = {
-	Astronaut = {
-		Button = Astronaut;
-		Idle1 = "rbxassetid://891621366";
-		Idle2 = "rbxassetid://891633237";
-		Walk = "rbxassetid://891636393";
-		Run = "rbxassetid://891636393";
-		Fall = "rbxassetid://891617961";
-		Jump = "rbxassetid://891627522";
-		Climb = "rbxassetid://891609353";
-		Swim = "rbxassetid://891639666";
-		SwimIdle = "rbxassetid://891663592"
-	};
-	Bold = {
-		Button = Bold;
-		Idle1 = "rbxassetid://16738333868";
-		Idle2 = "rbxassetid://16738334710";
-		Walk = "rbxassetid://16738340646";
-		Run = "rbxassetid://16738337225";
-		Fall = "rbxassetid://16738333171";
-		Jump = "rbxassetid://16738336650";
-		Climb = "rbxassetid://16738332169";
-		Swim = "rbxassetid://16738339158";
-		SwimIdle = "rbxassetid://16738339817"
-	};
-	Bubbly = {
-		Button = Bubbly;
-		Idle1 = "rbxassetid://910004836";
-		Idle2 = "rbxassetid://910009958";
-		Walk = "rbxassetid://910034870";
-		Run = "rbxassetid://910025107";
-		Fall = "rbxassetid://910001910";
-		Jump = "rbxassetid://910016857";
-		Climb = "rbxassetid://909997997";
-		Swim = "rbxassetid://910028158";
-		SwimIdle = "rbxassetid://910030921"
-	};
-	Cartoony = {
-		Button = Cartoony;
-		Idle1 = "rbxassetid://742637544";
-		Idle2 = "rbxassetid://742638445";
-		Walk = "rbxassetid://742640026";
-		Run = "rbxassetid://742638842";
-		Fall = "rbxassetid://742637151";
-		Jump = "rbxassetid://742637942";
-		Climb = "rbxassetid://742636889";
-		Swim = "rbxassetid://742639220";
-		SwimIdle = "rbxassetid://742639812"
-	};
-	Elder = {
-		Button = Elder;
-		Idle1 = "rbxassetid://845397899";
-		Idle2 = "rbxassetid://8454005";
-		Walk = "rbxassetid://845403856";
-		Run = "rbxassetid://845386501";
-		Fall = "rbxassetid://616005863";
-		Jump = "rbxassetid://845398858";
-		Climb = "rbxassetid://656114359";
-		Swim = "rbxassetid://845401742";
-		SwimIdle = "rbxassetid://845403127"
-	};
-	Knight = {
-		Button = Knight;
-		Idle1 = "rbxassetid://657595757";
-		Idle2 = "rbxassetid://657568135";
-		Walk = "rbxassetid://657552124";
-		Run = "rbxassetid://657564596";
-		Fall = "rbxassetid://657600338";
-		Jump = "rbxassetid://658409194";
-		Climb = "rbxassetid://658360781";
-		Swim = "rbxassetid://657560551";
-		SwimIdle = "rbxassetid://657557095"
-	};
-	Levitation = {
-		Button = Levitation;
-		Idle1 = "rbxassetid://616006778";
-		Idle2 = "rbxassetid://616008087";
-		Walk = "rbxassetid://616013216";
-		Run = "rbxassetid://616010382";
-		Fall = "rbxassetid://616005863";
-		Jump = "rbxassetid://616008936";
-		Climb = "rbxassetid://616003713";
-		Swim = "rbxassetid://616011509";
-		SwimIdle = "rbxassetid://616012453"
-	};
-	Mage = {
-		Button = Mage;
-		Idle1 = "rbxassetid://707742142";
-		Idle2 = "rbxassetid://707855907";
-		Walk = "rbxassetid://707897309";
-		Run = "rbxassetid://707861613";
-		Fall = "rbxassetid://707829716";
-		Jump = "rbxassetid://707853694";
-		Climb = "rbxassetid://707826056";
-		Swim = "rbxassetid://707876443";
-		SwimIdle = "rbxassetid://707894699"
-	};
-	Ninja = {
-		Button = Ninja;
-		Idle1 = "rbxassetid://656117400";
-		Idle2 = "rbxassetid://656118341";
-		Walk = "rbxassetid://656121766";
-		Run = "rbxassetid://656118852";
-		Fall = "rbxassetid://656115606";
-		Jump = "rbxassetid://656117878";
-		Climb = "rbxassetid://656114359";
-		Swim = "rbxassetid://656119721";
-		SwimIdle = "rbxassetid://656121397"
-	};
-	OldSchool = {
-		Button = OldSchool;
-		Idle1 = "rbxassetid://5319828216";
-		Idle2 = "rbxassetid://5319831086";
-		Walk = "rbxassetid://5319847204";
-		Run = "rbxassetid://5319844329";
-		Fall = "rbxassetid://5319839762";
-		Jump = "rbxassetid://5319841935";
-		Climb = "rbxassetid://5319816685";
-		Swim = "rbxassetid://5319850266";
-		SwimIdle = "rbxassetid://5319852613"
-	};
-	Pirate = {
-		Button = Pirate;
-		Idle1 = "rbxassetid://750781874";
-		Idle2 = "rbxassetid://750782770";
-		Walk = "rbxassetid://750785693";
-		Run = "rbxassetid://750783738";
-		Fall = "rbxassetid://750780242";
-		Jump = "rbxassetid://750782230";
-		Climb = "rbxassetid://750779899";
-		Swim = "rbxassetid://750784579";
-		SwimIdle = "rbxassetid://750785176"
-	};
-	Rthro = {
-		Button = Rthro;
-		Idle1 = "rbxassetid://2510196951";
-		Idle2 = "rbxassetid://2510197257";
-		Walk = "rbxassetid://2510202577";
-		Run = "rbxassetid://2510198475";
-		Fall = "rbxassetid://656115606";
-		Jump = "rbxassetid://656117878";
-		Climb = "rbxassetid://2510192778";
-		Swim = "rbxassetid://2510199791";
-		SwimIdle = "rbxassetid://2510201162"
-	};
-	Stylish = {
-		Button = Stylish;
-		Idle1 = "rbxassetid://616136790";
-		Idle2 = "rbxassetid://616138447";
-		Walk = "rbxassetid://616146177";
-		Run = "rbxassetid://616140816";
-		Fall = "rbxassetid://616134815";
-		Jump = "rbxassetid://616139451";
-		Climb = "rbxassetid://616133594";
-		Swim = "rbxassetid://616143378";
-		SwimIdle = "rbxassetid://616144772"
-	};
-	Superhero = {
-		Button = Superhero;
-		Idle1 = "rbxassetid://616111295";
-		Idle2 = "rbxassetid://616113536";
-		Walk = "rbxassetid://616122287";
-		Run = "rbxassetid://616117076";
-		Fall = "rbxassetid://616108001";
-		Jump = "rbxassetid://616115533";
-		Climb = "rbxassetid://616104706";
-		Swim = "rbxassetid://616119360";
-		SwimIdle = "rbxassetid://616120861"
-	};
-	Toy = {
-		Button = Toy;
-		Idle1 = "rbxassetid://782841498";
-		Idle2 = "rbxassetid://782845736";
-		Walk = "rbxassetid://782843345";
-		Run = "rbxassetid://782842708";
-		Fall = "rbxassetid://782846423";
-		Jump = "rbxassetid://782847020";
-		Climb = "rbxassetid://782843869";
-		Swim = "rbxassetid://782844582";
-		SwimIdle = "rbxassetid://782845186"
-	};
-	Vampire = {
-		Button = Vampire;
-		Idle1 = "rbxassetid://1083445855";
-		Idle2 = "rbxassetid://1083450166";
-		Walk = "rbxassetid://1083473930";
-		Run = "rbxassetid://1083462077";
-		Fall = "rbxassetid://1083443587";
-		Jump = "rbxassetid://1083455352";
-		Climb = "rbxassetid://1083439238";
-		Swim = "rbxassetid://1083464683";
-		SwimIdle = "rbxassetid://1083467779"
-	};
-	Werewolf = {
-		Button = Werewolf;
-		Idle1 = "rbxassetid://1083195517";
-		Idle2 = "rbxassetid://1083214717";
-		Walk = "rbxassetid://1083178339";
-		Run = "rbxassetid://1083216690";
-		Fall = "rbxassetid://1083189019";
-		Jump = "rbxassetid://1083218792";
-		Climb = "rbxassetid://1083182000";
-		Swim = "rbxassetid://1083222527";
-		SwimIdle = "rbxassetid://1083222527"
-	};
-	Zombie = {
-		Button = Zombie;
-		Idle1 = "rbxassetid://616158929";
-		Idle2 = "rbxassetid://616160636";
-		Walk = "rbxassetid://616168032";
-		Run = "rbxassetid://616163682";
-		Fall = "rbxassetid://616157476";
-		Jump = "rbxassetid://616161997";
-		Climb = "rbxassetid://616156119";
-		Swim = "rbxassetid://616165109";
-		SwimIdle = "rbxassetid://616166655"
-	};
-	GirlCombo1 = {
-		Button = GirlCombo1;
-		Idle1 = "rbxassetid://910004836";
-		Idle2 = "rbxassetid://910009958";
-		Walk = "rbxassetid://910034870";
-		Run = "rbxassetid://910025107";
-		Fall = "rbxassetid://5319839762";
-		Jump = "rbxassetid://5319841935";
-		Climb = "rbxassetid://5319816685";
-		Swim = "rbxassetid://5319850266";
-		SwimIdle = "rbxassetid://5319852613"
-	};
-	GirlCombo2 = {
-		Button = GirlCombo2;
-		Idle1 = "rbxassetid://616136790";
-		Idle2 = "rbxassetid://616138447";
-		Walk = "rbxassetid://910034870";
-		Run = "rbxassetid://910025107";
-		Fall = "rbxassetid://5319839762";
-		Jump = "rbxassetid://5319841935";
-		Climb = "rbxassetid://5319816685";
-		Swim = "rbxassetid://5319850266";
-		SwimIdle = "rbxassetid://5319852613"
-	};
-	TryhardCombo1 = {
-		Button = TryhardCombo1;
-		Idle1 = "rbxassetid://5319828216";
-		Idle2 = "rbxassetid://5319831086";
-		Walk = "rbxassetid://707897309";
-		Run = "rbxassetid://707861613";
-		Fall = "rbxassetid://5319839762";
-		Jump = "rbxassetid://5319841935";
-		Climb = "rbxassetid://5319816685";
-		Swim = "rbxassetid://5319850266";
-		SwimIdle = "rbxassetid://5319852613"
-	};
-	TryhardCombo2 = {
-		Button = TryhardCombo2;
-		Idle1 = "rbxassetid://782841498";
-		Idle2 = "rbxassetid://782845736";
-		Walk = "rbxassetid://782843345";
-		Run = "rbxassetid://782842708";
-		Fall = "rbxassetid://616005863";
-		Jump = "rbxassetid://782847020";
-		Climb = "rbxassetid://707826056";
-		Swim = "rbxassetid://707876443";
-		SwimIdle = "rbxassetid://707894699"
-	};
-	TryhardCombo3 = {
-		Button = TryhardCombo3;
-		Idle1 = "rbxassetid://4417977954";
-		Idle2 = "rbxassetid://4417978624";
-		Walk = "rbxassetid://656121766";
-		Run = "rbxassetid://656118852";
-		Fall = "rbxassetid://616005863";
-		Jump = "rbxassetid://5319841935";
-		Climb = "rbxassetid://5319816685";
-		Swim = "rbxassetid://5319850266";
-		SwimIdle = "rbxassetid://5319852613"
-	};
-	TryhardCombo4 = {
-		Button = TryhardCombo4;
-		Idle1 = "rbxassetid://616111295";
-		Idle2 = "rbxassetid://616113536";
-		Walk = "rbxassetid://782843345";
-		Run = "rbxassetid://782842708";
-		Fall = "rbxassetid://5319839762";
-		Jump = "rbxassetid://5319841935";
-		Climb = "rbxassetid://5319816685";
-		Swim = "rbxassetid://5319850266";
-		SwimIdle = "rbxassetid://5319852613"
-	};
-}
-local customanims = {
-	Idle1 = {
-		TextBox = Idle1;
-		PlaceholderText = Idle1.PlaceholderText;
-	};
-	Idle2 = {
-		TextBox = Idle2;
-		PlaceholderText = Idle2.PlaceholderText;
-	};
-	Walk = {
-		TextBox = Walk;
-		PlaceholderText = Walk.PlaceholderText;
-	};
-	Run = {
-		TextBox = Run;
-		PlaceholderText = Run.PlaceholderText;
-	};
-	Fall = {
-		TextBox = Fall;
-		PlaceholderText = Fall.PlaceholderText;
-	};
-	Jump = {
-		TextBox = Jump;
-		PlaceholderText = Jump.PlaceholderText;
-	};
-	Climb = {
-		TextBox = Climb;
-		PlaceholderText = Climb.PlaceholderText;
-	};
-	Swim = {
-		TextBox = Swim;
-		PlaceholderText = Swim.PlaceholderText;
-	};
-	SwimIdle = {
-		TextBox = SwimIdle;
-		PlaceholderText = SwimIdle.PlaceholderText;
-	};
-}
+if Drawing then
+	Drawing1 = Drawing.new("Circle")
+	Drawing1.Color = Color3.fromRGB(255, 89, 89)
+	Drawing1.Thickness = 2
+	Drawing1.Visible = false
+	Drawing1.Radius = configs.FOV
+	Drawing1.Filled = false
 
-function Lerp(a, b, m)
-	return a + (b - a) * m
+	Drawing2 = Drawing.new("Circle")
+	Drawing2.Thickness = 4
+	Drawing2.Visible = false
+	Drawing2.Radius = configs.FOV
+	Drawing2.ZIndex = -1
+	Drawing2.Filled = false
+else
+	notify("Info","Drawing is not supported on this executor, functions such as ShowFOVCircle will not work.")
 end
-function assignButtonFunctions(button,callback)
-	local ripplecontainer = Instance.new("Frame", button)
-	ripplecontainer.Name = "RippleContainer"
-	ripplecontainer.ZIndex = button.ZIndex + 1
-	ripplecontainer.Size = UDim2.new(1,0,1,0)
-	ripplecontainer.Transparency = 1
-	ripplecontainer.ClipsDescendants = true
 
-	local function tweenInRipple(rippleeffect)
-		spawn(function()
-			local Info = TweenInfo.new(0.9,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut,0,false,0)
-			local Goals = {Size = UDim2.new(0, 200, 0, 200)}
-			local Tween = TweenService:Create(rippleeffect, Info, Goals)
-			Tween:Play()
-		end)
+---------------------------------------------------------------------------
+-- Functions
+
+function AddChams(object,isacharmodel,chamsettings) -- Adds ESP
+	local function AddBoxHandleAdornment(part)
+		local BHA = Instance.new("BoxHandleAdornment", part)
+		BHA.Name = "MM2CHAMS"
+		BHA.Adornee = part
+		BHA.Color3 = chamsettings.Color
+		BHA.ZIndex = 10
+		BHA.AlwaysOnTop = true
+		BHA.Size = part.Size
+		BHA.Transparency = 0.3
 	end
-
-	local function fadeOutRipple(rippleeffect)
-		spawn(function()
-			local Info = TweenInfo.new(0.6,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut,0,false,0)
-			local goal = {ImageTransparency = 1}
-			local Tween = TweenService:Create(rippleeffect, Info, goal)
-			Tween:Play()
-			task.wait(1)
-			rippleeffect:Destroy()
-		end)
-	end
-
-	button.MouseButton1Down:Connect(function()
-		spawn(callback)
-		
-		a += 1
-		local b = a
-
-		local done = false
-
-		local rippleeffect = Instance.new("ImageLabel", ripplecontainer)
-		rippleeffect.Name = "RippleEffect"
-		rippleeffect.Position = UDim2.new(0,mouse.X - button.AbsolutePosition.X,0,mouse.Y - button.AbsolutePosition.Y)
-		rippleeffect.ZIndex = ripplecontainer.ZIndex + 1
-		rippleeffect.AnchorPoint = Vector2.new(0.5, 0.5)
-		rippleeffect.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
-		rippleeffect.BackgroundTransparency = 1
-		rippleeffect.Image = "rbxassetid://266543268"
-		rippleeffect.ImageColor3 = Color3.fromRGB(0, 0, 0)
-		rippleeffect.ImageTransparency = 0.8
-
-		tweenInRipple(rippleeffect)
-		connections[b] = button.MouseButton1Up:Connect(function()
-			if not done then
-				done = true
-				fadeOutRipple(rippleeffect)
+	if isacharmodel then
+		if object.ClassName == "Model" and Players:FindFirstChild(object.Name) then
+			for _, limb in pairs(object:GetChildren()) do
+				if limb:IsA("BasePart") and limb.Name ~= "HumanoidRootPart" and not limb:FindFirstChild("MM2CHAMS") then
+					AddBoxHandleAdornment(limb)
+				end
 			end
-		end)
-		task.wait(4)
-		connections[b]:Disconnect()
-		done = true
-		fadeOutRipple(rippleeffect)
-	end)
+		end
+	elseif object:IsA("BasePart") then
+		AddBoxHandleAdornment(object)
+	end
 end
-function setAnimations(char)
-	if char then
-		local animatescript = char:WaitForChild("Animate")
-		if animatescript then
-			local idle = animatescript:WaitForChild("idle")
-			local walk = animatescript:WaitForChild("walk")
-			local run = animatescript:WaitForChild("run")
-			local swim = animatescript:WaitForChild("swim")
-			local swimidle = animatescript:WaitForChild("swimidle")
-			local jump = animatescript:WaitForChild("jump")
-			local fall = animatescript:WaitForChild("fall")
-			local climb = animatescript:WaitForChild("climb")
+function UpdateChams(object,isacharmodel,chamsettings) -- Updates ESP
+	local function changeadornment(BHA)
+		BHA.Color3 = chamsettings.Color
+	end
+	if isacharmodel then
+		if object.ClassName == "Model" and Players:FindFirstChild(object.Name) then
+			for _, limb in pairs(object:GetChildren()) do
+				local BHA = limb:FindFirstChild("MM2CHAMS")
+				if BHA and BHA.ClassName == "BoxHandleAdornment" then
+					changeadornment(BHA)
+				end
+			end
+		end
+	else
+		local BHA = object:FindFirstChild("MM2CHAMS")
+		if BHA and BHA.ClassName == "BoxHandleAdornment" then
+			changeadornment(BHA)
+		end
+	end
+end
+function RemoveChams(object,isacharmodel) -- Destroys ESP
+	if isacharmodel then
+		if object.ClassName == "Model" and Players:FindFirstChild(object.Name) then
+			for _, limb in pairs(object:GetChildren()) do
+				local BHA = limb:FindFirstChild("MM2CHAMS")
+				if BHA and BHA.ClassName == "BoxHandleAdornment" then
+					BHA:Destroy()
+				end
+			end
+		end
+	else
+		local BHA = object:FindFirstChild("MM2CHAMS")
+		if BHA and BHA.ClassName == "BoxHandleAdornment" then
+			BHA:Destroy()
+		end
+	end
+end
+function GetClosestPlayer(FOV,maxdist)
+	local lplrchar = LocalPlayer.Character
+	if lplrchar then
+		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
+		if lplrhrp and lplrhrp:IsA("BasePart") then
+			local camera = workspace.CurrentCamera
+			local closest
+			local function getclosestplayertoscreenpoint(point)
+				for _, player in pairs(Players:GetPlayers()) do
+					local character = player.Character
+					if character and character ~= lplrchar then
+						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+						if NPCRoot and NPCRoot:IsA("BasePart") then
+							local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
+							local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
+							local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
-			if idle and walk and run and swim and swimidle and jump and fall and climb then
-				local IdleAnim1 = idle:WaitForChild("Animation1")
-				if currentanims.Idle1 and IdleAnim1 then
-					IdleAnim1.AnimationId = currentanims.Idle1
+							if onscreen and distance <= FOV then
+								if not closest or distancefromplayer < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
+									closest = character
+								end
+							end
+						end
+					end
 				end
-				local IdleAnim2 = idle:WaitForChild("Animation2")
-				if currentanims.Idle2 and IdleAnim2 then
-					IdleAnim2.AnimationId = currentanims.Idle2
+			end
+			if configs.AimbotMethod == "ClosestPlayerToCursor" and camera then
+				getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
+				return closest
+			elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
+				for _, player in pairs(Players:GetPlayers()) do
+					local character = player.Character
+					if character and character ~= lplrchar  then
+						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+						if NPCRoot and NPCRoot:IsA("BasePart") then
+							local distance = (NPCRoot.Position - lplrhrp.Position).Magnitude
+							if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distance <= maxdist then
+								closest = character
+							end
+						end
+					end
 				end
-				local WalkAnim = walk:WaitForChild("WalkAnim")
-				if currentanims.Walk and WalkAnim then
-					WalkAnim.AnimationId = currentanims.Walk
+			elseif configs.AimbotMethod == "ClosestPlayerToScreenCenter" and camera then
+				getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y - 58)/2)
+			elseif configs.AimbotMethod == "Murderer/Target" then
+				if game.PlaceId == "636649648" then
+
+				elseif players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
+					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
+				else
+					for _, player in pairs(Players:GetPlayers()) do
+						if players[player.Name] and players[player.Name].Role and players[player.Name].Role == weapons.Knife.Role[1] then
+							local character = player.Character
+							if character and character ~= lplrchar then
+								local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+								if NPCRoot and NPCRoot:IsA("BasePart") then
+									local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
+
+									if not closest or distancefromplayer < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
+										closest = character
+									end
+								end
+							end
+						end
+					end
 				end
-				local RunAnim = run:WaitForChild("RunAnim")
-				if currentanims.Run and RunAnim then
-					RunAnim.AnimationId = currentanims.Run
-				end
-				local SwimAnim = swim:WaitForChild("Swim")
-				if currentanims.Swim and SwimAnim then
-					SwimAnim.AnimationId = currentanims.Swim
-				end
-				local SwimIdleAnim = swimidle:WaitForChild("SwimIdle")
-				if currentanims.SwimIdle and SwimIdleAnim then
-					SwimIdleAnim.AnimationId = currentanims.SwimIdle
-				end
-				local JumpAnim = jump:WaitForChild("JumpAnim")
-				if currentanims.Jump and JumpAnim then
-					JumpAnim.AnimationId = currentanims.Jump
-				end
-				local FallAnim = fall:WaitForChild("FallAnim")
-				if currentanims.Fall and FallAnim then
-					FallAnim.AnimationId = currentanims.Fall
-				end
-				local ClimbAnim = climb:WaitForChild("ClimbAnim")
-				if currentanims.Climb and ClimbAnim then
-					ClimbAnim.AnimationId = currentanims.Climb
+			end
+			return closest
+		end
+	end
+	return nil
+end
+function ChamPlayerRoles() -- Chams Player Using Colors Based On Their Role
+	for _, player in pairs(Players:GetPlayers()) do
+		local character = player.Character
+		if character and players[player.Name] and player ~= LocalPlayer then
+			local role = players[player.Name].Role
+			if role then
+				if role == weapons.Knife.Role[1] then
+					AddChams(character,true,{
+						Color = configs.MurdererColor;
+					})
+				elseif role == weapons.Gun.Role[1] then
+					AddChams(character,true,{
+						Color = configs.SheriffColor;
+					})
+				elseif role == weapons.Gun.Role[2] then
+					AddChams(character,true,{
+						Color = configs.HeroColor;
+					})
+				elseif role == "Innocent" then
+					AddChams(character,true,{
+						Color = configs.InnocentColor;
+					})
 				end
 			end
 		end
 	end
 end
-function changeAnimations(anims)
-	currentanims.Idle1 = anims.Idle1
-	currentanims.Idle2 = anims.Idle2
-	currentanims.Walk = anims.Walk
-	currentanims.Run = anims.Run
-	currentanims.Fall = anims.Fall
-	currentanims.Jump = anims.Jump
-	currentanims.Climb = anims.Climb
-	currentanims.Swim = anims.Swim
-	currentanims.SwimIdle = anims.SwimIdle
-	setAnimations(lplrchar)
-	print("animations changed")
-end
-workspace.ChildAdded:Connect(function(char)
-	if char:IsA("Model") and char.Name == lplr.Name then
-		lplrchar = char
-		setAnimations(lplrchar)
+function UnchamPlayers()
+	for _, player in pairs(Players:GetPlayers()) do
+		local character = player.Character
+		if character then
+			RemoveChams(character,true)
+		end
 	end
+end
+function UpdateAllChams()
+	for _, child in pairs(workspace:GetChildren()) do
+		local player = Players:GetPlayerFromCharacter(child)
+		if player and players[player.Name] and player ~= LocalPlayer then
+			local role = players[player.Name].Role
+			if role then
+				if role == weapons.Knife.Role[1] then
+					UpdateChams(child,true,{
+						Color = configs.MurdererColor;
+					})
+				elseif role == weapons.Gun.Role[1] then
+					UpdateChams(child,true,{
+						Color = configs.SheriffColor;
+					})
+				elseif role == weapons.Gun.Role[2] then
+					UpdateChams(child,true,{
+						Color = configs.HeroColor;
+					})
+				elseif role == "Innocent" then
+					UpdateChams(child,true,{
+						Color = configs.InnocentColor;
+					})
+				end
+			end
+		elseif child:IsA("BasePart") and child.Name == "GunDrop" then
+			UpdateChams(child,false,{
+				Color = configs.GunDropColor;
+			})
+		end
+	end
+end
+function RemoveDisplays(character)
+	local KnifeDisplay = character:WaitForChild("KnifeDisplay", 10)
+	local GunDisplay = character:WaitForChild("GunDisplay", 10)
+
+	if KnifeDisplay then KnifeDisplay:Destroy() end
+	if GunDisplay then GunDisplay:Destroy() end
+
+	if configs.IncludeAccessories then
+		for _, child in pairs(character:GetChildren()) do
+			if child:IsA("Accessory") or child.Name == "Radio" or child.Name == "Pet" then
+				child:Destroy()
+			end
+		end
+	end
+end
+function eventfunctions.Initialize(player)
+	players[player.Name] = {Role = "Innocent";}
+
+	local backpack = player:WaitForChild("Backpack")
+	local character = player.Character or player.CharacterAdded:Wait()
+
+	a += 4
+	local b = a
+
+	players[player.Name].Disconnect = function()
+		if connections[b] then
+			connections[b]:Disconnect()
+		end
+		if connections[b - 1] then
+			connections[b - 1]:Disconnect()
+		end
+		if connections[b - 2] then
+			connections[b - 2]:Disconnect()
+		end
+	end
+	local function HumanoidDiedEvent(humanoid)
+		if connections[b] then
+			connections[b]:Disconnect()
+		end
+		connections[b] = humanoid.Died:Connect(function()
+			if players[player.Name].Role == weapons.Gun.Role[1] then
+				match.SheriffDied = true
+			end
+			players[player.Name].Role = "Innocent"
+		end)
+	end
+	local function AssignRole(Tool)
+		if Tool.Name == "Knife" then
+			players[player.Name].Role = weapons.Knife.Role[1]
+			if configs.Chams and player ~= LocalPlayer then
+				UpdateChams(character,true,{
+					Color = configs.MurdererColor;
+				})
+			end
+		elseif Tool.Name == "Gun" then
+			if match.SheriffDied then
+				players[player.Name].Role = weapons.Gun.Role[2]
+				if configs.Chams and player ~= LocalPlayer then
+					UpdateChams(character,true,{
+						Color = configs.HeroColor;
+					})
+				end
+			else
+				players[player.Name].Role = weapons.Gun.Role[1]
+				if configs.Chams and player ~= LocalPlayer then
+					UpdateChams(character,true,{
+						Color = configs.SheriffColor;
+					})
+				end
+			end
+		end
+	end
+	local function CharacterAdded(char)
+		character = char
+		players[player.Name].Role = "Innocent"
+
+		local bp = player:WaitForChild("Backpack")
+		backpack = bp
+		local NPCHum = char:WaitForChild("Humanoid")
+		if NPCHum.ClassName == "Humanoid" then
+			if player == LocalPlayer then
+				if configs.ToggleWalkSpeed then
+					NPCHum.WalkSpeed = configs.WalkSpeed
+				end
+				if configs.ToggleJumpPower then
+					NPCHum.JumpPower = configs.JumpPower
+				end
+			end
+			HumanoidDiedEvent(NPCHum)
+		end
+		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or player ~= LocalPlayer) then
+			RemoveDisplays(char)
+		end
+		if configs.Chams and player ~= LocalPlayer then
+			AddChams(char,true,{
+				Color = configs.InnocentColor;
+			})
+		end
+		if connections[b - 1] then
+			connections[b - 1]:Disconnect()
+		end
+		connections[b - 1] = bp.ChildAdded:Connect(function(child)
+			if child.ClassName == "Tool" then
+				AssignRole(child)
+			end
+		end)
+	end
+
+	connections[b - 2] = player.CharacterAdded:Connect(function(character)
+		CharacterAdded(character)
+	end)
+	CharacterAdded(character)
+
+	for _, child in pairs(backpack:GetChildren()) do
+		if child.ClassName == "Tool" then
+			AssignRole(child)
+		end
+	end
+	for _, child in pairs(character:GetChildren()) do
+		if child.ClassName == "Tool" then
+			AssignRole(child)
+		end
+	end
+end
+local function RemoveLagFromObject(object)
+	if not object:FindFirstAncestorOfClass("Model") or not object:FindFirstAncestorOfClass("Model"):FindFirstChildOfClass("Humanoid") then
+		if object:IsA("MeshPart") then
+			object.Material = Enum.Material.SmoothPlastic
+			object.TextureID = ""
+		elseif object:IsA("UnionOperation") then
+			object.Material = Enum.Material.SmoothPlastic
+		elseif object:IsA("Decal") then
+			object:Destroy()
+		elseif object.ClassName == "SpecialMesh" and object.MeshType == Enum.MeshType.FileMesh then
+			object.TextureId = ""
+		elseif object:IsA("ParticleEmitter") or object:IsA("Trail") then
+			object:Destroy()
+		elseif object:IsA("BasePart") then
+			object.Material = Enum.Material.SmoothPlastic
+			object.Reflectance = 0
+			object.TopSurface = Enum.SurfaceType.Smooth
+			object.BottomSurface = Enum.SurfaceType.Smooth
+			object.FrontSurface = Enum.SurfaceType.Smooth
+			object.BackSurface = Enum.SurfaceType.Smooth
+			object.LeftSurface = Enum.SurfaceType.Smooth
+			object.RightSurface = Enum.SurfaceType.Smooth
+		end
+	end
+end
+function AimbotVisuals(path)
+	task.wait()
+	local prevatt
+	local hue = 0
+
+	local container = Instance.new("Part", workspace)
+	container.Anchored = true
+	container.CanCollide = false
+	container.Transparency = 1
+
+	for _, i in path do
+		local att = Instance.new("Attachment", container)
+		att.WorldPosition = i
+
+		if prevatt then
+			local beam = Instance.new("Beam", container)
+			beam.FaceCamera = true
+			beam.Attachment0 = prevatt
+			beam.Attachment1 = att
+			beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.560784, 1),Color3.fromHSV((hue + 3)/360, 0.560784, 1))
+			beam.Segments = 1
+			beam.Width0 = 0.3
+			beam.Width1 = 0.3
+		end
+		hue += 3
+		if hue >= 360 then
+			hue = 0
+		end
+		prevatt = att
+	end
+	task.wait(5)
+	container:Destroy()
+end
+
+---------------------------------------------------------------------------
+-- GUI
+
+local ScreenGui = Instance.new("ScreenGui")
+local TextButton = Instance.new("TextButton")
+
+ScreenGui.Parent = CoreGui
+ScreenGui.IgnoreGuiInset = true
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Sibling
+
+TextButton.Parent = ScreenGui
+TextButton.AnchorPoint = Vector2.new(0.5, 0)
+TextButton.BackgroundColor3 = Color3.fromRGB(255, 255, 255)
+TextButton.BackgroundTransparency = 0.500
+TextButton.BorderColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.BorderSizePixel = 0
+TextButton.Position = UDim2.new(0.5, 0, 0, 0)
+TextButton.Size = UDim2.new(0, 200, 0, 20)
+TextButton.Font = Enum.Font.SourceSans
+TextButton.Text = "Open GUI"
+TextButton.TextColor3 = Color3.fromRGB(0, 0, 0)
+TextButton.TextSize = 14.000
+
+TextButton.MouseButton1Click:Connect(function()
+	keypress(0xA1)
+	task.wait()
+	keyrelease(0xA1)
 end)
-for _, animpack in pairs(anims) do
-	assignButtonFunctions(animpack.Button,function()
-		print(animpack.Button.Name.." callback")
-		changeAnimations({
-			Idle1 = animpack.Idle1;
-			Idle2 = animpack.Idle2;
-			Walk = animpack.Walk;
-			Run = animpack.Run;
-			Fall = animpack.Fall;
-			Jump = animpack.Jump;
-			Climb = animpack.Climb;
-			Swim = animpack.Swim;
-			SwimIdle = animpack.SwimIdle;
-		})
-	end)
-end
-for i, customanim in pairs(customanims) do
-	local ticket = 0
-	local TextBox = customanim.TextBox
-	local function textBoxErrorMessage(Text)
-		ticket += 1
-		local currentticket = ticket
-		TextBox.Text = ""
-		TextBox.PlaceholderText = Text
-		task.wait(1.25)
-		if currentticket == ticket then
-			TextBox.PlaceholderText = customanim.PlaceholderText
+
+---------------------------------------------------------------------------
+-- Library
+
+local Window = Library:CreateWindow({
+	Name = "Murder Mystery 2";
+	LoadingTitle = "Murder Mystery 2 Main";
+	LoadingSubtitle = "by CITY512";
+	ConfigurationSaving = {
+		Enabled = true;
+		FolderName = nil; -- Create a custom folder for your hub/game
+		FileName = "MM2CHEATSBYCITY512"
+	};
+	Discord = {
+		Enabled = false;
+		Invite = "noinvitelink"; -- The Discord invite code, do not include discord.gg/. E.g. discord.gg/ABCD would be ABCD
+		RememberJoins = true -- Set this to false to make them join the discord every time they load it up
+	};
+	KeySystem = false, -- Set this to true to use our key system
+	KeySettings = {
+		Title = "Untitled";
+		Subtitle = "Key System";
+		Note = "No method of obtaining the key is provided";
+		FileName = "Key"; -- It is recommended to use something unique as other scripts using Rayfield may overwrite your key file
+		SaveKey = true; -- The user's key will be saved, but if you change the key, they will be unable to use your script
+		GrabKeyFromSite = false; -- If this is true, set Key below to the RAW site you would like Rayfield to get the key from
+		Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
+	}
+})
+
+local Main = Window:CreateTab("Main", 10814531047) -- Title, Image
+local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458) -- Title, Image
+local Visuals = Window:CreateTab("Visuals", 13080349149) -- Title, Image
+local Blatant = Window:CreateTab("Blatant", 10653372160) -- Title, Image
+local AutoFarm = Window:CreateTab("Auto Farm", 12966420667) -- Title, Image
+local Others = Window:CreateTab("Others", 11385220704) -- Title, Image
+
+---------------------------------------------------------------------------
+local Section = Main:CreateSection("Aimbot", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
+local GunAimbot = Main:CreateToggle({
+	Name = "Gun Aimbot";
+	CurrentValue = false;
+	Flag = "Gun Aimbot";
+	Callback = function(value)
+		configs.GunAimbot = value
+	end;
+})
+local KnifeAimbot = Main:CreateToggle({
+	Name = "Knife Aimbot";
+	CurrentValue = false;
+	Flag = "Knife Aimbot";
+	Callback = function(value)
+		configs.KnifeAimbot = value
+	end;
+})
+local GunPrediction = Main:CreateSlider({
+	Name = "Gun Prediction";
+	Range = {0, 1000};
+	Increment = 1;
+	Suffix = "ms";
+	CurrentValue = 150;
+	Flag = "Ping Prediction";
+	Callback = function(value)
+		configs.GunPrediction = value
+	end;
+})
+local KnifePrediction = Main:CreateSlider({
+	Name = "Knife Prediction";
+	Range = {0, 1000};
+	Increment = 1;
+	Suffix = "ms";
+	CurrentValue = 100;
+	Flag = "Knife Prediction";
+	Callback = function(value)
+		configs.KnifePrediction = value
+	end;
+})
+local Dropdown = Main:CreateDropdown({
+	Name = "Aimbot Method";
+	Options = {"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter","Murderer/Target"};
+	CurrentOption = "Murderer/Target";
+	MultiSelection = false; -- If MultiSelections is allowed
+	Flag = "Aimbot Method";
+	Callback = function(option)
+		configs.AimbotMethod = option
+	end,
+})
+local FOV = Main:CreateSlider({
+	Name = "FOV";
+	Range = {0, 1000};
+	Increment = 1;
+	Suffix = "";
+	CurrentValue = 350;
+	Flag = "FOV";
+	Callback = function(value)
+		configs.FOV = value
+		if Drawing then
+			Drawing1.Radius = configs.FOV
+			Drawing2.Radius = configs.FOV
 		end
-	end
-	TextBox.FocusLost:Connect(function()
-		TextBox.Interactable = false
-		local ID = tonumber(TextBox.Text)
-		if ID then
-			local suc, err = pcall(function()
-				local asset = MarketplaceService:GetProductInfo(ID)
-				if asset.AssetTypeId ~= 24 then error("") end
-			end)
-			if suc then
-				currentanims[i] = "rbxassetid://"..tostring(ID)
-				if lplrchar then
-					coroutine.wrap(setAnimations)(lplrchar)
-				end
+	end;
+})
+
+local Section = Main:CreateSection("Gun Mods", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
+local AutoEquip = Main:CreateToggle({
+	Name = "Auto Equip";
+	CurrentValue = false;
+	Flag = "Auto Equip";
+	Callback = function(value)
+		configs.AutoEquip = value
+	end;
+})
+local AutoShoot = Main:CreateToggle({
+	Name = "Auto Shoot";
+	CurrentValue = false;
+	Flag = "Auto Shoot";
+	Callback = function(value)
+		configs.AutoShoot = value
+	end;
+})
+
+local Section = Main:CreateSection("Kill Aura", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
+local KillAura = Main:CreateToggle({
+	Name = "Kill Aura";
+	CurrentValue = false;
+	Flag = "Kill Aura";
+	Callback = function(value)
+		configs.KillAura = value
+	end;
+})
+local KillAuraRange = Main:CreateSlider({
+	Name = "Kill Aura Range";
+	Range = {0, 100};
+	Increment = 0.1;
+	Suffix = "studs";
+	CurrentValue = 15;
+	Flag = "FOV";
+	Callback = function(value)
+		configs.KillAuraRange = value
+	end;
+})
+local FaceTarget = Main:CreateToggle({
+	Name = "Face Target";
+	CurrentValue = false;
+	Flag = "Face Target";
+	Callback = function(value)
+		configs.FaceTarget = value
+	end;
+})
+
+---------------------------------------------------------------------------
+local WalkSpeedToggle = LocalPlayerTab:CreateToggle({
+	Name = "Toggle WalkSpeed";
+	CurrentValue = false;
+	Flag = "Toggle WalkSpeed";
+	Callback = function(value)
+		configs.ToggleWalkSpeed = value
+		if not configs.ToggleWalkSpeed and LocalPlayer.Character then
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if lplrhum then
+				lplrhum.WalkSpeed = 16
 			end
-			if err then
-				textBoxErrorMessage("Invalid ID")
+		end
+	end;
+})
+local JumpPowerToggle = LocalPlayerTab:CreateToggle({
+	Name = "Toggle JumpPower";
+	CurrentValue = false;
+	Flag = "Toggle JumpPower";
+	Callback = function(value)
+		configs.ToggleJumpPower = value
+		if not configs.ToggleJumpPower and LocalPlayer.Character then
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if lplrhum then
+				lplrhum.JumpPower = 50
 			end
+		end
+	end;
+})
+local WalkSpeed = LocalPlayerTab:CreateSlider({
+	Name = "WalkSpeed";
+	Range = {0, 100};
+	Increment = 1;
+	Suffix = "";
+	CurrentValue = 16;
+	Flag = "WalkSpeed";
+	Callback = function(value)
+		configs.WalkSpeed = value
+		if configs.ToggleWalkSpeed and LocalPlayer.Character then
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if lplrhum then
+				lplrhum.WalkSpeed = configs.WalkSpeed
+			end
+		end
+	end;
+})
+local JumpPower = LocalPlayerTab:CreateSlider({
+	Name = "JumpPower";
+	Range = {0, 100};
+	Increment = 1;
+	Suffix = "";
+	CurrentValue = 50;
+	Flag = "JumpPower";
+	Callback = function(value)
+		configs.JumpPower = value
+		if configs.ToggleJumpPower and LocalPlayer.Character then
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
+			if lplrhum then
+				lplrhum.JumpPower = configs.JumpPower
+			end
+		end
+	end;
+})
+---------------------------------------------------------------------------
+local Section = Visuals:CreateSection("Chams", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
+local PlayerChams = Visuals:CreateToggle({
+	Name = "Player Chams";
+	CurrentValue = false;
+	Flag = "Player Chams";
+	Callback = function(value)
+		configs.Chams = value
+		if value then
+			ChamPlayerRoles()
 		else
-			textBoxErrorMessage("ID Must Be A Number")
+			UnchamPlayers()				
 		end
-		TextBox.Interactable = true
-	end)
+	end;
+})
+local ShowGunDrop = Visuals:CreateToggle({
+	Name = "Show Gun Drop";
+	CurrentValue = false;
+	Flag = "Show Gun Drop";
+	Callback = function(value)
+		configs.ShowGunDrop = value
+		for _, child in pairs(workspace:GetChildren()) do
+			if child:IsA("BasePart") and child.Name == "GunDrop" then
+				if configs.ShowGunDrop then
+					AddChams(child,false,{
+						Color = configs.GunDropColor;
+					})
+				else
+					RemoveChams(child,false)
+				end
+			end
+		end
+	end;
+})
+local ShowTraps = Visuals:CreateToggle({
+	Name = "Show Traps";
+	CurrentValue = false;
+	Flag = "Show Traps";
+	Callback = function(value)
+		configs.TrapESP = value
+		for _, descendant in pairs(workspace:GetDescendants()) do
+			if descendant:IsA("BasePart") and descendant.Name == "Trap" then
+				if configs.TrapESP then
+					AddChams(descendant,false,{
+						Color = configs.TrapColor;
+					})
+				else
+					RemoveChams(descendant,false)
+				end
+			end
+		end
+	end;
+})
+local MurdererColor = Visuals:CreateColorPicker({
+	Name = "Murderer Color";
+	Color = configs.MurdererColor;
+	Flag = "Murderer Color";
+	Callback = function(value)
+		configs.MurdererColor = value
+		UpdateAllChams()
+	end
+})
+local TrapColor = Visuals:CreateColorPicker({
+	Name = "Trap Color";
+	Color = configs.TrapColor;
+	Flag = "Trap Color";
+	Callback = function(value)
+		configs.TrapColor = value
+		UpdateAllChams()
+	end
+})
+local HeroColor = Visuals:CreateColorPicker({
+	Name = "Hero/Target Color";
+	Color = configs.HeroColor;
+	Flag = "Hero Color";
+	Callback = function(value)
+		configs.HeroColor = value
+		UpdateAllChams()
+	end
+})
+local InnocentColor = Visuals:CreateColorPicker({
+	Name = "Innocent Color";
+	Color = configs.InnocentColor;
+	Flag = "Innocent Color";
+	Callback = function(value)
+		configs.InnocentColor = value
+		UpdateAllChams()
+	end
+})
+local SheriffColor = Visuals:CreateColorPicker({
+	Name = "Sheriff Color";
+	Color = configs.SheriffColor;
+	Flag = "Sheriff Color";
+	Callback = function(value)
+		configs.SheriffColor = value
+		UpdateAllChams()
+	end
+})
+local GunDropColor = Visuals:CreateColorPicker({
+	Name = "Gun Drop Color";
+	Color = configs.GunDropColor;
+	Flag = "Gun Drop Color";
+	Callback = function(value)
+		configs.GunDropColor = value
+		UpdateAllChams()
+	end
+})
+if Drawing then
+	local ShowFOVCircle = Visuals:CreateToggle({
+		Name = "Show FOV Circle";
+		CurrentValue = false;
+		Flag = "Show FOV Circle";
+		Callback = function(value)
+			Drawing1.Visible = value
+			Drawing2.Visible = value
+		end;
+	})
+end
+local ShowAimbotVisuals = Visuals:CreateToggle({
+	Name = "Show Aimbot Visuals";
+	CurrentValue = false;
+	Flag = "Show Aimbot Visuals";
+	Callback = function(value)
+		configs.ShowAimbotVisuals = value
+	end;
+})
+
+local Section = Visuals:CreateSection("World", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+
+local RemoveMapLag = Visuals:CreateButton({
+	Name = "Remove Map Lag";
+	Callback = function()
+		if not scriptvariables.AntiLagAlreadyExecuted then
+			scriptvariables.AntiLagAlreadyExecuted = true
+
+			local Terrain = workspace.Terrain
+			Terrain.WaterWaveSize = 0
+			Terrain.WaterWaveSpeed = 0
+			Terrain.WaterReflectance = 0
+			Terrain.WaterTransparency = 0
+
+			local Lighting = game.Lighting
+			Lighting.GlobalShadows = false
+			Lighting.FogEnd = 9e9
+			settings().Rendering.QualityLevel = 1
+
+			for _, child in pairs(Lighting:GetChildren()) do
+				if child:IsA("BlurEffect") or child:IsA("SunRaysEffect") or child:IsA("ColorCorrectionEffect") or child:IsA("BloomEffect") or child:IsA("DepthOfFieldEffect") then
+					child:Destroy()
+				end
+			end
+			for _, descendant in pairs(workspace:GetDescendants()) do
+				RemoveLagFromObject(descendant)
+			end
+		end
+	end
+})
+local RemoveAccessoryLag = Visuals:CreateButton({
+	Name = "Remove Accessory Lag";
+	Callback = function()
+		local lplrchar = LocalPlayer.Character
+		for _, player in pairs(Players:GetPlayers()) do
+			local character = player.Character
+			if character and (configs.IncludeLocalPlayer or character ~= lplrchar) then
+				RemoveDisplays(character)
+			end
+		end
+	end;
+})
+local AutoRemoveLag = Visuals:CreateToggle({
+	Name = "Auto Remove Lag";
+	CurrentValue = false;
+	Flag = "Auto Remove Lag";
+	Callback = function(value)
+		configs.AutoRemoveLag = value
+	end;
+})
+local IncludeHats = Visuals:CreateToggle({
+	Name = "Include Hats";
+	CurrentValue = false;
+	Flag = "Include Hats";
+	Callback = function(value)
+		configs.IncludeAccessories = value
+	end;
+})
+local IncludeLocalPlayer = Visuals:CreateToggle({
+	Name = "Include LocalPlayer";
+	CurrentValue = false;
+	Flag = "Include LocalPlayer";
+	Callback = function(value)
+		configs.IncludeLocalPlayer = value
+	end;
+})
+---------------------------------------------------------------------------
+local AnnounceRoles = Blatant:CreateButton({
+	Name = "Announce Roles";
+	Callback = function()
+		local murderer = "nobody"
+		local sheriff = "nobody"
+		for _, player in pairs(Players:GetPlayers()) do
+			if players[player.Name] then
+				if players[player.Name].Role == weapons.Knife.Role[1] then
+					murderer = player.Name
+				elseif players[player.Name].Role == weapons.Gun.Role[1] or players[player.Name].Role == weapons.Gun.Role[2] then
+					sheriff = player.Name
+				end
+			end
+		end
+		local args = {
+			[1] = "The murderer is "..murderer.." and the sheriff is "..sheriff;
+			[2] = "normalchat"
+		}
+		ReplicatedStorage:WaitForChild("DefaultChatSystemEvents"):WaitForChild("SayMessageRequest"):FireServer(table.unpack(args))
+	end,
+})
+local GrabGun = Blatant:CreateButton({
+	Name = "Grab Gun",
+	Callback = function()
+		-- The function that takes place when the keybind is pressed
+		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+	end,
+})
+local AutoGrabGun = Blatant:CreateToggle({
+	Name = "Auto Grab Gun";
+	CurrentValue = false;
+	Flag = "Auto Grab Gun";
+	Callback = function(value)
+		configs.AutoGrabGun = value
+	end;
+})
+local KillAll = Blatant:CreateButton({
+	Name = "Kill All";
+	Callback = function()
+		-- The function that takes place when the keybind is pressed
+		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+	end;
+})
+
+local Section = Blatant:CreateSection("Fling", true)
+
+local FlingPlayerType = Blatant:CreateDropdown({
+	Name = "Player",
+	Options = "",
+	CurrentOption = "";
+	MultiSelection = false; -- If MultiSelections is allowed
+	Flag = "Fling Player"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+	Callback = function(Option)
+		configs.FlingPlayer = Option
+	end;
+})
+local FlingPlayer = Blatant:CreateButton({
+	Name = "Fling Player";
+	Callback = function()
+		local lplrchar = LocalPlayer.Character
+		if not scriptvariables.AlreadyFlinging and configs.FlingPlayer and lplrchar then
+			local player = Players:FindFirstChild(configs.FlingPlayer)
+			local lplrhrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+			if player and lplrhrp then
+				local NPCRoot = player:FindFirstChild("HumanoidRootPart")
+				if NPCRoot then
+					scriptvariables.AlreadyFlinging = true
+
+					local bav = Instance.new("BodyAngularVelocity", lplrhrp)
+					bav.AngularVelocity = Vector3.new(0,500000,0)
+					bav.MaxTorque = Vector3.new(0,math.huge,0)
+					bav.P = math.huge	
+
+					while true do
+						if not NPCRoot.Parent then scriptvariables.AlreadyFlinging = false break end
+
+						lplrhrp.Position = NPCRoot.Position
+						lplrhrp.Velocity = Vector3.new(0,0,0)
+						task.wait()
+					end
+				end
+			end
+		end
+	end;
+})
+---------------------------------------------------------------------------
+local CoinFarm = AutoFarm:CreateToggle({
+	Name = "Coin Farm";
+	CurrentValue = false;
+	Flag = "Coin Farm";
+	Callback = function(value)
+		configs.CoinFarm = value
+	end;
+})
+local XPFarm = AutoFarm:CreateToggle({
+	Name = "XP Farm";
+	CurrentValue = false;
+	Flag = "XP Farm";
+	Callback = function(value)
+		configs.XPFarm = value
+	end;
+})
+local AutoUnbox = AutoFarm:CreateToggle({
+	Name = "Auto Unbox";
+	CurrentValue = false;
+	Flag = "Auto Unbox";
+	Callback = function(value)
+		configs.AutoUnbox = value
+	end;
+})
+local AutoUnboxCrate = AutoFarm:CreateDropdown({
+	Name = "Auto Unbox Crate";
+	Options = {"Crate #1","Crate #2","Crate #3"};
+	CurrentOption = "Crate #1";
+	MultiSelection = true; -- If MultiSelections is allowed
+	Flag = "Auto Unbox Crate";
+	Callback = function(option)
+		configs.AutoUnboxCrate = option
+	end,
+})
+---------------------------------------------------------------------------
+local Dupe = Others:CreateButton({
+	Name = "Dupe V2";
+	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20dupe"))()
+	end;
+})
+local Rejoin = Others:CreateButton({
+	Name = "Rejoin";
+	Callback = function()
+		Window:Notify({
+			Title = "Info";
+			Content = "Rejoining";
+			Duration = 5;
+			Image = "";
+			Actions = {};
+		})
+		TeleportService:Teleport(game.PlaceId, LocalPlayer)
+	end;
+})
+local Unload = Others:CreateButton({
+	Name = "Unload";
+	Callback = function()
+		_G.mm2hacksalreadyloadedbyCITY512 = false
+		scriptvariables.ScriptActivated = false
+		Library:Destroy()
+	end;
+})
+local KeepGUI = Others:CreateToggle({
+	Name = "Keep GUI";
+	CurrentValue = false;
+	Flag = "Keep GUI";
+	Callback = function(value)
+		if scriptvariables.QueueOnTeleport then
+			scriptvariables.ExecuteOnTeleport = value
+		else
+			Window:Notify({
+				Title = "Error";
+				Content = 'The function "queue_on_teleport" is not supported on this executor';
+				Duration = 5;
+				Image = "";
+				Actions = {};
+			})
+		end
+	end;
+})
+
+---------------------------------------------------------------------------
+-- Events
+
+eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(instance)
+	if instance:IsA("BasePart") and instance.Name == "GunDrop" then
+		AddChams(instance,false,{
+			Color = configs.GunDropColor;
+		})
+		if configs.AutoGrabGun then
+			local lplrchar = LocalPlayer.Character
+			if lplrchar then
+				local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
+				if lplrhrp then
+					local prevCFrame = lplrhrp.CFrame
+					lplrhrp.CFrame = instance.Position
+					task.wait(0.5)
+					lplrhrp.CFrame = prevCFrame
+				end
+			end
+		end
+	elseif instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
+		match.SheriffDied = false
+	end
+end)
+eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(instance)
+	if instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
+		match.SheriffDied = false
+	end
+end)
+--eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
+	--if descendant:IsA("BasePart") and descendant.Name == "Trap" then
+		--AddChams(descendant,false,{
+			--Color = configs.TrapColor;
+		--})
+	--elseif scriptvariables.AntiLagAlreadyExecuted then
+		--RemoveLagFromObject(descendant)
+	--end
+--end)
+eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
+	if scriptvariables.ScriptActivated and not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and scriptvariables.ExecuteOnTeleport then
+		scriptvariables.TPCheck = true
+		scriptvariables.QueueOnTeleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20hack.lua"))()')
+	end
+end)
+eventfunctions.PlayerAdded = Players.PlayerAdded:Connect(function(player)
+	FlingPlayerType:Add(player.Name)
+	eventfunctions.Initialize(player)
+end)
+eventfunctions.PlayerRemoved = Players.PlayerRemoving:Connect(function(removedplayer)
+	if players[removedplayer.Name] then
+		players[removedplayer.Name].Disconnect()
+		players[removedplayer.Name] = nil
+	end
+	FlingPlayerType:Remove(removedplayer.Name)
+end)
+
+---------------------------------------------------------------------------
+-- Hooks
+
+local namecall
+namecall = hookmetamethod(game,"__namecall", function(self,...)
+	local args = {...}
+	local method = getnamecallmethod()
+
+	if scriptvariables.ScriptActivated and not checkcaller() and LocalPlayer.Character then
+		local lplrchar = LocalPlayer.Character
+		if (configs.GunAimbot or configs.AutoShoot) and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
+			local closest = GetClosestPlayer(configs.FOV,500)
+
+			if not closest then return self.InvokeServer(self,...) end
+
+			local lplrhrp = lplrchar.HumanoidRootPart
+			local attachment = Instance.new("Attachment", lplrhrp)
+			attachment.Position = Vector3.new(1.6, 1.2, -3)
+
+			local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
+				IgnoreList = nil;
+				Ping = configs.GunPrediction;
+				PredictSpamJump = true;
+				IsAGun = true;
+			})
+			if configs.ShowAimbotVisuals then
+				coroutine.wrap(AimbotVisuals)(path)
+			end
+			attachment:Destroy()
+
+			args[2] = aimpos
+			return aimpos and self.InvokeServer(self,table.unpack(args)) or self.InvokeServer(self,...)
+
+		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
+			local closest = GetClosestPlayer(configs.FOV,500)
+
+			if not closest then return self.FireServer(self,...) end
+
+			local lplrhrp = lplrchar.HumanoidRootPart
+			local attachment = Instance.new("Attachment", lplrhrp)
+			attachment.Position = Vector3.new(1.5, 1.9, 1)
+			local path, aimpos
+			if powers.Sleight then
+				path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
+					IgnoreList = nil;
+					Ping = configs.KnifePrediction;
+					PredictSpamJump = true;
+				})
+			else
+				path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
+					IgnoreList = nil;
+					Ping = configs.KnifePrediction;
+					PredictSpamJump = true;
+				})
+			end
+			if configs.ShowAimbotVisuals then
+				coroutine.wrap(AimbotVisuals)(path)
+			end
+
+			powers.Sleight = false
+			attachment:Destroy()
+
+			args[1] = CFrame.new(aimpos)
+			return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
+		end
+	end
+	return namecall(self,...)
+end)
+
+---------------------------------------------------------------------------
+-- Loops
+
+for _, player in pairs(Players:GetPlayers()) do
+	FlingPlayerType:Add(player.Name)
+	eventfunctions.Initialize(player)
 end
 
-Title.InputBegan:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
-		dragging = true
-		dragstart = input.Position
-		startpos = Title.Position
-		lastmousepos = UserInputService:GetMouseLocation()
-		
-		input.Changed:Connect(function()
-			if input.UserInputState == Enum.UserInputState.End then
-				dragging = false
+local prevtarget
+while true do
+	if prevtarget then
+		local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
+		if PrevTargetRoot and PrevTargetRoot:IsA("BasePart") then
+			local PrevTargetRoot = prevtarget.HumanoidRootPart
+			PrevTargetRoot.Size = Vector3.new(2,2,1)
+		end
+		prevtarget = nil
+	end
+	if Drawing and configs.ShowFOVCircle then
+		local mousepos = Vector2.new(Mouse.X,Mouse.Y)
+		Drawing1.Position = mousepos
+		Drawing2.Position = mousepos
+	end
+	if not scriptvariables.ScriptActivated then break end
+
+	local lplrchar = LocalPlayer.Character
+	if lplrchar then
+		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
+		local lplrhum = lplrchar:FindFirstChildOfClass("Humanoid")
+		if lplrhum and lplrhrp and lplrhum.Health > 0 and lplrhrp:IsA("BasePart") then
+			if configs.KillAura then
+				local Knife = lplrchar:FindFirstChild("Knife")
+				if Knife and Knife.ClassName == "Tool" then
+					local closest
+					for _, player in pairs(Players:GetPlayers()) do
+						local character = player.Character
+						if character and character ~= lplrchar then
+							local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+							if NPCRoot and NPCRoot:IsA("BasePart") then
+								local distance = (NPCRoot.Position - lplrhrp.Position).Magnitude
+								if distance < configs.KillAuraRange then
+									if not closest or distance < closest[2] then
+										closest = {character,distance}
+									end
+								end
+							end
+						end
+					end
+					if closest then
+						prevtarget = closest[1]
+
+						local TargetRoot = prevtarget.HumanoidRootPart
+						if configs.FaceTarget then
+							lplrhrp.CFrame = CFrame.new(lplrhrp.Position,TargetRoot.Position * Vector3.new(1,0,1) + lplrhrp.Position * Vector3.new(0,1,0))
+						end
+						TargetRoot.CanCollide = false
+						TargetRoot.Size = Vector3.new(configs.KillAuraRange,configs.KillAuraRange,configs.KillAuraRange)
+						Knife:Activate()
+					end
+				end
 			end
-		end)
-	end
-end)
+			if players[LocalPlayer.Name] and (players[LocalPlayer.Name].Role == weapons.Gun.Role[1] or players[LocalPlayer.Name].Role == weapons.Gun.Role[2]) and not lplrchar:FindFirstChild("Gun") then
+				local Gun = lplrchar:FindFirstChild("Gun")
+				if configs.AutoEquip and (not Gun or Gun.ClassName ~= "Tool") then
+					local bp = LocalPlayer:FindFirstChild("Backpack")
+					if bp then
+						for _, child in pairs(bp:GetChildren()) do
+							if child.ClassName == "Tool" and child.Name == "Gun" then
+								lplrhum:EquipTool(child)
+							end
+						end
+					end
+				end
+				if configs.AutoShoot and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeServer") and Gun.KnifeServer:FindFirstChild("ShootGun") then
+					for _, player in pairs(Players:GetPlayers()) do
+						local character = player.Character
+						if character then
+							local NPCRoot = character:FindFirstChild("HumanoidRootPart") 
+							if NPCRoot and NPCRoot:IsA("BasePart") and players[player.Name] and players[player.Name].Role == weapons.Knife.Role[1] then
+								local startpos = lplrchar.Gun.Handle.Position
 
-Title.InputChanged:Connect(function(input)
-	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
-		draginput = input
-	end
-end)
-RunService.Heartbeat:Connect(function(dt)
-	if not startpos then return end;
-	if not dragging and lastgoalpos then
-		Title.Position = UDim2.new(startpos.X.Scale, Lerp(Title.Position.X.Offset, lastgoalpos.X.Offset, dt * 8), startpos.Y.Scale, Lerp(Title.Position.Y.Offset, lastgoalpos.Y.Offset, dt * 8))
-		return 
-	end
+								local params = RaycastParams.new()
+								params.FilterDescendantsInstances = {character,lplrchar}
+								params.FilterType = Enum.RaycastFilterType.Exclude
 
-	local delta = lastmousepos - UserInputService:GetMouseLocation()
-	local xGoal = startpos.X.Offset - delta.X
-	local yGoal = startpos.Y.Offset - delta.Y
-	lastgoalpos = UDim2.new(startpos.X.Scale, xGoal, startpos.Y.Scale, yGoal)
-	Title.Position = UDim2.new(startpos.X.Scale, Lerp(Title.Position.X.Offset, xGoal, dt * 8), startpos.Y.Scale, Lerp(Title.Position.Y.Offset, yGoal, dt * 8))
-end)
+								local raycast = workspace:Raycast(startpos, NPCRoot.Position - startpos, params)
+								if not raycast or not raycast.Position then
+									lplrchar.Gun.KnifeServer.ShootGun:InvokeServer()
+								end
+							end
+						end
+					end
+				end
+			end
+		end
+	end
+	task.wait()
+end
