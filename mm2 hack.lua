@@ -1089,6 +1089,12 @@ local Dupe = Others:CreateButton({
 		loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20dupe"))()
 	end;
 })
+local FreeAnimations = Others:CreateButton({
+	Name = "Free Animations";
+	Callback = function()
+		loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/freeanims.lua"))()
+	end;
+})
 local Rejoin = Others:CreateButton({
 	Name = "Rejoin";
 	Callback = function()
