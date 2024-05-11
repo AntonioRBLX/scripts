@@ -1,4 +1,6 @@
 local MarketplaceService = game:GetService("MarketplaceService")
+local UserInputService = game:GetService("UserInputService")
+local RunService = game:GetService("RunService")
 local TweenService = game:GetService("TweenService")
 local Players = game:GetService("Players")
 
@@ -161,6 +163,7 @@ local SwimOutlineUICorner = Instance.new("UICorner")
 --Properties:
 
 ScreenGui.Parent = game.Players.LocalPlayer:WaitForChild("PlayerGui")
+ScreenGui.ZIndexBehavior = Enum.ZIndexBehavior.Global
 
 Title.Name = "Title"
 Title.Parent = ScreenGui
@@ -176,6 +179,7 @@ Title.TextSize = 13.000
 Title.TextStrokeTransparency = 0.000
 Title.TextWrapped = true
 Title.TextYAlignment = Enum.TextYAlignment.Top
+Title.RichText = true
 
 Animations.Name = "Animations"
 Animations.Parent = Title
@@ -1367,6 +1371,14 @@ SwimOutlineUICorner.CornerRadius = UDim.new(0, 4)
 SwimOutlineUICorner.Name = "Swim Outline UICorner"
 SwimOutlineUICorner.Parent = SwimOutline
 
+local dragging
+local draginput
+local dragstart
+local startpos
+
+local lastmousepos
+local lastgoalpos
+
 local connections = {}
 local a = 0
 
@@ -1701,6 +1713,9 @@ local customanims = {
 	};
 }
 
+function Lerp(a, b, m)
+	return a + (b - a) * m
+end
 function assignButtonFunctions(button,callback)
 	local ripplecontainer = Instance.new("Frame", button)
 	ripplecontainer.Name = "RippleContainer"
@@ -1886,3 +1901,37 @@ for i, customanim in pairs(customanims) do
 		TextBox.Interactable = true
 	end)
 end
+
+Title.InputBegan:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch then
+		dragging = true
+		dragstart = input.Position
+		startpos = Title.Position
+		lastmousepos = UserInputService:GetMouseLocation()
+		
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragging = false
+			end
+		end)
+	end
+end)
+
+Title.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		draginput = input
+	end
+end)
+RunService.Heartbeat:Connect(function(dt)
+	if not startpos then return end;
+	if not dragging and lastgoalpos then
+		Title.Position = UDim2.new(startpos.X.Scale, Lerp(Title.Position.X.Offset, lastgoalpos.X.Offset, dt * 8), startpos.Y.Scale, Lerp(Title.Position.Y.Offset, lastgoalpos.Y.Offset, dt * 8))
+		return 
+	end
+
+	local delta = lastmousepos - UserInputService:GetMouseLocation()
+	local xGoal = startpos.X.Offset - delta.X
+	local yGoal = startpos.Y.Offset - delta.Y
+	lastgoalpos = UDim2.new(startpos.X.Scale, xGoal, startpos.Y.Scale, yGoal)
+	Title.Position = UDim2.new(startpos.X.Scale, Lerp(Title.Position.X.Offset, xGoal, dt * 8), startpos.Y.Scale, Lerp(Title.Position.Y.Offset, yGoal, dt * 8))
+end)
