@@ -1158,15 +1158,15 @@ eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(i
 		match.SheriffDied = false
 	end
 end)
-eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
-	if descendant:IsA("BasePart") and descendant.Name == "Trap" then
-		AddChams(descendant,false,{
-			Color = configs.TrapColor;
-		})
-	elseif scriptvariables.AntiLagAlreadyExecuted then
-		RemoveLagFromObject(descendant)
-	end
-end)
+--eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
+	--if descendant:IsA("BasePart") and descendant.Name == "Trap" then
+		--AddChams(descendant,false,{
+			--Color = configs.TrapColor;
+		--})
+	--elseif scriptvariables.AntiLagAlreadyExecuted then
+		--RemoveLagFromObject(descendant)
+	--end
+--end)
 eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
 	if scriptvariables.ScriptActivated and not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and scriptvariables.ExecuteOnTeleport then
 		scriptvariables.TPCheck = true
