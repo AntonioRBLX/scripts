@@ -203,7 +203,7 @@ function RemoveChams(object,isacharmodel) -- Destroys ESP
 	end
 end
 function GetClosestPlayer(FOV,maxdist)
-	local lplrchar = workspace:FindFirstChild(LocalPlayer.Name)
+	local lplrchar = LocalPlayer.Character
 	if lplrchar then
 		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
 		if lplrhrp and lplrhrp:IsA("BasePart") then
@@ -211,7 +211,7 @@ function GetClosestPlayer(FOV,maxdist)
 			local closest
 			local function getclosestplayertoscreenpoint(point)
 				for _, player in pairs(Players:GetPlayers()) do
-					local character = workspace:FindFirstChild(player.Name)
+					local character = player.Character
 					if character and character ~= lplrchar then
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 						if NPCRoot and NPCRoot:IsA("BasePart") then
@@ -233,7 +233,7 @@ function GetClosestPlayer(FOV,maxdist)
 				return closest
 			elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
 				for _, player in pairs(Players:GetPlayers()) do
-					local character = workspace:FindFirstChild(player.Name)
+					local character = player.Character
 					if character and character ~= lplrchar  then
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 						if NPCRoot and NPCRoot:IsA("BasePart") then
@@ -254,7 +254,7 @@ function GetClosestPlayer(FOV,maxdist)
 				else
 					for _, player in pairs(Players:GetPlayers()) do
 						if players[player.Name] and players[player.Name].Role and players[player.Name].Role == weapons.Knife.Role[1] then
-							local character = workspace:FindFirstChild(player.Name)
+							local character = player.Character
 							if character and character ~= lplrchar then
 								local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 								if NPCRoot and NPCRoot:IsA("BasePart") then
@@ -276,7 +276,7 @@ function GetClosestPlayer(FOV,maxdist)
 end
 function ChamPlayerRoles() -- Chams Player Using Colors Based On Their Role
 	for _, player in pairs(Players:GetPlayers()) do
-		local character = workspace:FindFirstChild(player.Name)
+		local character = player.Character
 		if character and players[player.Name] and player ~= LocalPlayer then
 			local role = players[player.Name].Role
 			if role then
@@ -303,7 +303,7 @@ function ChamPlayerRoles() -- Chams Player Using Colors Based On Their Role
 end
 function UnchamPlayers()
 	for _, player in pairs(Players:GetPlayers()) do
-		local character = workspace:FindFirstChild(player.Name)
+		local character = player.Character
 		if character then
 			RemoveChams(character,true)
 		end
@@ -311,7 +311,7 @@ function UnchamPlayers()
 end
 function UpdateAllChams()
 	for _, child in pairs(workspace:GetChildren()) do
-		local player = Players:FindFirstChild(child.Name)
+		local player = Players:GetPlayerFromCharacter(child)
 		if player and players[player.Name] and player ~= LocalPlayer then
 			local role = players[player.Name].Role
 			if role then
@@ -359,7 +359,7 @@ function eventfunctions.Initialize(player)
 	players[player.Name] = {Role = "Innocent";}
 
 	local backpack = player:WaitForChild("Backpack")
-	local character = workspace:FindFirstChild(player.Name) or player.CharacterAdded:Wait()
+	local character = player.Character or player.CharacterAdded:Wait()
 
 	a += 4
 	local b = a
@@ -412,9 +412,9 @@ function eventfunctions.Initialize(player)
 			end
 		end
 	end
-	players[player.Name].CharacterAdded = function(char)
-		players[player.Name].Role = "Innocent"
+	local function CharacterAdded(char)
 		character = char
+		players[player.Name].Role = "Innocent"
 
 		local bp = player:WaitForChild("Backpack")
 		backpack = bp
@@ -430,6 +430,14 @@ function eventfunctions.Initialize(player)
 			end
 			HumanoidDiedEvent(NPCHum)
 		end
+		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or player ~= LocalPlayer) then
+			RemoveDisplays(char)
+		end
+		if configs.Chams and player ~= LocalPlayer then
+			AddChams(char,true,{
+				Color = configs.InnocentColor;
+			})
+		end
 		if connections[b - 1] then
 			connections[b - 1]:Disconnect()
 		end
@@ -439,7 +447,11 @@ function eventfunctions.Initialize(player)
 			end
 		end)
 	end
-	players[player.Name].CharacterAdded(character)
+
+	connections[b - 2] = player.CharacterAdded:Connect(function(character)
+		CharacterAdded(character)
+	end)
+	CharacterAdded(character)
 
 	for _, child in pairs(backpack:GetChildren()) do
 		if child.ClassName == "Tool" then
@@ -699,9 +711,8 @@ local WalkSpeedToggle = LocalPlayerTab:CreateToggle({
 	Flag = "Toggle WalkSpeed";
 	Callback = function(value)
 		configs.ToggleWalkSpeed = value
-		local lplrchar = workspace:FindFirstChild(LocalPlayer.Name)
-		if not configs.ToggleWalkSpeed and lplrchar then
-			local lplrhum = lplrchar:FindFirstChildOfClass("Humanoid")
+		if not configs.ToggleWalkSpeed and LocalPlayer.Character then
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 			if lplrhum then
 				lplrhum.WalkSpeed = 16
 			end
@@ -714,9 +725,8 @@ local JumpPowerToggle = LocalPlayerTab:CreateToggle({
 	Flag = "Toggle JumpPower";
 	Callback = function(value)
 		configs.ToggleJumpPower = value
-		local lplrchar = workspace:FindFirstChild(LocalPlayer.Name)
-		if not configs.ToggleJumpPower and lplrchar then
-			local lplrhum = lplrchar:FindFirstChildOfClass("Humanoid")
+		if not configs.ToggleJumpPower and LocalPlayer.Character then
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 			if lplrhum then
 				lplrhum.JumpPower = 50
 			end
@@ -732,9 +742,8 @@ local WalkSpeed = LocalPlayerTab:CreateSlider({
 	Flag = "WalkSpeed";
 	Callback = function(value)
 		configs.WalkSpeed = value
-		local lplrchar = workspace:FindFirstChild(LocalPlayer.Name)
-		if configs.ToggleWalkSpeed and lplrchar then
-			local lplrhum = lplrchar:FindFirstChildOfClass("Humanoid")
+		if configs.ToggleWalkSpeed and LocalPlayer.Character then
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 			if lplrhum then
 				lplrhum.WalkSpeed = configs.WalkSpeed
 			end
@@ -750,9 +759,8 @@ local JumpPower = LocalPlayerTab:CreateSlider({
 	Flag = "JumpPower";
 	Callback = function(value)
 		configs.JumpPower = value
-		local lplrchar = workspace:FindFirstChild(LocalPlayer.Name)
-		if configs.ToggleJumpPower and lplrchar then
-			local lplrhum = lplrchar:FindFirstChildOfClass("Humanoid")
+		if configs.ToggleJumpPower and LocalPlayer.Character then
+			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 			if lplrhum then
 				lplrhum.JumpPower = configs.JumpPower
 			end
@@ -920,9 +928,9 @@ local RemoveMapLag = Visuals:CreateButton({
 local RemoveAccessoryLag = Visuals:CreateButton({
 	Name = "Remove Accessory Lag";
 	Callback = function()
-		local lplrchar = workspace:FindFirstChild(LocalPlayer.Name)
+		local lplrchar = LocalPlayer.Character
 		for _, player in pairs(Players:GetPlayers()) do
-			local character = workspace:FindFirstChild(player.Name)
+			local character = player.Character
 			if character and (configs.IncludeLocalPlayer or character ~= lplrchar) then
 				RemoveDisplays(character)
 			end
@@ -1013,10 +1021,10 @@ local FlingPlayerType = Blatant:CreateDropdown({
 local FlingPlayer = Blatant:CreateButton({
 	Name = "Fling Player";
 	Callback = function()
-		local lplrchar = workspace:FindFirstChild(LocalPlayer.Name)
+		local lplrchar = LocalPlayer.Character
 		if not scriptvariables.AlreadyFlinging and configs.FlingPlayer and lplrchar then
 			local player = Players:FindFirstChild(configs.FlingPlayer)
-			local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
+			local lplrhrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
 			if player and lplrhrp then
 				local NPCRoot = player:FindFirstChild("HumanoidRootPart")
 				if NPCRoot then
@@ -1136,7 +1144,7 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 			Color = configs.GunDropColor;
 		})
 		if configs.AutoGrabGun then
-			local lplrchar = workspace:FindFirstChild(LocalPlayer.Name)
+			local lplrchar = LocalPlayer.Character
 			if lplrchar then
 				local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
 				if lplrhrp then
@@ -1149,19 +1157,6 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 		end
 	elseif instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
 		match.SheriffDied = false
-	elseif instance:IsA("Model") and instance:FindFirstChildOfClass("Humanoid") and Players:FindFirstChild(instance.Name) then
-		local player = Players:FindFirstChild(instance.Name)
-		if players[player.Name] then
-			coroutine.wrap(players[player.Name].CharacterAdded)(instance)
-		end
-		if configs.Chams and player ~= LocalPlayer then
-			AddChams(instance,true,{
-				Color = configs.InnocentColor;
-			})
-		end
-		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or player ~= LocalPlayer) then
-			RemoveDisplays(instance)
-		end
 	end
 end)
 eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(instance)
@@ -1170,13 +1165,13 @@ eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(i
 	end
 end)
 --eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
---if descendant:IsA("BasePart") and descendant.Name == "Trap" then
---AddChams(descendant,false,{
---Color = configs.TrapColor;
---})
---elseif scriptvariables.AntiLagAlreadyExecuted then
---RemoveLagFromObject(descendant)
---end
+	--if descendant:IsA("BasePart") and descendant.Name == "Trap" then
+		--AddChams(descendant,false,{
+			--Color = configs.TrapColor;
+		--})
+	--elseif scriptvariables.AntiLagAlreadyExecuted then
+		--RemoveLagFromObject(descendant)
+	--end
 --end)
 eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
 	if scriptvariables.ScriptActivated and not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and scriptvariables.ExecuteOnTeleport then
@@ -1290,7 +1285,7 @@ while true do
 	end
 	if not scriptvariables.ScriptActivated then break end
 
-	local lplrchar = workspace:FindFirstChild(LocalPlayer.Name)
+	local lplrchar = LocalPlayer.Character
 	if lplrchar then
 		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
 		local lplrhum = lplrchar:FindFirstChildOfClass("Humanoid")
@@ -1300,7 +1295,7 @@ while true do
 				if Knife and Knife.ClassName == "Tool" then
 					local closest
 					for _, player in pairs(Players:GetPlayers()) do
-						local character = workspace:FindFirstChild(player.Name)
+						local character = player.Character
 						if character and character ~= lplrchar then
 							local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 							if NPCRoot and NPCRoot:IsA("BasePart") then
@@ -1340,7 +1335,7 @@ while true do
 				end
 				if configs.AutoShoot and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeServer") and Gun.KnifeServer:FindFirstChild("ShootGun") then
 					for _, player in pairs(Players:GetPlayers()) do
-						local character = workspace:FindFirstChild(player.Name)
+						local character = player.Character
 						if character then
 							local NPCRoot = character:FindFirstChild("HumanoidRootPart") 
 							if NPCRoot and NPCRoot:IsA("BasePart") and players[player.Name] and players[player.Name].Role == weapons.Knife.Role[1] then
