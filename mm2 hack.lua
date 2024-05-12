@@ -440,7 +440,7 @@ function eventfunctions.Initialize(player)
 		end)
 	end
 	players[player.Name].CharacterAdded()
-	
+
 	for _, child in pairs(backpack:GetChildren()) do
 		if child.ClassName == "Tool" then
 			AssignRole(child)
@@ -920,9 +920,10 @@ local RemoveMapLag = Visuals:CreateButton({
 local RemoveAccessoryLag = Visuals:CreateButton({
 	Name = "Remove Accessory Lag";
 	Callback = function()
+		local lplrchar = workspace:FindFirstChild(LocalPlayer.Name)
 		for _, player in pairs(Players:GetPlayers()) do
 			local character = workspace:FindFirstChild(player.Name)
-			if character and (configs.IncludeLocalPlayer or character ~= LocalPlayer.Name) then
+			if character and (configs.IncludeLocalPlayer or character ~= lplrchar) then
 				RemoveDisplays(character)
 			end
 		end
