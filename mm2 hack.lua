@@ -1149,7 +1149,7 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 		end
 	elseif instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
 		match.SheriffDied = false
-	elseif instance:IsA("Model") and instance:FindFirstChild("Humanoid") and Players:FindFirstChild(instance.Name) then
+	elseif instance:IsA("Model") and instance:FindFirstChildOfClass("Humanoid") and Players:FindFirstChild(instance.Name) then
 		local player = Players:FindFirstChild(instance.Name)
 		if players[player.Name] then
 			players[player.Name].CharacterAdded(instance)
