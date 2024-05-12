@@ -439,7 +439,7 @@ function eventfunctions.Initialize(player)
 			end
 		end)
 	end
-	players[player.Name].CharacterAdded()
+	players[player.Name].CharacterAdded(character)
 
 	for _, child in pairs(backpack:GetChildren()) do
 		if child.ClassName == "Tool" then
