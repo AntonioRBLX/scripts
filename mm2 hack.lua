@@ -1152,7 +1152,7 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 	elseif instance:IsA("Model") and instance:FindFirstChildOfClass("Humanoid") and Players:FindFirstChild(instance.Name) then
 		local player = Players:FindFirstChild(instance.Name)
 		if players[player.Name] then
-			players[player.Name].CharacterAdded(instance)
+			coroutine.wrap(players[player.Name].CharacterAdded)(instance)
 		end
 		if configs.Chams and player ~= LocalPlayer then
 			AddChams(instance,true,{
