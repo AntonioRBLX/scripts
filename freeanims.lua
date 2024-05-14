@@ -1849,25 +1849,25 @@ workspace.ChildAdded:Connect(function(char)
 		setAnimations(lplrchar)
 	end
 end)
-for _, animpack in pairs(anims) do
-	assignButtonFunctions(animpack.Button,function()
-		print(animpack.Button.Name.." callback")
+for _, v in pairs(anims) do
+	assignButtonFunctions(v.Button,function()
+		print(v.Button.Name.." callback")
 		changeAnimations({
-			Idle1 = animpack.Idle1;
-			Idle2 = animpack.Idle2;
-			Walk = animpack.Walk;
-			Run = animpack.Run;
-			Fall = animpack.Fall;
-			Jump = animpack.Jump;
-			Climb = animpack.Climb;
-			Swim = animpack.Swim;
-			SwimIdle = animpack.SwimIdle;
+			Idle1 = v.Idle1;
+			Idle2 = v.Idle2;
+			Walk = v.Walk;
+			Run = v.Run;
+			Fall = v.Fall;
+			Jump = v.Jump;
+			Climb = v.Climb;
+			Swim = v.Swim;
+			SwimIdle = v.SwimIdle;
 		})
 	end)
 end
-for i, customanim in pairs(customanims) do
+for i, v in pairs(customanims) do
 	local ticket = 0
-	local TextBox = customanim.TextBox
+	local TextBox = v.TextBox
 	local function textBoxErrorMessage(Text)
 		ticket += 1
 		local currentticket = ticket
@@ -1875,7 +1875,7 @@ for i, customanim in pairs(customanims) do
 		TextBox.PlaceholderText = Text
 		task.wait(1.25)
 		if currentticket == ticket then
-			TextBox.PlaceholderText = customanim.PlaceholderText
+			TextBox.PlaceholderText = v.PlaceholderText
 		end
 	end
 	TextBox.FocusLost:Connect(function()
@@ -1896,7 +1896,11 @@ for i, customanim in pairs(customanims) do
 				textBoxErrorMessage("Invalid ID")
 			end
 		else
-			textBoxErrorMessage("ID Must Be A Number")
+			if anims[ID:lower()] then
+				currentanims[i] = "rbxassetid://"..anims[ID:lower()][i]
+			else
+				textBoxErrorMessage("ID Must Be A Number or Animation Name")
+			end
 		end
 		TextBox.Interactable = true
 	end)
