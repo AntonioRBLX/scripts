@@ -1385,7 +1385,7 @@ local a = 0
 local currentanims = {}
 
 local anims = {
-	Astronaut = {
+	astronaut = {
 		Button = Astronaut;
 		Idle1 = "rbxassetid://891621366";
 		Idle2 = "rbxassetid://891633237";
@@ -1397,7 +1397,7 @@ local anims = {
 		Swim = "rbxassetid://891639666";
 		SwimIdle = "rbxassetid://891663592"
 	};
-	Bold = {
+	bold = {
 		Button = Bold;
 		Idle1 = "rbxassetid://16738333868";
 		Idle2 = "rbxassetid://16738334710";
@@ -1409,7 +1409,7 @@ local anims = {
 		Swim = "rbxassetid://16738339158";
 		SwimIdle = "rbxassetid://16738339817"
 	};
-	Bubbly = {
+	bubbly = {
 		Button = Bubbly;
 		Idle1 = "rbxassetid://910004836";
 		Idle2 = "rbxassetid://910009958";
@@ -1421,7 +1421,7 @@ local anims = {
 		Swim = "rbxassetid://910028158";
 		SwimIdle = "rbxassetid://910030921"
 	};
-	Cartoony = {
+	cartoony = {
 		Button = Cartoony;
 		Idle1 = "rbxassetid://742637544";
 		Idle2 = "rbxassetid://742638445";
@@ -1433,7 +1433,7 @@ local anims = {
 		Swim = "rbxassetid://742639220";
 		SwimIdle = "rbxassetid://742639812"
 	};
-	Elder = {
+	elder = {
 		Button = Elder;
 		Idle1 = "rbxassetid://845397899";
 		Idle2 = "rbxassetid://8454005";
@@ -1445,7 +1445,7 @@ local anims = {
 		Swim = "rbxassetid://845401742";
 		SwimIdle = "rbxassetid://845403127"
 	};
-	Knight = {
+	knight = {
 		Button = Knight;
 		Idle1 = "rbxassetid://657595757";
 		Idle2 = "rbxassetid://657568135";
@@ -1457,7 +1457,7 @@ local anims = {
 		Swim = "rbxassetid://657560551";
 		SwimIdle = "rbxassetid://657557095"
 	};
-	Levitation = {
+	levitation = {
 		Button = Levitation;
 		Idle1 = "rbxassetid://616006778";
 		Idle2 = "rbxassetid://616008087";
@@ -1469,7 +1469,7 @@ local anims = {
 		Swim = "rbxassetid://616011509";
 		SwimIdle = "rbxassetid://616012453"
 	};
-	Mage = {
+	mage = {
 		Button = Mage;
 		Idle1 = "rbxassetid://707742142";
 		Idle2 = "rbxassetid://707855907";
@@ -1481,7 +1481,7 @@ local anims = {
 		Swim = "rbxassetid://707876443";
 		SwimIdle = "rbxassetid://707894699"
 	};
-	Ninja = {
+	ninja = {
 		Button = Ninja;
 		Idle1 = "rbxassetid://656117400";
 		Idle2 = "rbxassetid://656118341";
@@ -1493,7 +1493,7 @@ local anims = {
 		Swim = "rbxassetid://656119721";
 		SwimIdle = "rbxassetid://656121397"
 	};
-	OldSchool = {
+	oldschool = {
 		Button = OldSchool;
 		Idle1 = "rbxassetid://5319828216";
 		Idle2 = "rbxassetid://5319831086";
@@ -1505,7 +1505,7 @@ local anims = {
 		Swim = "rbxassetid://5319850266";
 		SwimIdle = "rbxassetid://5319852613"
 	};
-	Pirate = {
+	pirate = {
 		Button = Pirate;
 		Idle1 = "rbxassetid://750781874";
 		Idle2 = "rbxassetid://750782770";
@@ -1517,7 +1517,7 @@ local anims = {
 		Swim = "rbxassetid://750784579";
 		SwimIdle = "rbxassetid://750785176"
 	};
-	Rthro = {
+	rthro = {
 		Button = Rthro;
 		Idle1 = "rbxassetid://2510196951";
 		Idle2 = "rbxassetid://2510197257";
@@ -1529,7 +1529,7 @@ local anims = {
 		Swim = "rbxassetid://2510199791";
 		SwimIdle = "rbxassetid://2510201162"
 	};
-	Stylish = {
+	stylish = {
 		Button = Stylish;
 		Idle1 = "rbxassetid://616136790";
 		Idle2 = "rbxassetid://616138447";
@@ -1541,7 +1541,7 @@ local anims = {
 		Swim = "rbxassetid://616143378";
 		SwimIdle = "rbxassetid://616144772"
 	};
-	Superhero = {
+	superhero = {
 		Button = Superhero;
 		Idle1 = "rbxassetid://616111295";
 		Idle2 = "rbxassetid://616113536";
@@ -1553,7 +1553,7 @@ local anims = {
 		Swim = "rbxassetid://616119360";
 		SwimIdle = "rbxassetid://616120861"
 	};
-	Toy = {
+	toy = {
 		Button = Toy;
 		Idle1 = "rbxassetid://782841498";
 		Idle2 = "rbxassetid://782845736";
@@ -1565,7 +1565,7 @@ local anims = {
 		Swim = "rbxassetid://782844582";
 		SwimIdle = "rbxassetid://782845186"
 	};
-	Vampire = {
+	vampire = {
 		Button = Vampire;
 		Idle1 = "rbxassetid://1083445855";
 		Idle2 = "rbxassetid://1083450166";
@@ -1577,7 +1577,7 @@ local anims = {
 		Swim = "rbxassetid://1083464683";
 		SwimIdle = "rbxassetid://1083467779"
 	};
-	Werewolf = {
+	werewolf = {
 		Button = Werewolf;
 		Idle1 = "rbxassetid://1083195517";
 		Idle2 = "rbxassetid://1083214717";
@@ -1589,7 +1589,7 @@ local anims = {
 		Swim = "rbxassetid://1083222527";
 		SwimIdle = "rbxassetid://1083222527"
 	};
-	Zombie = {
+	zombie = {
 		Button = Zombie;
 		Idle1 = "rbxassetid://616158929";
 		Idle2 = "rbxassetid://616160636";
@@ -1601,10 +1601,10 @@ local anims = {
 		Swim = "rbxassetid://616165109";
 		SwimIdle = "rbxassetid://616166655"
 	};
-	GirlCombo1 = {
+	girlcombo1 = {
 		Button = GirlCombo1;
-		Idle1 = "rbxassetid://910004836";
-		Idle2 = "rbxassetid://910009958";
+		Idle1 = "rbxassetid://16738333868";
+		Idle2 = "rbxassetid://16738334710";
 		Walk = "rbxassetid://910034870";
 		Run = "rbxassetid://910025107";
 		Fall = "rbxassetid://5319839762";
@@ -1613,7 +1613,7 @@ local anims = {
 		Swim = "rbxassetid://5319850266";
 		SwimIdle = "rbxassetid://5319852613"
 	};
-	GirlCombo2 = {
+	girlcombo2 = {
 		Button = GirlCombo2;
 		Idle1 = "rbxassetid://616136790";
 		Idle2 = "rbxassetid://616138447";
@@ -1625,7 +1625,7 @@ local anims = {
 		Swim = "rbxassetid://5319850266";
 		SwimIdle = "rbxassetid://5319852613"
 	};
-	TryhardCombo1 = {
+	tryhardcombo1 = {
 		Button = TryhardCombo1;
 		Idle1 = "rbxassetid://5319828216";
 		Idle2 = "rbxassetid://5319831086";
@@ -1637,7 +1637,7 @@ local anims = {
 		Swim = "rbxassetid://5319850266";
 		SwimIdle = "rbxassetid://5319852613"
 	};
-	TryhardCombo2 = {
+	tryhardcombo2 = {
 		Button = TryhardCombo2;
 		Idle1 = "rbxassetid://782841498";
 		Idle2 = "rbxassetid://782845736";
@@ -1649,7 +1649,7 @@ local anims = {
 		Swim = "rbxassetid://707876443";
 		SwimIdle = "rbxassetid://707894699"
 	};
-	TryhardCombo3 = {
+	tryhardcombo3 = {
 		Button = TryhardCombo3;
 		Idle1 = "rbxassetid://4417977954";
 		Idle2 = "rbxassetid://4417978624";
@@ -1661,7 +1661,7 @@ local anims = {
 		Swim = "rbxassetid://5319850266";
 		SwimIdle = "rbxassetid://5319852613"
 	};
-	TryhardCombo4 = {
+	tryhardcombo4 = {
 		Button = TryhardCombo4;
 		Idle1 = "rbxassetid://616111295";
 		Idle2 = "rbxassetid://616113536";
