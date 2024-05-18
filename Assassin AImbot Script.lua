@@ -107,7 +107,7 @@ function GetClosestPlayer(FOV,maxdist)
 end
 
 local namecall
-namecall = hookmetamethod(game, '__namecall', newcclosure(function(self,...)
+namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 	local method = getnamecallmethod()
 	local args = {...}
 	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
