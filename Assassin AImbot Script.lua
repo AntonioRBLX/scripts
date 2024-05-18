@@ -12,7 +12,7 @@ end
 local isexecutorclosure = is_synapse_function or isexecutorclosure
 local hooked
 
-function Check(v)
+function FindAnticheat(v)
     if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
         local source = getinfo(v).source
         local anticheat = string.find(source, "BAC") or string.find(source, "ReplicatedFirst.Animator") or string.find(source, "PlayerScripts.reeeee") then
@@ -27,10 +27,10 @@ function Check(v)
     end
 end
 for _, v in next, getgc() do
-    Check(v)
+    FindAnticheat(v)
 end
 for _, v in next, getreg() do
-    Check(v)
+    FindAnticheat(v)
 end
 if not hooked then
 	StarterGui:SetCore("SendNotification", {
