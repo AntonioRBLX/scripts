@@ -35,7 +35,7 @@ end
 if not hooked then
 	StarterGui:SetCore("SendNotification", {
 		Title = "Error";
-		Text = "Failed to Find Anticheat";
+		Text = "Failed to Bypass Anticheat";
 	})
 	return
 end
