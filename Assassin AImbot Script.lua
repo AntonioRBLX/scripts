@@ -43,8 +43,8 @@ end
 if getgenv().AlreadyExecuted then return end
 getgenv().AlreadyExecuted = true
 
-local LocalPlayer = Players.LocalPlayer
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
+local LocalPlayer = Players.LocalPlayer
 
 local configs = {
 	AimbotEnabled = true;
