@@ -15,16 +15,16 @@ end
 function HookAnticheat(v)
 	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
 		local source = getinfo(v).source
-		local anticheat = string.find(source, "BAC") or string.find(source, "ReplicatedFirst.Animator") or string.find(source, "PlayerScripts.reeeee")
-
-	if anticheat then
-		hookfunction(v, function()
-
-		end)
-		hooked = true
-		print("Hooked!")
+		local anticheat = source:find("BAC") or source:find("ReplicatedFirst.Animator") or source:find("PlayerScripts.reeeee")
+	
+		if anticheat then
+			hookfunction(v, function()
+	
+			end)
+			hooked = true
+			print("Hooked!")
+		end
 	end
-end
 end
 for _, v in next, getgc() do
 	HookAnticheat(v)
