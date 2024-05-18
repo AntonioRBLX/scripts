@@ -1195,7 +1195,7 @@ end)
 -- Hooks
 
 local namecall
-namecall = hookmetamethod(game,"__namecall", function(self,...)
+namecall = hookmetamethod(game, "__namecall", function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
 
