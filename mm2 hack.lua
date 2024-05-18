@@ -355,58 +355,6 @@ function RemoveDisplays(character)
 		end
 	end
 end
-function GetAimVector(lplrchar,typ)
-	if typ == 1 then
-		local closest = GetClosestPlayer(configs.FOV,500)
-
-		if not closest then return end
-
-		local lplrhrp = lplrchar.HumanoidRootPart
-		local attachment = Instance.new("Attachment", lplrhrp)
-		attachment.Position = Vector3.new(1.6, 1.2, -3)
-
-		local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
-			IgnoreList = nil;
-			Ping = configs.GunPrediction;
-			PredictSpamJump = true;
-			IsAGun = true;
-		})
-		if configs.ShowAimbotVisuals then
-			coroutine.wrap(AimbotVisuals)(path)
-		end
-		attachment:Destroy()
-
-		return aimpos
-	elseif typ == 2 then
-		local closest = GetClosestPlayer(configs.FOV,500)
-
-		if not closest then return end
-
-		local lplrhrp = lplrchar.HumanoidRootPart
-		local attachment = Instance.new("Attachment", lplrhrp)
-		attachment.Position = Vector3.new(1.5, 1.9, 1)
-		local path, aimpos
-		if powers.Sleight then
-			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
-				IgnoreList = nil;
-				Ping = configs.KnifePrediction;
-				PredictSpamJump = true;
-			})
-		else
-			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
-				IgnoreList = nil;
-				Ping = configs.KnifePrediction;
-				PredictSpamJump = true;
-			})
-		end
-		if configs.ShowAimbotVisuals then
-			coroutine.wrap(AimbotVisuals)(path)
-		end
-
-		powers.Sleight = false
-		attachment:Destroy()
-	end
-end
 function eventfunctions.Initialize(player)
 	players[player.Name] = {Role = "Innocent";}
 
@@ -573,6 +521,61 @@ function AimbotVisuals(path)
 	end
 	task.wait(5)
 	container:Destroy()
+end
+function GetAimVector(lplrchar,typ)
+	if typ == 1 then
+		local closest = GetClosestPlayer(configs.FOV,500)
+
+		if not closest then return end
+
+		local lplrhrp = lplrchar.HumanoidRootPart
+		local attachment = Instance.new("Attachment", lplrhrp)
+		attachment.Position = Vector3.new(1.6, 1.2, -3)
+
+		local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
+			IgnoreList = nil;
+			Ping = configs.GunPrediction;
+			PredictSpamJump = true;
+			IsAGun = true;
+		})
+		if configs.ShowAimbotVisuals then
+			coroutine.wrap(AimbotVisuals)(path)
+		end
+		attachment:Destroy()
+
+		return aimpos
+	elseif typ == 2 then
+		local closest = GetClosestPlayer(configs.FOV,500)
+
+		if not closest then return end
+
+		local lplrhrp = lplrchar.HumanoidRootPart
+		local attachment = Instance.new("Attachment", lplrhrp)
+		attachment.Position = Vector3.new(1.5, 1.9, 1)
+		
+		local path, aimpos
+		if powers.Sleight then
+			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
+				IgnoreList = nil;
+				Ping = configs.KnifePrediction;
+				PredictSpamJump = true;
+			})
+		else
+			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
+				IgnoreList = nil;
+				Ping = configs.KnifePrediction;
+				PredictSpamJump = true;
+			})
+		end
+		if configs.ShowAimbotVisuals then
+			coroutine.wrap(AimbotVisuals)(path)
+		end
+
+		powers.Sleight = false
+		attachment:Destroy()
+
+		return aimpos
+	end
 end
 
 ---------------------------------------------------------------------------
