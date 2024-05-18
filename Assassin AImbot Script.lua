@@ -4,7 +4,7 @@ local Players = game:GetService("Players")
 local isexecutorclosure = is_synapse_function or isexecutorclosure
 local hooked
 
-if not (is_synapse_function or isexecutorclosure) or not hookmetamethod or not newcclosure or not getgc or not getreg or not checkcaller then
+if not isexecutorclosure or not hookmetamethod or not newcclosure or not getgc or not getreg or not checkcaller then
 	StarterGui:SetCore("SendNotification", {
         Title = "Error";
         Text = "Your Executor Is Not Supported";
