@@ -67,38 +67,36 @@ end
 
 local index 
 index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
-	if configs.AimbotEnabled then
-		if not checkcaller() and idx:lower() == "unitray" and LocalPlayer then
-			print("Knife Throw Index")
-			local closest = GetClosestPlayer(configs.FOV,1000)
-			if closest then
-				local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-				local attachment = Instance.new("Attachment", HumanoidRootPart)
-				attachment.Position = Vector3.new(1.6, 1.2, -3)
-	
-				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,290,60,{
-					IgnoreList = nil;
-					Ping = configs.PingPrediction;
-					PredictSpamJump = true;
-				})
-					
-				attachment:Destroy()
+	if configs.AimbotEnabled and not checkcaller() and idx:lower() == "unitray" and LocalPlayer then
+		print("Knife Thrown")
+		local closest = GetClosestPlayer(configs.FOV,1000)
+		if closest then
+			local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
+			local attachment = Instance.new("Attachment", HumanoidRootPart)
+			attachment.Position = Vector3.new(1.6, 1.2, -3)
+
+			local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,290,60,{
+				IgnoreList = nil;
+				Ping = configs.PingPrediction;
+				PredictSpamJump = true;
+			})
 				
-				if aimpos then
-					local aimposPart = Instance.new("Part", workspace)
-					aimposPart.Anchored = true
-					aimposPart.CanCollide = false
-					aimposPart.Position = aimpos
-					aimposPart.Size = Vector3.new(0.25,0.25,0.25)
-					
-					return Ray.new(obj.Origin, (obj.Hit - obj.Origin).Unit)
-				end
-			else
-				local sound = Instance.new("Sound", workspace)
-				sound.SoundId = "rbxassetid://9082114925"
-				sound.PlayOnRemove = true
-				sound:Destroy()
+			attachment:Destroy()
+			
+			if aimpos then
+				local aimposPart = Instance.new("Part", workspace)
+				aimposPart.Anchored = true
+				aimposPart.CanCollide = false
+				aimposPart.Position = aimpos
+				aimposPart.Size = Vector3.new(0.25,0.25,0.25)
+				
+				return Ray.new(obj.Origin, (obj.Hit - obj.Origin).Unit)
 			end
+		else
+			local sound = Instance.new("Sound", workspace)
+			sound.SoundId = "rbxassetid://9082114925"
+			sound.PlayOnRemove = true
+			sound:Destroy()
 		end
 	end
 	return index(obj, idx)
