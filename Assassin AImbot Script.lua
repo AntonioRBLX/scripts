@@ -1,7 +1,46 @@
+local StarterGui = game:GetService("StarterGui")
+local Players = game:GetService("Players")
+
 if getgenv().AlreadyExecuted then return end
 getgenv().AlreadyExecuted = true
+if not (is_synapse_function or isexecutorclosure) or not hookmetamethod or not newcclosure or not getgc or not getreg or not checkcaller then
+	StarterGui:SetCore("SendNotification", {
+        Title = "Error";
+        Text = "Your Executor Is Not Supported";
+    })
+    return
+end
 
-local Players = game:GetService("Players")
+local isexecutorclosure = is_synapse_function or isexecutorclosure
+local hooked
+
+function Check(v)
+    if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
+        local source = getinfo(v).source
+        local anticheat = string.find(source, "BAC") or string.find(source, "ReplicatedFirst.Animator") or string.find(source, "PlayerScripts.reeeee") then
+	
+        if anticheat then
+            hookfunction(v, function()
+               
+            end)
+            hooked = true
+            print("Hooked!")
+        end
+    end
+end
+for _, v in next, getgc() do
+    Check(v)
+end
+for _, v in next, getreg() do
+    Check(v)
+end
+if not hooked then
+    StarterGui:SetCore("SendNotification", {
+        Title = "Error";
+        Text = "Failed to Find Anticheat";
+    })
+end
+
 local LocalPlayer = Players.LocalPlayer
 
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
@@ -101,7 +140,7 @@ index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
 	end
 	return index(obj, idx)
 end))
-game:GetService("StarterGui"):SetCore("SendNotification",{
-	Title = "Notification"; -- Required
-	Text = "Aimbot Successfully Loaded"; -- Required
+StarterGui:SetCore("SendNotification", {
+	Title = "Notification";
+	Text = "Aimbot Successfully Loaded";
 })
