@@ -1,6 +1,9 @@
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 
+local isexecutorclosure = is_synapse_function or isexecutorclosure
+local hooked
+
 if not (is_synapse_function or isexecutorclosure) or not hookmetamethod or not newcclosure or not getgc or not getreg or not checkcaller then
 	StarterGui:SetCore("SendNotification", {
         Title = "Error";
@@ -8,9 +11,6 @@ if not (is_synapse_function or isexecutorclosure) or not hookmetamethod or not n
     })
     return
 end
-
-local isexecutorclosure = is_synapse_function or isexecutorclosure
-local hooked
 
 function HookAnticheat(v)
     if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
@@ -40,8 +40,10 @@ if not hooked then
 	return
 end
 
-local LocalPlayer = Players.LocalPlayer
+if getgenv().AlreadyExecuted then return end
+getgenv().AlreadyExecuted = true
 
+local LocalPlayer = Players.LocalPlayer
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
 
 local configs = {
