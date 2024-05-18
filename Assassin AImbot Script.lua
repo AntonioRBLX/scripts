@@ -6,31 +6,31 @@ local hooked
 
 if not isexecutorclosure or not hookmetamethod or not newcclosure or not getgc or not getreg or not checkcaller then
 	StarterGui:SetCore("SendNotification", {
-        Title = "Error";
-        Text = "Your Executor Is Not Supported";
-    })
-    return
+		Title = "Error";
+		Text = "Your Executor Is Not Supported";
+	})
+	return
 end
 
 function HookAnticheat(v)
-    if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
-        local source = getinfo(v).source
-        local anticheat = string.find(source, "BAC") or string.find(source, "ReplicatedFirst.Animator") or string.find(source, "PlayerScripts.reeeee") then
-	
-        if anticheat then
-            hookfunction(v, function()
-               
-            end)
-            hooked = true
-            print("Hooked!")
-        end
-    end
+	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
+		local source = getinfo(v).source
+		local anticheat = string.find(source, "BAC") or string.find(source, "ReplicatedFirst.Animator") or string.find(source, "PlayerScripts.reeeee")
+
+	if anticheat then
+		hookfunction(v, function()
+
+		end)
+		hooked = true
+		print("Hooked!")
+	end
+end
 end
 for _, v in next, getgc() do
-    HookAnticheat(v)
+	HookAnticheat(v)
 end
 for _, v in next, getreg() do
-    HookAnticheat(v)
+	HookAnticheat(v)
 end
 if not hooked then
 	StarterGui:SetCore("SendNotification", {
@@ -71,7 +71,7 @@ function GetClosestPlayer(FOV,maxdist)
 						local viewportpoint, onscreen = camera:WorldToViewportPoint(NPCRoot.Position)
 						local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
 						local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
-	
+
 						if onscreen and distance <= FOV then
 							if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
 								closest = character
@@ -120,16 +120,16 @@ index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
 				Ping = configs.PingPrediction;
 				PredictSpamJump = true;
 			})
-				
+
 			attachment:Destroy()
-			
+
 			if aimpos then
 				local aimposPart = Instance.new("Part", workspace)
 				aimposPart.Anchored = true
 				aimposPart.CanCollide = false
 				aimposPart.Position = aimpos
 				aimposPart.Size = Vector3.new(0.25,0.25,0.25)
-				
+
 				return Ray.new(obj.Origin, (obj.Hit - obj.Origin).Unit)
 			end
 		else
