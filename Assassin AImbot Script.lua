@@ -11,7 +11,7 @@ if not isexecutorclosure or not hookmetamethod or not newcclosure or not getgc o
 	})
 	return
 end
-
+--[[
 function HookAnticheat(v)
 	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
 		local source = getinfo(v).source
@@ -39,6 +39,7 @@ if not hooked then
 	})
 	return
 end
+--]]
 
 if getgenv().AlreadyExecuted then return end
 getgenv().AlreadyExecuted = true
@@ -105,41 +106,17 @@ function GetClosestPlayer(FOV,maxdist)
 	return nil
 end
 
-local index 
-index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
-	if configs.AimbotEnabled and not checkcaller() and idx:lower() == "unitray" and LocalPlayer then
-		print("Knife Thrown")
-		local closest = GetClosestPlayer(configs.FOV,1000)
-		if closest then
-			local HumanoidRootPart = LocalPlayer.Character.HumanoidRootPart
-			local attachment = Instance.new("Attachment", HumanoidRootPart)
-			attachment.Position = Vector3.new(1.6, 1.2, -3)
-
-			local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,290,60,{
-				IgnoreList = nil;
-				Ping = configs.PingPrediction;
-				PredictSpamJump = true;
-			})
-
-			attachment:Destroy()
-
-			if aimpos then
-				local aimposPart = Instance.new("Part", workspace)
-				aimposPart.Anchored = true
-				aimposPart.CanCollide = false
-				aimposPart.Position = aimpos
-				aimposPart.Size = Vector3.new(0.25,0.25,0.25)
-
-				return Ray.new(obj.Origin, (obj.Hit - obj.Origin).Unit)
-			end
-		else
-			local sound = Instance.new("Sound", workspace)
-			sound.SoundId = "rbxassetid://9082114925"
-			sound.PlayOnRemove = true
-			sound:Destroy()
+local namecall
+namecall = hookmetamethod(game, '__namecall', newcclosure(function(self,...)
+	local method = getnamecallmethod()
+	local args = {...}
+	if not checkcaller() and method == "FireServer" and self.Name == "ThrowKnife" then
+		local closest = GetClosestPlayer()
+		if closest and typeof(args[1]) == "Vector3" or typeof(args[1]) == "CFrame" then
+			args[1] = closest.HumanoidRootPart.Position
 		end
 	end
-	return index(obj, idx)
+	return namecall(self,...)
 end))
 StarterGui:SetCore("SendNotification", {
 	Title = "Notification";
