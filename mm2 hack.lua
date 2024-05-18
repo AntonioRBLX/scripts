@@ -355,6 +355,58 @@ function RemoveDisplays(character)
 		end
 	end
 end
+function GetAimVector(lplrchar,typ)
+	if typ == 1 then
+		local closest = GetClosestPlayer(configs.FOV,500)
+
+		if not closest then return end
+
+		local lplrhrp = lplrchar.HumanoidRootPart
+		local attachment = Instance.new("Attachment", lplrhrp)
+		attachment.Position = Vector3.new(1.6, 1.2, -3)
+
+		local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
+			IgnoreList = nil;
+			Ping = configs.GunPrediction;
+			PredictSpamJump = true;
+			IsAGun = true;
+		})
+		if configs.ShowAimbotVisuals then
+			coroutine.wrap(AimbotVisuals)(path)
+		end
+		attachment:Destroy()
+
+		return aimpos
+	elseif typ == 2 then
+		local closest = GetClosestPlayer(configs.FOV,500)
+
+		if not closest then return end
+
+		local lplrhrp = lplrchar.HumanoidRootPart
+		local attachment = Instance.new("Attachment", lplrhrp)
+		attachment.Position = Vector3.new(1.5, 1.9, 1)
+		local path, aimpos
+		if powers.Sleight then
+			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
+				IgnoreList = nil;
+				Ping = configs.KnifePrediction;
+				PredictSpamJump = true;
+			})
+		else
+			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
+				IgnoreList = nil;
+				Ping = configs.KnifePrediction;
+				PredictSpamJump = true;
+			})
+		end
+		if configs.ShowAimbotVisuals then
+			coroutine.wrap(AimbotVisuals)(path)
+		end
+
+		powers.Sleight = false
+		attachment:Destroy()
+	end
+end
 function eventfunctions.Initialize(player)
 	players[player.Name] = {Role = "Innocent";}
 
@@ -1165,13 +1217,13 @@ eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(i
 	end
 end)
 --eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
-	--if descendant:IsA("BasePart") and descendant.Name == "Trap" then
-		--AddChams(descendant,false,{
-			--Color = configs.TrapColor;
-		--})
-	--elseif scriptvariables.AntiLagAlreadyExecuted then
-		--RemoveLagFromObject(descendant)
-	--end
+--if descendant:IsA("BasePart") and descendant.Name == "Trap" then
+--AddChams(descendant,false,{
+--Color = configs.TrapColor;
+--})
+--elseif scriptvariables.AntiLagAlreadyExecuted then
+--RemoveLagFromObject(descendant)
+--end
 --end)
 eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
 	if scriptvariables.ScriptActivated and not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and scriptvariables.ExecuteOnTeleport then
@@ -1201,59 +1253,15 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 
 	if scriptvariables.ScriptActivated and not checkcaller() and LocalPlayer.Character then
 		local lplrchar = LocalPlayer.Character
-		if (configs.GunAimbot or configs.AutoShoot) and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
-			local closest = GetClosestPlayer(configs.FOV,500)
-
-			if not closest then return self.InvokeServer(self,...) end
-
-			local lplrhrp = lplrchar.HumanoidRootPart
-			local attachment = Instance.new("Attachment", lplrhrp)
-			attachment.Position = Vector3.new(1.6, 1.2, -3)
-
-			local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
-				IgnoreList = nil;
-				Ping = configs.GunPrediction;
-				PredictSpamJump = true;
-				IsAGun = true;
-			})
-			if configs.ShowAimbotVisuals then
-				coroutine.wrap(AimbotVisuals)(path)
-			end
-			attachment:Destroy()
-
+		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
+			local aimpos = GetAimVector(lplrchar,1)
 			args[2] = aimpos
+
 			return aimpos and self.InvokeServer(self,table.unpack(args)) or self.InvokeServer(self,...)
-
 		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
-			local closest = GetClosestPlayer(configs.FOV,500)
-
-			if not closest then return self.FireServer(self,...) end
-
-			local lplrhrp = lplrchar.HumanoidRootPart
-			local attachment = Instance.new("Attachment", lplrhrp)
-			attachment.Position = Vector3.new(1.5, 1.9, 1)
-			local path, aimpos
-			if powers.Sleight then
-				path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
-					IgnoreList = nil;
-					Ping = configs.KnifePrediction;
-					PredictSpamJump = true;
-				})
-			else
-				path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
-					IgnoreList = nil;
-					Ping = configs.KnifePrediction;
-					PredictSpamJump = true;
-				})
-			end
-			if configs.ShowAimbotVisuals then
-				coroutine.wrap(AimbotVisuals)(path)
-			end
-
-			powers.Sleight = false
-			attachment:Destroy()
-
+			local aimpos = GetAimVector(lplrchar,2)
 			args[1] = CFrame.new(aimpos)
+
 			return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
 		end
 	end
@@ -1347,7 +1355,15 @@ while true do
 
 								local raycast = workspace:Raycast(startpos, NPCRoot.Position - startpos, params)
 								if not raycast or not raycast.Position then
-									lplrchar.Gun.KnifeServer.ShootGun:InvokeServer()
+									local aimpos = GetAimVector(lplrchar,1)
+									if aimpos then
+										local args = {
+											[1] = "";
+											[2] = aimpos
+										}
+										
+										lplrchar.Gun.KnifeServer.ShootGun:InvokeServer(table.unpack(args))
+									end
 								end
 							end
 						end
