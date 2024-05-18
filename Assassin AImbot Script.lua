@@ -8,7 +8,7 @@ local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY51
 
 local configs = {
 	AimbotEnabled = true;
-	AimbotMethod = "ClosestPlayerToCursor";
+	AimbotMethod = "ClosestPlayerToCharacter";
 	PingPrediction = 75;
 	FOV = 1500;
 }
@@ -68,7 +68,7 @@ end
 local index 
 index = hookmetamethod(game, '__index', newcclosure(function(obj, idx)
 	if configs.AimbotEnabled then
-		if not checkcaller() and idx:lower() == "unitray" and LocalPlayer.Character then
+		if not checkcaller() and idx:lower() == "unitray" and LocalPlayer then
 			print("Knife Throw Index")
 			local closest = GetClosestPlayer(configs.FOV,1000)
 			if closest then
