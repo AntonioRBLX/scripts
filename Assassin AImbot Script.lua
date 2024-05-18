@@ -1,8 +1,6 @@
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 
-if getgenv().AlreadyExecuted then return end
-getgenv().AlreadyExecuted = true
 if not (is_synapse_function or isexecutorclosure) or not hookmetamethod or not newcclosure or not getgc or not getreg or not checkcaller then
 	StarterGui:SetCore("SendNotification", {
         Title = "Error";
@@ -35,10 +33,11 @@ for _, v in next, getreg() do
     Check(v)
 end
 if not hooked then
-    StarterGui:SetCore("SendNotification", {
-        Title = "Error";
-        Text = "Failed to Find Anticheat";
-    })
+	StarterGui:SetCore("SendNotification", {
+		Title = "Error";
+		Text = "Failed to Find Anticheat";
+	})
+	return
 end
 
 local LocalPlayer = Players.LocalPlayer
