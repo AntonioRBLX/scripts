@@ -1361,10 +1361,10 @@ while true do
 									local aimpos = GetAimVector(lplrchar,1)
 									if aimpos then
 										local args = {
-											[1] = "";
-											[2] = aimpos
+											[1] = 1;
+											[2] = aimpos;
+											[3] = "AH"
 										}
-										
 										lplrchar.Gun.KnifeServer.ShootGun:InvokeServer(table.unpack(args))
 									end
 								end
