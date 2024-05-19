@@ -107,17 +107,18 @@ function GetClosestPlayer(FOV,maxdist)
 end
 
 local namecall
-namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
+namecall = hookmetamethod(game, "__namecall", function(self,...)
 	local method = getnamecallmethod()
 	local args = {...}
 	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
 		local closest = GetClosestPlayer()
-		if closest and typeof(args[1]) == "Vector3" or typeof(args[1]) == "CFrame" then
+		if closest then
 			args[1] = closest.HumanoidRootPart.Position
 		end
+		return self.FireServer(self,table.unpack(args))
 	end
 	return namecall(self,...)
-end))
+end)
 StarterGui:SetCore("SendNotification", {
 	Title = "Notification";
 	Text = "Aimbot Successfully Loaded";
