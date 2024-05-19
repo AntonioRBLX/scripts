@@ -13,8 +13,8 @@ if not isexecutorclosure or not hookmetamethod or not newcclosure or not getgc o
 end
 function HookFunction(v)
 	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
-		local source = getinfo(v).source
-		local anticheat = source:find("BAC") or source:find("ReplicatedFirst.Animator") or source:find("PlayerScripts.reeeee")
+		local source = getinfo(v).source:lower()
+		local anticheat = source:find("bac") or source:find("replicatedfirst.animator") or source:find("playerscripts.reeeee")
 	
 		if anticheat then
 			hookfunction(v, function()
