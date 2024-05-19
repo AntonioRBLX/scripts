@@ -111,7 +111,7 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 	local method = getnamecallmethod()
 	local args = {...}
 	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
-		local closest = GetClosestPlayer()
+		local closest = GetClosestPlayer(FOV,1000)
 		if closest then
 			args[1] = closest.HumanoidRootPart.Position
 		end
