@@ -11,6 +11,7 @@ if not isexecutorclosure or not hookmetamethod or not newcclosure or not getgc o
 	})
 	return
 end
+--[[
 function HookFunction(v)
 	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
 		local funcinfo = getinfo(v)
@@ -38,7 +39,7 @@ if not hooked then
 	})
 	return
 end
-
+--]]
 if getgenv().AlreadyExecuted then return end
 getgenv().AlreadyExecuted = true
 
