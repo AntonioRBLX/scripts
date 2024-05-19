@@ -21,7 +21,7 @@ function HookFunction(v)
 	
 			end)
 			hooked = true
-			print("Hooked!")
+			warn("Hooked!")
 		end
 	end
 end
