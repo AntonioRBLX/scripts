@@ -111,9 +111,24 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 	local method = getnamecallmethod()
 	local args = {...}
 	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
-		local closest = GetClosestPlayer(FOV,1000)
+		local closest = GetClosestPlayer(configs.FOV,1000)
 		if closest then
-			args[1] = closest.HumanoidRootPart.Position
+			local lplrhrp = lplrchar.HumanoidRootPart
+			
+			local attachment = Instance.new("Attachment", lplrhrp)
+			attachment.Position = Vector3.new(1.6, 1.2, -3)
+			
+			local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,290,60,{
+				IgnoreList = nil;
+				Ping = configs.PingPrediction;
+				PredictSpamJump = true;
+				IsAGun = true;
+			})
+			
+			attachment:Destroy()
+			if aimpos then
+				args[1] = aimpos
+			end
 		end
 		return self.FireServer(self,table.unpack(args))
 	end
