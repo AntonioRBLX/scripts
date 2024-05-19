@@ -123,7 +123,7 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 					IgnoreList = nil;
 					Ping = configs.PingPrediction;
 					PredictSpamJump = true;
-					IsAGun = true;
+					IsAGun = false;
 				})
 
 				attachment:Destroy()
