@@ -11,7 +11,7 @@ if not isexecutorclosure or not hookmetamethod or not newcclosure or not getgc o
 	})
 	return
 end
-function HookAnticheat(v)
+function HookFunction(v)
 	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
 		local source = getinfo(v).source
 		local anticheat = source:find("BAC") or source:find("ReplicatedFirst.Animator") or source:find("PlayerScripts.reeeee")
@@ -26,10 +26,10 @@ function HookAnticheat(v)
 	end
 end
 for _, v in next, getgc() do
-	HookAnticheat(v)
+	HookFunction(v)
 end
 for _, v in next, getreg() do
-	HookAnticheat(v)
+	HookFunction(v)
 end
 if not hooked then
 	StarterGui:SetCore("SendNotification", {
