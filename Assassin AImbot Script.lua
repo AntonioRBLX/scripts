@@ -43,6 +43,7 @@ end
 if getgenv().AlreadyExecuted then return end
 getgenv().AlreadyExecuted = true
 
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/bloodball/-back-ups-for-libs/main/wall%20v3"))()
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
 local LocalPlayer = Players.LocalPlayer
 
@@ -104,6 +105,22 @@ function GetClosestPlayer(FOV,maxdist)
 	end
 	return nil
 end
+
+local Window = Library:CreateWindow("Aimbot")
+local AimbotFolder = Window:CreateFolder("Aimbot")
+AimbotFolder:Toggle("Aimbot", function(bool)
+    configs.AimbotEnabled = bool
+end)
+local AimbotConfigsFolder = Window:CreateFolder("Aimbot Configs")
+AimbotConfigsFolder:Dropdown("Aimbot Method",{"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter"},true,function(mob)
+    configs.AimbotMethod = mob
+end)
+AimbotConfigsFolder:Slider("Ping Prediction",{min = 0;max = 500;precise = true},function(value)
+    configs.PingPrediction = value
+end)
+AimbotConfigsFolder:Slider("FOV",{min = 50;max = 1000;precise = true},function(value)
+    configs.FOV = value
+end)
 
 local namecall
 namecall = hookmetamethod(game, "__namecall", function(self,...)
