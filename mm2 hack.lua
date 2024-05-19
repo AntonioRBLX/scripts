@@ -559,12 +559,14 @@ function GetAimVector(lplrchar,typ)
 				IgnoreList = nil;
 				Ping = configs.KnifePrediction;
 				PredictSpamJump = true;
+				IsAGun = false;
 			})
 		else
 			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
 				IgnoreList = nil;
 				Ping = configs.KnifePrediction;
 				PredictSpamJump = true;
+				IsAGun = false;
 			})
 		end
 		if configs.ShowAimbotVisuals then
