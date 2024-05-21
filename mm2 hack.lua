@@ -524,7 +524,7 @@ function AimbotVisuals(path)
 	container:Destroy()
 end
 function GetAimVector(lplrchar,typ)
-	p = (LocalPlayer:GetNetworkPing * 2) + 175
+	local p = (LocalPlayer:GetNetworkPing() * 2) + 175
 	if typ == 1 then
 		local closest = GetClosestPlayer(configs.FOV,500)
 
