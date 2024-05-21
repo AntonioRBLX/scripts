@@ -48,6 +48,7 @@ local configs = { -- Library Configurations
 	KnifeAimbot = false;
 	GunPrediction = 150;
 	KnifePrediction = 100;
+	Automatic = false;
 	AimbotMethod = "Murderer/Target";
 	FOV = 350;
 	AutoEquip = false;
@@ -523,6 +524,7 @@ function AimbotVisuals(path)
 	container:Destroy()
 end
 function GetAimVector(lplrchar,typ)
+	p = (LocalPlayer:GetNetworkPing * 2) + 1.95
 	if typ == 1 then
 		local closest = GetClosestPlayer(configs.FOV,500)
 
@@ -531,10 +533,14 @@ function GetAimVector(lplrchar,typ)
 		local lplrhrp = lplrchar.HumanoidRootPart
 		local attachment = Instance.new("Attachment", lplrhrp)
 		attachment.Position = Vector3.new(1.6, 1.2, -3)
-
+		
+		if not configs.Automatic then
+			p = configs.GunPrediction
+		end
+		
 		local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
 			IgnoreList = nil;
-			Ping = configs.GunPrediction;
+			Ping = p;
 			PredictSpamJump = true;
 			IsAGun = true;
 		})
@@ -552,19 +558,23 @@ function GetAimVector(lplrchar,typ)
 		local lplrhrp = lplrchar.HumanoidRootPart
 		local attachment = Instance.new("Attachment", lplrhrp)
 		attachment.Position = Vector3.new(1.5, 1.9, 1)
+
+		if not configs.Automatic then
+			p = configs.KnifePrediction
+		end
 		
 		local path, aimpos
 		if powers.Sleight then
 			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
 				IgnoreList = nil;
-				Ping = configs.KnifePrediction;
+				Ping = p;
 				PredictSpamJump = true;
 				IsAGun = false;
 			})
 		else
 			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
 				IgnoreList = nil;
-				Ping = configs.KnifePrediction;
+				Ping = p;
 				PredictSpamJump = true;
 				IsAGun = false;
 			})
@@ -684,6 +694,14 @@ local KnifePrediction = Main:CreateSlider({
 	Flag = "Knife Prediction";
 	Callback = function(value)
 		configs.KnifePrediction = value
+	end;
+})
+local Automatic = Main:CreateToggle({
+	Name = "Automatic";
+	CurrentValue = false;
+	Flag = "Automatic";
+	Callback = function(value)
+		configs.Automatic = value
 	end;
 })
 local Dropdown = Main:CreateDropdown({
