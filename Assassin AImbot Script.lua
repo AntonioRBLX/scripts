@@ -123,7 +123,7 @@ AimbotConfigsFolder:Slider("FOV",{min = 50;max = 1000;precise = true},function(v
 end)
 
 local namecall
-namecall = hookmetamethod(game, "__namecall", function(self,...)
+namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 	local method = getnamecallmethod()
 	local args = {...}
 	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
@@ -152,7 +152,7 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 		end
 	end
 	return namecall(self,...)
-end)
+end))
 StarterGui:SetCore("SendNotification", {
 	Title = "Notification";
 	Text = "Aimbot Successfully Loaded";
