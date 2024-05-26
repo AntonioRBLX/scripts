@@ -125,12 +125,12 @@ end)
 local namecall
 namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 	local method = getnamecallmethod()
-	local args = {...}
 	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
 		local lplrchar = LocalPlayer.Character
 		if lplrchar then
 			local closest = GetClosestPlayer(configs.FOV,1000)
 			if closest then
+				local args = {...}
 				local lplrhrp = lplrchar.HumanoidRootPart
 
 				local attachment = Instance.new("Attachment", lplrhrp)
