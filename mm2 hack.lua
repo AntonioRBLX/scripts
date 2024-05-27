@@ -1275,6 +1275,8 @@ local CoinFarm = AutoFarm:CreateToggle({
 								end
 							end
 							if closest then
+								lplrhrp.CanCollide = false
+								lplrhrp.Anchored = false
 								local info = TweenInfo.new(configs.AutoFarmSpeed,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut,0,false)
 								local tween = TweenService:Create(lplrhrp,info,{CFrame = CFrame.new(closest.Position - Vector3.new(0,3.5,0))})
 								tween:Play()
@@ -1284,6 +1286,8 @@ local CoinFarm = AutoFarm:CreateToggle({
 									wait()
 									firetouchinterest(closest, lplrhrp, 0)
 								end)
+								lplrhrp.CanCollide = true
+								lplrhrp.Anchored = true
 							end
 						end
 					end
