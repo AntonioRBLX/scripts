@@ -1278,7 +1278,7 @@ local CoinFarm = AutoFarm:CreateToggle({
 								lplrhrp.CanCollide = false
 								lplrhrp.Anchored = false
 								local info = TweenInfo.new(configs.AutoFarmSpeed,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut,0,false)
-								local tween = TweenService:Create(lplrhrp,info,{CFrame = CFrame.new(closest.Position - Vector3.new(0,3.5,0))})
+								local tween = TweenService:Create(lplrhrp,info,{CFrame = CFrame.new(closest.Position - Vector3.new(0,4,0))})
 								tween:Play()
 								tween.Completed:Wait()
 								spawn(function()
