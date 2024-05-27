@@ -1487,6 +1487,11 @@ for _, player in pairs(Players:GetPlayers()) do
 	FlingPlayerType:Add(player.Name)
 	eventfunctions.Initialize(player)
 end
+for _, v in pairs(workspace:GetChildren()) do
+	if v.Name == "Normal" and not v:FindFirstChildOfClass("Humanoid") then
+		match.Map = v
+	end
+end
 
 local prevtarget
 while true do
