@@ -3,6 +3,7 @@ local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
+local TweenService = game:GetService("TweenService")
 
 function notify(title,msg)
 	game:GetService("StarterGui"):SetCore("SendNotification" ,{
@@ -16,8 +17,8 @@ if not game:IsLoaded() then
 	game.Loaded:Wait()
 	message:Destroy()
 end
-if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod or not getgenv then -- Checks if executor is supported
-	notify("Error","Incompatible Executor! Functions are not supported by this executor.")
+if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod or not getgenv or not firetouchinterest then -- Checks if executor is supported
+	notify("Error","Incompatible Executor! Required functions are not supported by this executor.")
 	return
 end
 if game.PlaceId ~= 142823291 and game.PlaceId ~= 636649648 then 
@@ -69,9 +70,11 @@ local configs = { -- Library Configurations
 	XPFarm = false;
 	AutoUnbox = false;
 	AutoUnboxCrate = {};
+	AutoFarmSpeed = 1;
+	AutoFarmDelay = 0.5;
 
 	AutoGrabGun = false;
-	FlingPlayer = false;
+	FlingPlayer = nil;
 
 	Chams = false;
 	ShowGunDrop = false;
@@ -103,13 +106,14 @@ local weapons = {
 }
 local match = {
 	SheriffDied = false;
+	Map = nil;
 }
 local powers = {
 	Sleight = false;
 }
 local eventfunctions = {}
 local scriptvariables = {
-	AlreadyFlinging = false;
+	IsFlinging = false;
 	AntiLagAlreadyExecuted = false;
 	ScriptActivated = true;
 	ExecuteOnTeleport = false;
@@ -353,6 +357,18 @@ function RemoveDisplays(character)
 			if child:IsA("Accessory") or child.Name == "Radio" or child.Name == "Pet" then
 				child:Destroy()
 			end
+		end
+	end
+end
+function GrabGunFunction(gundrop)
+	local lplrchar = LocalPlayer.Character
+	if lplrchar then
+		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
+		if lplrhrp then
+			local prevCFrame = lplrhrp.CFrame
+			lplrhrp.CFrame = CFrame.new(gundrop.Position)
+			task.wait(0.5)
+			lplrhrp.CFrame = prevCFrame
 		end
 	end
 end
@@ -656,11 +672,12 @@ local AutoFarm = Window:CreateTab("Auto Farm", 12966420667) -- Title, Image
 local Others = Window:CreateTab("Others", 11385220704) -- Title, Image
 
 ---------------------------------------------------------------------------
-local Section = Main:CreateSection("Aimbot", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+local AimbotSection = Main:CreateSection("Aimbot", false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
 local GunAimbot = Main:CreateToggle({
 	Name = "Gun Aimbot";
 	CurrentValue = false;
+	SectionParent = AimbotSection;
 	Flag = "Gun Aimbot";
 	Callback = function(value)
 		configs.GunAimbot = value
@@ -669,6 +686,7 @@ local GunAimbot = Main:CreateToggle({
 local KnifeAimbot = Main:CreateToggle({
 	Name = "Knife Aimbot";
 	CurrentValue = false;
+	SectionParent = AimbotSection;
 	Flag = "Knife Aimbot";
 	Callback = function(value)
 		configs.KnifeAimbot = value
@@ -680,7 +698,8 @@ local GunPrediction = Main:CreateSlider({
 	Increment = 1;
 	Suffix = "ms";
 	CurrentValue = 150;
-	Flag = "Ping Prediction";
+	SectionParent = AimbotSection;
+	Flag = "Gun Prediction";
 	Callback = function(value)
 		configs.GunPrediction = value
 	end;
@@ -691,6 +710,7 @@ local KnifePrediction = Main:CreateSlider({
 	Increment = 1;
 	Suffix = "ms";
 	CurrentValue = 100;
+	SectionParent = AimbotSection;
 	Flag = "Knife Prediction";
 	Callback = function(value)
 		configs.KnifePrediction = value
@@ -700,6 +720,7 @@ local Automatic = Main:CreateToggle({
 	Name = "Automatic";
 	CurrentValue = false;
 	Flag = "Automatic";
+	SectionParent = AimbotSection;
 	Callback = function(value)
 		configs.Automatic = value
 	end;
@@ -709,6 +730,7 @@ local Dropdown = Main:CreateDropdown({
 	Options = {"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter","Murderer/Target"};
 	CurrentOption = "Murderer/Target";
 	MultiSelection = false; -- If MultiSelections is allowed
+	SectionParent = AimbotSection;
 	Flag = "Aimbot Method";
 	Callback = function(option)
 		configs.AimbotMethod = option
@@ -720,6 +742,7 @@ local FOV = Main:CreateSlider({
 	Increment = 1;
 	Suffix = "";
 	CurrentValue = 350;
+	SectionParent = AimbotSection;
 	Flag = "FOV";
 	Callback = function(value)
 		configs.FOV = value
@@ -730,11 +753,12 @@ local FOV = Main:CreateSlider({
 	end;
 })
 
-local Section = Main:CreateSection("Gun Mods", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+local GunModsSection = Main:CreateSection("Gun Mods", false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
 local AutoEquip = Main:CreateToggle({
 	Name = "Auto Equip";
 	CurrentValue = false;
+	SectionParent = GunModsSection;
 	Flag = "Auto Equip";
 	Callback = function(value)
 		configs.AutoEquip = value
@@ -743,17 +767,19 @@ local AutoEquip = Main:CreateToggle({
 local AutoShoot = Main:CreateToggle({
 	Name = "Auto Shoot";
 	CurrentValue = false;
+	SectionParent = GunModsSection;
 	Flag = "Auto Shoot";
 	Callback = function(value)
 		configs.AutoShoot = value
 	end;
 })
 
-local Section = Main:CreateSection("Kill Aura", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+local KillAuraSection = Main:CreateSection("Kill Aura", false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
 local KillAura = Main:CreateToggle({
 	Name = "Kill Aura";
 	CurrentValue = false;
+	SectionParent = KillAuraSection;
 	Flag = "Kill Aura";
 	Callback = function(value)
 		configs.KillAura = value
@@ -765,7 +791,8 @@ local KillAuraRange = Main:CreateSlider({
 	Increment = 0.1;
 	Suffix = "studs";
 	CurrentValue = 15;
-	Flag = "FOV";
+	SectionParent = KillAuraSection;
+	Flag = "Kill Aura Range";
 	Callback = function(value)
 		configs.KillAuraRange = value
 	end;
@@ -773,6 +800,7 @@ local KillAuraRange = Main:CreateSlider({
 local FaceTarget = Main:CreateToggle({
 	Name = "Face Target";
 	CurrentValue = false;
+	SectionParent = KillAuraSection;
 	Flag = "Face Target";
 	Callback = function(value)
 		configs.FaceTarget = value
@@ -843,11 +871,12 @@ local JumpPower = LocalPlayerTab:CreateSlider({
 	end;
 })
 ---------------------------------------------------------------------------
-local Section = Visuals:CreateSection("Chams", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+local ChamsSection = Visuals:CreateSection("Chams", false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
 local PlayerChams = Visuals:CreateToggle({
 	Name = "Player Chams";
 	CurrentValue = false;
+    SectionParent = ChamsSection;
 	Flag = "Player Chams";
 	Callback = function(value)
 		configs.Chams = value
@@ -861,6 +890,7 @@ local PlayerChams = Visuals:CreateToggle({
 local ShowGunDrop = Visuals:CreateToggle({
 	Name = "Show Gun Drop";
 	CurrentValue = false;
+    SectionParent = ChamsSection;
 	Flag = "Show Gun Drop";
 	Callback = function(value)
 		configs.ShowGunDrop = value
@@ -880,6 +910,7 @@ local ShowGunDrop = Visuals:CreateToggle({
 local ShowTraps = Visuals:CreateToggle({
 	Name = "Show Traps";
 	CurrentValue = false;
+    SectionParent = ChamsSection;
 	Flag = "Show Traps";
 	Callback = function(value)
 		configs.TrapESP = value
@@ -899,6 +930,7 @@ local ShowTraps = Visuals:CreateToggle({
 local MurdererColor = Visuals:CreateColorPicker({
 	Name = "Murderer Color";
 	Color = configs.MurdererColor;
+    SectionParent = ChamsSection;
 	Flag = "Murderer Color";
 	Callback = function(value)
 		configs.MurdererColor = value
@@ -908,6 +940,7 @@ local MurdererColor = Visuals:CreateColorPicker({
 local TrapColor = Visuals:CreateColorPicker({
 	Name = "Trap Color";
 	Color = configs.TrapColor;
+    SectionParent = ChamsSection;
 	Flag = "Trap Color";
 	Callback = function(value)
 		configs.TrapColor = value
@@ -917,7 +950,8 @@ local TrapColor = Visuals:CreateColorPicker({
 local HeroColor = Visuals:CreateColorPicker({
 	Name = "Hero/Target Color";
 	Color = configs.HeroColor;
-	Flag = "Hero Color";
+    SectionParent = ChamsSection;
+	Flag = "Hero/Target Color";
 	Callback = function(value)
 		configs.HeroColor = value
 		UpdateAllChams()
@@ -926,6 +960,7 @@ local HeroColor = Visuals:CreateColorPicker({
 local InnocentColor = Visuals:CreateColorPicker({
 	Name = "Innocent Color";
 	Color = configs.InnocentColor;
+    SectionParent = ChamsSection;
 	Flag = "Innocent Color";
 	Callback = function(value)
 		configs.InnocentColor = value
@@ -935,6 +970,7 @@ local InnocentColor = Visuals:CreateColorPicker({
 local SheriffColor = Visuals:CreateColorPicker({
 	Name = "Sheriff Color";
 	Color = configs.SheriffColor;
+    SectionParent = ChamsSection;
 	Flag = "Sheriff Color";
 	Callback = function(value)
 		configs.SheriffColor = value
@@ -944,16 +980,19 @@ local SheriffColor = Visuals:CreateColorPicker({
 local GunDropColor = Visuals:CreateColorPicker({
 	Name = "Gun Drop Color";
 	Color = configs.GunDropColor;
+    SectionParent = ChamsSection;
 	Flag = "Gun Drop Color";
 	Callback = function(value)
 		configs.GunDropColor = value
 		UpdateAllChams()
 	end
 })
+local AimbotVisualsSection = Visuals:CreateSection("Aimbot Visuals", false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 if Drawing then
 	local ShowFOVCircle = Visuals:CreateToggle({
 		Name = "Show FOV Circle";
 		CurrentValue = false;
+        SectionParent = AimbotVisualsSection;
 		Flag = "Show FOV Circle";
 		Callback = function(value)
 			Drawing1.Visible = value
@@ -964,16 +1003,18 @@ end
 local ShowAimbotVisuals = Visuals:CreateToggle({
 	Name = "Show Aimbot Visuals";
 	CurrentValue = false;
+    SectionParent = AimbotVisualsSection;
 	Flag = "Show Aimbot Visuals";
 	Callback = function(value)
 		configs.ShowAimbotVisuals = value
 	end;
 })
 
-local Section = Visuals:CreateSection("World", true) -- The 2nd argument is to tell if its only a Title and doesnt contain element
+local AntiLagSection = Visuals:CreateSection("Anti-Lag", false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
 local RemoveMapLag = Visuals:CreateButton({
 	Name = "Remove Map Lag";
+    SectionParent = AntiLagSection;
 	Callback = function()
 		if not scriptvariables.AntiLagAlreadyExecuted then
 			scriptvariables.AntiLagAlreadyExecuted = true
@@ -1002,6 +1043,7 @@ local RemoveMapLag = Visuals:CreateButton({
 })
 local RemoveAccessoryLag = Visuals:CreateButton({
 	Name = "Remove Accessory Lag";
+    SectionParent = AntiLagSection;
 	Callback = function()
 		local lplrchar = LocalPlayer.Character
 		for _, player in pairs(Players:GetPlayers()) do
@@ -1015,6 +1057,7 @@ local RemoveAccessoryLag = Visuals:CreateButton({
 local AutoRemoveLag = Visuals:CreateToggle({
 	Name = "Auto Remove Lag";
 	CurrentValue = false;
+    SectionParent = AntiLagSection;
 	Flag = "Auto Remove Lag";
 	Callback = function(value)
 		configs.AutoRemoveLag = value
@@ -1023,6 +1066,7 @@ local AutoRemoveLag = Visuals:CreateToggle({
 local IncludeHats = Visuals:CreateToggle({
 	Name = "Include Hats";
 	CurrentValue = false;
+    SectionParent = AntiLagSection;
 	Flag = "Include Hats";
 	Callback = function(value)
 		configs.IncludeAccessories = value
@@ -1031,6 +1075,7 @@ local IncludeHats = Visuals:CreateToggle({
 local IncludeLocalPlayer = Visuals:CreateToggle({
 	Name = "Include LocalPlayer";
 	CurrentValue = false;
+    SectionParent = AntiLagSection;
 	Flag = "Include LocalPlayer";
 	Callback = function(value)
 		configs.IncludeLocalPlayer = value
@@ -1061,8 +1106,11 @@ local AnnounceRoles = Blatant:CreateButton({
 local GrabGun = Blatant:CreateButton({
 	Name = "Grab Gun",
 	Callback = function()
-		-- The function that takes place when the keybind is pressed
-		-- The variable (Keybind) is a boolean for whether the keybind is being held or not (HoldToInteract needs to be true)
+		for _, v in pairs(workspace:GetChildren()) do
+			if v:IsA("BasePart") and v.Name == "GunDrop" then
+				GrabGunFunction(v)
+			end
+		end
 	end,
 })
 local AutoGrabGun = Blatant:CreateToggle({
@@ -1081,59 +1129,174 @@ local KillAll = Blatant:CreateButton({
 	end;
 })
 
-local Section = Blatant:CreateSection("Fling", true)
+local FlingSection = Blatant:CreateSection("Fling", false)
 
 local FlingPlayerType = Blatant:CreateDropdown({
 	Name = "Player",
-	Options = "",
-	CurrentOption = "";
+	Options = {},
+	CurrentOption = nil;
 	MultiSelection = false; -- If MultiSelections is allowed
-	Flag = "Fling Player"; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
+    SectionParent = FlingSection;
+	Flag = nil; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Option)
 		configs.FlingPlayer = Option
 	end;
 })
 local FlingPlayer = Blatant:CreateButton({
 	Name = "Fling Player";
+    SectionParent = FlingSection;
 	Callback = function()
+		local function AddBodyFling(basepart)
+			local bav = Instance.new("BodyAngularVelocity", basepart)
+			bav.Name = "Flinger"
+			bav.AngularVelocity = Vector3.new(0,99999,0)
+			bav.MaxTorque = Vector3.new(0,math.huge,0)
+			bav.P = math.huge
+		end
+
 		local lplrchar = LocalPlayer.Character
-		if not scriptvariables.AlreadyFlinging and configs.FlingPlayer and lplrchar then
-			local player = Players:FindFirstChild(configs.FlingPlayer)
-			local lplrhrp = LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
-			if player and lplrhrp then
-				local NPCRoot = player:FindFirstChild("HumanoidRootPart")
-				if NPCRoot then
-					scriptvariables.AlreadyFlinging = true
+		if not scriptvariables.IsFlinging and configs.FlingPlayer and lplrchar then
+			local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
+			if lplrhrp then
+				local player = Players:FindFirstChild(configs.FlingPlayer)
+				if player then
+					local character = player.Character
+					if character then
+						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+						if NPCRoot then
+							local prevCFrame = lplrhrp.CFrame
+							scriptvariables.IsFlinging = true
 
-					local bav = Instance.new("BodyAngularVelocity", lplrhrp)
-					bav.AngularVelocity = Vector3.new(0,500000,0)
-					bav.MaxTorque = Vector3.new(0,math.huge,0)
-					bav.P = math.huge	
+							AddBodyFling(lplrhrp)
 
-					while true do
-						if not NPCRoot.Parent then scriptvariables.AlreadyFlinging = false break end
-
-						lplrhrp.Position = NPCRoot.Position
-						lplrhrp.Velocity = Vector3.new(0,0,0)
-						task.wait()
+							while true do
+								if not scriptvariables.IsFlinging or not Players:FindFirstChild(configs.FlingPlayer) then 
+									scriptvariables.IsFlinging = false
+									for _, v in pairs(lplrchar:GetChildren()) do
+										if v:IsA("BasePart") then
+											v.CanCollide = true
+											v.Massless = false
+											v.AssemblyAngularVelocity = Vector3.new(0,0,0)
+											v.AssemblyLinearVelocity = Vector3.new(0,0,0)
+											v.Velocity = Vector3.new(0,0,0)
+										end
+									end
+									local bav = lplrhrp:FindFirstChild("Flinger")
+									if bav then
+										bav:Destroy()
+									end
+									lplrhrp.CFrame = prevCFrame
+									break
+								end
+								if lplrchar.Parent then -- if localplayer character has not been destroyed
+									for _, v in pairs(lplrchar:GetChildren()) do
+										if v:IsA("BasePart") then
+											v.CanCollide = false
+											v.Massless = true
+											v.Velocity = Vector3.new(0,0,0)
+										end
+									end
+									if character.Parent then -- if character has not been destroyed
+										if lplrhrp.Parent then -- if localplayer root has not been destroyed
+											if NPCRoot.Parent then -- if npc root has not been destroyed
+												lplrhrp.CFrame = CFrame.new(NPCRoot.Position)
+											else
+												local NPCRoottemp = character:FindFirstChild("HumanoidRootPart")
+												if NPCRoottemp then
+													NPCRoot = NPCRoottemp
+												end
+											end
+										else
+											local lplrhrptemp = lplrchar:FindFirstChild("HumanoidRootPart")
+											if lplrhrptemp then
+												lplrhrp = lplrhrptemp
+												AddBodyFling(lplrhrp)
+											end
+										end
+									elseif player.Character then
+										character = player.Character
+									end
+								elseif LocalPlayer.Character then
+									lplrchar = LocalPlayer.Character
+								end
+								task.wait()
+							end
+						end
 					end
 				end
 			end
 		end
 	end;
 })
+local StopFlinging = Blatant:CreateButton({
+	Name = "Stop Flinging";
+    SectionParent = FlingSection;
+	Callback = function()
+		scriptvariables.IsFlinging = false
+	end;
+})
 ---------------------------------------------------------------------------
+local AutoFarmSection = Blatant:CreateSection("Auto Farm", false)
+
 local CoinFarm = AutoFarm:CreateToggle({
 	Name = "Coin Farm";
 	CurrentValue = false;
+    SectionParent = AutoFarmSection;
 	Flag = "Coin Farm";
 	Callback = function(value)
 		configs.CoinFarm = value
+		if configs.CoinFarm then
+			local lplrhrp
+			while true do
+				if not configs.CoinFarm then 
+					if lplrhrp then 
+						lplrhrp.Anchored = false 
+					end 
+					break 
+				end
+				local lplrchar = LocalPlayer.Character
+				if lplrchar then
+					local lplrhrptemp = lplrchar:FindFirstChild("HumanoidRootPart")
+					if lplrhrptemp and match.Map then
+						lplrhrp = lplrhrptemp
+						lplrhrp.Anchored = true
+						local coins = match.Map:FindFirstChild("CoinContainer")
+						if coins then
+							local closest
+							local distance
+							for _, v in pairs(coins:GetChildren()) do
+								local TouchInterest = v:FindFirstChildWhichIsA("TouchTransmitter")
+								if TouchInterest and v:IsA("BasePart") and v.Name == "Coin_Server" then
+									local distancetemp = (v.Position - lplrhrp.Position).Magnitude
+									if not closest or distancetemp < distance then
+										closest = v
+										distance = distancetemp
+									end
+								end
+							end
+							if closest then
+								local info = TweenInfo.new(configs.AutoFarmSpeed,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut,0,false)
+								local tween = TweenService:Create(lplrhrp,info,{CFrame = CFrame.new(closest.Position - Vector3.new(0,3.5,0))})
+								tween:Play()
+								tween.Completed:Wait()
+								spawn(function()
+									firetouchinterest(closest, lplrhrp, 1)
+									wait()
+									firetouchinterest(closest, lplrhrp, 0)
+								end)
+							end
+						end
+					end
+				end
+				task.wait(configs.AutoFarmDelay)
+			end
+		end
 	end;
 })
 local XPFarm = AutoFarm:CreateToggle({
 	Name = "XP Farm";
 	CurrentValue = false;
+    SectionParent = AutoFarmSection;
 	Flag = "XP Farm";
 	Callback = function(value)
 		configs.XPFarm = value
@@ -1142,6 +1305,7 @@ local XPFarm = AutoFarm:CreateToggle({
 local AutoUnbox = AutoFarm:CreateToggle({
 	Name = "Auto Unbox";
 	CurrentValue = false;
+    SectionParent = AutoFarmSection;
 	Flag = "Auto Unbox";
 	Callback = function(value)
 		configs.AutoUnbox = value
@@ -1152,10 +1316,38 @@ local AutoUnboxCrate = AutoFarm:CreateDropdown({
 	Options = {"Crate #1","Crate #2","Crate #3"};
 	CurrentOption = "Crate #1";
 	MultiSelection = true; -- If MultiSelections is allowed
+    SectionParent = AutoFarmSection;
 	Flag = "Auto Unbox Crate";
 	Callback = function(option)
 		configs.AutoUnboxCrate = option
 	end,
+})
+
+local AutoFarmSettingsSection = Blatant:CreateSection("Auto Farm Settings", false)
+
+local AutoFarmSpeed = AutoFarm:CreateSlider({
+	Name = "Auto Farm Speed";
+	Range = {0, 5};
+	Increment = 0.1;
+	Suffix = "s";
+	CurrentValue = 1;
+	SectionParent = AutoFarmSettingsSection;
+	Flag = "Auto Farm Speed";
+	Callback = function(value)
+		configs.AutoFarmSpeed = value
+	end;
+})
+local AutoFarmDelay = AutoFarm:CreateSlider({
+	Name = "Auto Farm Delay";
+	Range = {0, 5};
+	Increment = 0.1;
+	Suffix = "s";
+	CurrentValue = 0.5;
+	SectionParent = AutoFarmSettingsSection;
+	Flag = "Auto Farm Delay";
+	Callback = function(value)
+		configs.AutoFarmDelay = value
+	end;
 })
 ---------------------------------------------------------------------------
 local Dupe = Others:CreateButton({
@@ -1173,7 +1365,7 @@ local FreeAnimations = Others:CreateButton({
 local Rejoin = Others:CreateButton({
 	Name = "Rejoin";
 	Callback = function()
-		Window:Notify({
+		Library:Notify({
 			Title = "Info";
 			Content = "Rejoining";
 			Duration = 5;
@@ -1199,7 +1391,7 @@ local KeepGUI = Others:CreateToggle({
 		if scriptvariables.QueueOnTeleport then
 			scriptvariables.ExecuteOnTeleport = value
 		else
-			Window:Notify({
+			Library:Notify({
 				Title = "Error";
 				Content = 'The function "queue_on_teleport" is not supported on this executor';
 				Duration = 5;
@@ -1219,24 +1411,17 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 			Color = configs.GunDropColor;
 		})
 		if configs.AutoGrabGun then
-			local lplrchar = LocalPlayer.Character
-			if lplrchar then
-				local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
-				if lplrhrp then
-					local prevCFrame = lplrhrp.CFrame
-					lplrhrp.CFrame = instance.Position
-					task.wait(0.5)
-					lplrhrp.CFrame = prevCFrame
-				end
-			end
+			GrabGunFunction(instance)
 		end
 	elseif instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
 		match.SheriffDied = false
+		match.Map = instance
 	end
 end)
 eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(instance)
 	if instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
 		match.SheriffDied = false
+		match.Map = nil
 	end
 end)
 eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
