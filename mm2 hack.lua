@@ -1266,7 +1266,7 @@ local CoinFarm = AutoFarm:CreateToggle({
 							local distance
 							for _, v in pairs(coins:GetChildren()) do
 								local TouchInterest = v:FindFirstChildWhichIsA("TouchTransmitter")
-								if TouchInterest and v:IsA("BasePart") and v.Name == "Coin_Server" then
+								if TouchInterest and v:IsA("BasePart") and v.Name == "Coin_Server" and v.Transparency ~= 1 then
 									local distancetemp = (v.Position - lplrhrp.Position).Magnitude
 									if not closest or distancetemp < distance then
 										closest = v
