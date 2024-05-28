@@ -48,18 +48,18 @@ while true do
 		if Tool then
 			local att = Instance.new("Attachment", lplrhrp)
 			att.Position = Vector3.new(1.5, 0.5, 0)
-	
+
 			local closest
-	
+
 			local detectnearest = Instance.new("Part", workspace)
 			detectnearest.Anchored = true
 			detectnearest.Size = Vector3.new(Configs.LockRange*2,Configs.LockRange*2,Configs.LockRange*2)
 			detectnearest.Shape = Enum.PartType.Ball
 			detectnearest.Position = lplrhrp.Position
-	
+
 			local tp = detectnearest:GetTouchingParts()
 			detectnearest:Destroy()
-	
+
 			for _, i in ipairs(tp) do
 				local char = i:FindFirstAncestorOfClass("Model")
 				if char and char ~= lplrchar then
@@ -73,25 +73,28 @@ while true do
 					end
 				end
 			end
-	
+
 			if closest then
 				local npchum = closest[1].Humanoid
 				npchrp = closest[1].HumanoidRootPart
-				
+
 				local npcRAatt = Instance.new("Attachment", npchrp)
 				npcRAatt.Position = Vector3.new(1.5, 0.5, -1.5)
 				local npcHRPatt = Instance.new("Attachment", npchrp)
 				npcHRPatt.Position = Vector3.new(0, 0.5, -0.5)
 				local npcLAatt = Instance.new("Attachment", npchrp)
 				npcLAatt.Position = Vector3.new(-1.5, 0.5, -0.5)
-				
+				local att2 = Instance.new("Attachment", lplrhrp)
+				att2.Position = Vector3.new(1.5, -1, -3.75)
+
+
 				if (npchrp.Position - lplrhrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
 					local aimpos = npchrp.Position
-					
-					local RADist = (npcRAatt.WorldPosition - att.WorldPosition).Magnitude
-					local HRPDist = (npcHRPatt.WorldPosition - att.WorldPosition).Magnitude
-					local LADist = (npcLAatt.WorldPosition - att.WorldPosition).Magnitude
-					
+
+					local RADist = (npcRAatt.WorldPosition - att2.WorldPosition).Magnitude
+					local HRPDist = (npcHRPatt.WorldPosition - att2.WorldPosition).Magnitude
+					local LADist = (npcLAatt.WorldPosition - att2.WorldPosition).Magnitude
+
 					if RADist < HRPDist then
 						aimpos = npcRAatt.WorldPosition
 					else
@@ -110,15 +113,16 @@ while true do
 						else
 							count += 1
 						end
+						count += 1
 						if count >= 3 then
 							count = 1
 						end
 					end
-						
+
 					local CFrameLook = CFrame.new(att.WorldPosition,aimpos * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 					lplrhrp.CFrame = CFrame.new(lplrhrp.Position,lplrhrp.Position + CFrameLook.LookVector)
-					
-					npchrp.Size = Vector3.new(100,100,100)
+
+					npchrp.Size = Vector3.new(2,2,1)
 					coroutine.wrap(slash)(Tool)
 				end
 				npcRAatt:Destroy()
