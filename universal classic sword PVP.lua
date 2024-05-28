@@ -122,7 +122,7 @@ while true do
 					local CFrameLook = CFrame.new(att.WorldPosition,aimpos * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 					lplrhrp.CFrame = CFrame.new(lplrhrp.Position,lplrhrp.Position + CFrameLook.LookVector)
 
-					npchrp.Size = Vector3.new(2,2,1)
+					npchrp.Size = Vector3.new(100,100,100)
 					coroutine.wrap(slash)(Tool)
 				end
 				npcRAatt:Destroy()
