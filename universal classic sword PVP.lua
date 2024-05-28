@@ -46,7 +46,7 @@ while true do
 		local Tool = lplrchar:FindFirstChildOfClass("Tool")
 		if Tool then
 			local att = Instance.new("Attachment", lplrhrp)
-			att.Position = Vector3.new(1.5, 0.5, -1.5)
+			att.Position = Vector3.new(1.5, -1, 0)
 	
 			local closest
 	
@@ -64,9 +64,8 @@ while true do
 				if char and char ~= lplrchar then
 					local npchum = char:FindFirstChildOfClass("Humanoid")
 					local npchrp = char:FindFirstChild("HumanoidRootPart")
-					local npctorso = char:FindFirstChild("Torso")
-					if npchum and npchrp and npctorso then
-						local distance = (npctorso.Position - lplrhrp.Position).Magnitude
+					if npchum and npchrp then
+						local distance = (npchrp.Position - lplrhrp.Position).Magnitude
 						if (not closest or distance < closest[2]) and distance >= 0.5 then
 							closest = {char,distance}
 						end
@@ -77,9 +76,10 @@ while true do
 			if closest then
 				local npchum = closest[1].Humanoid
 				npchrp = closest[1].HumanoidRootPart
-				local npctorso = closest[1].Torso
-				if (npctorso.Position - lplrhrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
-					lplrhrp.CFrame = CFrame.new(lplrhrp.Position,lplrhrp.Position + CFrame.new(att.WorldPosition,(npctorso.Position + npchum.MoveDirection * npchum.WalkSpeed * lplr:GetNetworkPing()) * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0)).LookVector)
+				if (npchrp.Position - lplrhrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
+					local CFrameLook = CFrame.new(att.WorldPosition,hrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
+					lplrhrp.CFrame = CFrame.new(lplrhrp.Position,lplrhrp.Position + CFrameLook.LookVector)
+					
 					npchrp.Size = Vector3.new(100,100,100)
 					coroutine.wrap(slash)(Tool)
 				end
