@@ -47,7 +47,7 @@ while true do
 		local Tool = lplrchar:FindFirstChildOfClass("Tool")
 		if Tool then
 			local att = Instance.new("Attachment", lplrhrp)
-			att.Position = Vector3.new(1.5, -1, 0)
+			att.Position = Vector3.new(1.5, 0.5, 0)
 	
 			local closest
 	
@@ -77,15 +77,53 @@ while true do
 			if closest then
 				local npchum = closest[1].Humanoid
 				npchrp = closest[1].HumanoidRootPart
+				
+				local npcRAatt = Instance.new("Attachment", npchrp)
+				npcRAatt.Position = Vector3.new(1.5, 0.5, -1.5)
+				local npcHRPatt = Instance.new("Attachment", npchrp)
+				npcHRPatt.Position = Vector3.new(0, 0.5, -0.5)
+				local npcLAatt = Instance.new("Attachment", npchrp)
+				npcLAatt.Position = Vector3.new(-1.5, 0.5, -0.5)
+				
 				if (npchrp.Position - lplrhrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
-					local RADist = (npcRA.Position - )
+					local aimpos = npchrp.Position
+					
+					local RADist = (npcRAatt.WorldPosition - att.WorldPosition).Magnitude
+					local HRPDist = (npcHRPatt.WorldPosition - att.WorldPosition).Magnitude
+					local LADist = (npcLAatt.WorldPosition - att.WorldPosition).Magnitude
+					
+					if RADist < HRPDist then
+						aimpos = npcRAatt.WorldPosition
+					else
+						if count == 1 and RADist <= 3.5 then
+							aimpos = npcRAatt.WorldPosition
+						else
+							count += 1
+						end
+						if count == 2 and HRPDist <= 3.5 then
+							aimpos = npchrp.Position
+						else
+							count += 1
+						end
+						if count == 3 and LADist <= 3.5 then
+							aimpos = npcLAatt.Position
+						else
+							count += 1
+						end
+						if count > 3 then
+							count = 1
+						end
+					end
 						
-					local CFrameLook = CFrame.new(att.WorldPosition,npchrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
+					local CFrameLook = CFrame.new(att.WorldPosition,aimpos * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 					lplrhrp.CFrame = CFrame.new(lplrhrp.Position,lplrhrp.Position + CFrameLook.LookVector)
 					
 					npchrp.Size = Vector3.new(100,100,100)
 					coroutine.wrap(slash)(Tool)
 				end
+				npcRAatt:Destroy()
+				npcHRPatt:Destroy()
+				npcLAatt:Destroy()
 			end
 			att:Destroy()
 		end
