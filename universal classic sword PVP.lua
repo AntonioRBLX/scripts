@@ -110,7 +110,7 @@ while true do
 						else
 							count += 1
 						end
-						if count > 3 then
+						if count >= 3 then
 							count = 1
 						end
 					end
