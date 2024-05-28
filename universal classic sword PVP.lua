@@ -77,7 +77,7 @@ while true do
 				local npchum = closest[1].Humanoid
 				npchrp = closest[1].HumanoidRootPart
 				if (npchrp.Position - lplrhrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
-					local CFrameLook = CFrame.new(att.WorldPosition,hrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
+					local CFrameLook = CFrame.new(att.WorldPosition,npchrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 					lplrhrp.CFrame = CFrame.new(lplrhrp.Position,lplrhrp.Position + CFrameLook.LookVector)
 					
 					npchrp.Size = Vector3.new(100,100,100)
