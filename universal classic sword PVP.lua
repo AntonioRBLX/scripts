@@ -65,7 +65,7 @@ while true do
 				if char and char ~= lplrchar then
 					local npchum = char:FindFirstChildOfClass("Humanoid")
 					local npchrp = char:FindFirstChild("HumanoidRootPart")
-					if npchum and npchrp then
+					if npchum and npchrp and npchrp.Health > 0 then
 						local distance = (npchrp.Position - lplrhrp.Position).Magnitude
 						if (not closest or distance < closest[2]) and distance >= 0.5 then
 							closest = {char,distance}
@@ -88,7 +88,7 @@ while true do
 				att2.Position = Vector3.new(1.5, -1, -3.75)
 
 
-				if (npchrp.Position - lplrhrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
+				if (npchrp.Position - lplrhrp.Position).Magnitude <= Configs.AttackRange then
 					local aimpos = npchrp.Position
 
 					local RADist = (npcRAatt.WorldPosition - att2.WorldPosition).Magnitude
