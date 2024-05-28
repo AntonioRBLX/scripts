@@ -27,6 +27,7 @@ local lplrchar = lplr.Character or lplr.CharacterAdded:Wait()
 local lplrhrp = lplrchar:WaitForChild("HumanoidRootPart")
 
 local mouse = lplr:GetMouse()
+local count = 1
 
 function slash(tool)
 	if mouse.Icon ~= "rbxasset://textures/GunWaitCursor.png" then
@@ -77,6 +78,8 @@ while true do
 				local npchum = closest[1].Humanoid
 				npchrp = closest[1].HumanoidRootPart
 				if (npchrp.Position - lplrhrp.Position).Magnitude <= Configs.AttackRange and npchum.Health > 0 then
+					local RADist = (npcRA.Position - )
+						
 					local CFrameLook = CFrame.new(att.WorldPosition,npchrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 					lplrhrp.CFrame = CFrame.new(lplrhrp.Position,lplrhrp.Position + CFrameLook.LookVector)
 					
