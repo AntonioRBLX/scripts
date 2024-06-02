@@ -2,7 +2,7 @@ local CoreGui = game:GetService("CoreGui")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
-local TeleportService = game:GetService("TeleportService")
+local TeleportService = game:GetService("TeleportService") 
 local TweenService = game:GetService("TweenService")
 
 function notify(title,msg)
