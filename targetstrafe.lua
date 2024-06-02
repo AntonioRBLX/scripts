@@ -24,7 +24,7 @@ while true do
 			if NPC ~= LocalPlayer and (not NPC.Team or NPC.Team ~= LocalPlayer.Team) then
 				local NPCChar = NPC.Character
 				if NPCChar then
-					local NPCHum = closest.Parent:FindFirstChildOfClass("Humanoid")
+					local NPCHum = NPCChar:FindFirstChildOfClass("Humanoid")
 					local NPCRoot = NPCChar:FindFirstChild("HumanoidRootPart")
 					if NPCHum and NPCHum.Health > 0 and NPCRoot and NPCRoot:IsA("BasePart") then
 						local distance = (NPCRoot.Position - LPlrRoot.Position).Magnitude
