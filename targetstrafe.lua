@@ -93,6 +93,8 @@ while true do
 			end
 		end
 		--part:Destroy()
+	else
+		Controls:Enable()
 	end
 	task.wait()
 end
