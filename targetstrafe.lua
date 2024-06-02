@@ -21,7 +21,7 @@ while true do
 	local part
 	if LPlrChar and LPlrRoot and LPlrHumanoid then
 		for _, NPC in pairs(Players:GetPlayers()) do
-			if NPC ~= LocalPlayer and NPC.Team ~= LocalPlayer.Team then
+			if NPC ~= LocalPlayer and (not NPC.Team or NPC.Team ~= LocalPlayer.Team) then
 				local NPCChar = workspace:FindFirstChild(NPC.Name)
 				if NPCChar then
 					local NPCRoot = NPCChar:FindFirstChild("HumanoidRootPart")
