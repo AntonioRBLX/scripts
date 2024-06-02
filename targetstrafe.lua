@@ -32,55 +32,56 @@ while true do
 						end
 					end
 				end
-		end
-		if closest then
-			local closestHumanoid = closest.Parent:FindFirstChildOfClass("Humanoid")
-			if closestHumanoid and closestHumanoid.Health > 0 then
-				if (closest.Position + closestHumanoid.MoveDirection * 3 - LPlrRoot.Position).Magnitude <= 10 then
-					LPlrRoot.CFrame = CFrame.new(LPlrRoot.Position,closest.Position * Vector3.new(1,0,1) + LPlrRoot.Position * Vector3.new(0,1,0))
-					walkpos = LPlrRoot.Position - closest.Position
-				elseif (closest.Position - LPlrRoot.Position).Magnitude <= 32 then
-					LPlrRoot.CFrame = CFrame.new(LPlrRoot.Position,closest.Position * Vector3.new(1,0,1) + LPlrRoot.Position * Vector3.new(0,1,0))
-					walkpos = closest.Position + CFrame.Angles(0,math.rad(rotationangle),0).LookVector * distance
-					LPlrHumanoid.Jump = true
-					rotationangle += rotationdirection * 3
-					if math.random(1,50) == 1 then
-						rotationdirection = -rotationdirection -- Changes the pivot direction
+			end
+			if closest then
+				local closestHumanoid = closest.Parent:FindFirstChildOfClass("Humanoid")
+				if closestHumanoid and closestHumanoid.Health > 0 then
+					if (closest.Position + closestHumanoid.MoveDirection * 3 - LPlrRoot.Position).Magnitude <= 10 then
+						LPlrRoot.CFrame = CFrame.new(LPlrRoot.Position,closest.Position * Vector3.new(1,0,1) + LPlrRoot.Position * Vector3.new(0,1,0))
+						walkpos = LPlrRoot.Position - closest.Position
+					elseif (closest.Position - LPlrRoot.Position).Magnitude <= 32 then
+						LPlrRoot.CFrame = CFrame.new(LPlrRoot.Position,closest.Position * Vector3.new(1,0,1) + LPlrRoot.Position * Vector3.new(0,1,0))
+						walkpos = closest.Position + CFrame.Angles(0,math.rad(rotationangle),0).LookVector * distance
+						LPlrHumanoid.Jump = true
+						rotationangle += rotationdirection * 3
+						if math.random(1,50) == 1 then
+							rotationdirection = -rotationdirection -- Changes the pivot direction
+						end
+						if math.random(1,25) == 1 then
+							distance = math.random(8,20) -- Changes the distance
+						end
 					end
-					if math.random(1,25) == 1 then
-						distance = math.random(8,20) -- Changes the distance
-					end
-				end
-				if walkpos then
-					local raycastParams = RaycastParams.new()
-					raycastParams.FilterDescendantsInstances = {closest.Parent}
-					raycastParams.FilterType = Enum.RaycastFilterType.Exclude
-					
-					local raycast = workspace:Raycast(walkpos,Vector3.new(0,-10000,0),raycastParams)
-					if raycast and raycast.Position then
-						Controls:Disable()
-						LPlrHumanoid.WalkToPoint = walkpos
+					if walkpos then
+						local raycastParams = RaycastParams.new()
+						raycastParams.FilterDescendantsInstances = {closest.Parent}
+						raycastParams.FilterType = Enum.RaycastFilterType.Exclude
+
+						local raycast = workspace:Raycast(walkpos,Vector3.new(0,-10000,0),raycastParams)
+						if raycast and raycast.Position then
+							Controls:Disable()
+							LPlrHumanoid.WalkToPoint = walkpos
+						else
+							Controls:Enable()
+						end
 					else
 						Controls:Enable()
 					end
+
+					--part = Instance.new("Part", workspace)
+					--part.Anchored = true
+					--part.CanCollide = false
+					--part.BrickColor = BrickColor.new("Really Really red")
+					--part.Size = Vector3.new(1,1,1)
+					--part.Shape = Enum.PartType.Ball
+					--part.Position = walkpos
 				else
 					Controls:Enable()
 				end
-				
-				--part = Instance.new("Part", workspace)
-				--part.Anchored = true
-				--part.CanCollide = false
-				--part.BrickColor = BrickColor.new("Really Really red")
-				--part.Size = Vector3.new(1,1,1)
-				--part.Shape = Enum.PartType.Ball
-				--part.Position = walkpos
 			else
 				Controls:Enable()
 			end
-		else
-			Controls:Enable()
 		end
+		task.wait()
+		--part:Destroy()
 	end
-	task.wait()
-	--part:Destroy()
 end
