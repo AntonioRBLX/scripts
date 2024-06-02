@@ -48,7 +48,7 @@ while true do
 						rotationdirection = -rotationdirection -- Changes the pivot direction
 					end
 					if math.random(1,25) == 1 then
-						distance = math.random(8,20) -- Changes the distance
+						distance = math.random(8,13) -- Changes the distance
 					end
 				end
 				if walkpos then
