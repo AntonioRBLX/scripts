@@ -214,6 +214,7 @@ function GetClosestPlayer(FOV,maxdist)
 		if lplrhrp and lplrhrp:IsA("BasePart") then
 			local camera = workspace.CurrentCamera
 			local closest
+			local distance
 			local function getclosestplayertoscreenpoint(point)
 				for _, player in pairs(Players:GetPlayers()) do
 					local character = player.Character
@@ -221,12 +222,13 @@ function GetClosestPlayer(FOV,maxdist)
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 						if NPCRoot and NPCRoot:IsA("BasePart") then
 							local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
-							local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
+							local distancetemp = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
 							local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
-							if onscreen and distance <= FOV and distance <= maxdist then
-								if not closest or distancefromplayer < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
+							if onscreen and distancetemp <= FOV then
+								if not closest or distancetemp < distance and distancefromplayer <= maxdist then
 									closest = character
+									distance = distancetemp
 								end
 							end
 						end
@@ -235,16 +237,17 @@ function GetClosestPlayer(FOV,maxdist)
 			end
 			if configs.AimbotMethod == "ClosestPlayerToCursor" and camera then
 				getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
-				return closest
 			elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
 				for _, player in pairs(Players:GetPlayers()) do
 					local character = player.Character
 					if character and character ~= lplrchar  then
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 						if NPCRoot and NPCRoot:IsA("BasePart") then
-							local distance = (NPCRoot.Position - lplrhrp.Position).Magnitude
-							if not closest or distance < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distance <= maxdist then
+							local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
+							
+							if not closest or distancetemp < distance and distancetemp <= maxdist then
 								closest = character
+								distance = distancetemp
 							end
 						end
 					end
@@ -263,10 +266,11 @@ function GetClosestPlayer(FOV,maxdist)
 							if character and character ~= lplrchar then
 								local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 								if NPCRoot and NPCRoot:IsA("BasePart") then
-									local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
+									local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
-									if not closest or distancefromplayer < (closest.HumanoidRootPart.Position - lplrhrp.Position).Magnitude and distancefromplayer <= maxdist then
+									if not closest or distancetemp < distance and distancetemp <= maxdist then
 										closest = character
+										distance = distancetemp
 									end
 								end
 							end
