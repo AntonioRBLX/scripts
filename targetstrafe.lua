@@ -13,8 +13,8 @@ local distance = math.random(8,20)
 
 LocalPlayer.CharacterAdded:Connect(function(char)
 	LPlrChar = char
-	LPlrRoot = NPCChar:WaitForChild("HumanoidRootPart")
-	LPlrHumanoid = NPCChar:WaitForChild("Humanoid")
+	LPlrRoot = LPlrChar:WaitForChild("HumanoidRootPart")
+	LPlrHumanoid = LPlrChar:WaitForChild("Humanoid")
 end)
 while true do
 	closest = nil
