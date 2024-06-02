@@ -1,3 +1,6 @@
+local UIS = game:GetService("UserInputService")
+local StarterGui = game:GetService("StarterGui")
+
 local closest
 local Players = game:GetService("Players")
 local LocalPlayer = Players.LocalPlayer
@@ -11,15 +14,26 @@ local rotationangle = 0
 local rotationdirection = 1
 local distance = math.random(8,20)
 
+local enabled = false
+
 LocalPlayer.CharacterAdded:Connect(function(char)
 	LPlrChar = char
 	LPlrRoot = LPlrChar:WaitForChild("HumanoidRootPart")
 	LPlrHumanoid = LPlrChar:WaitForChild("Humanoid")
 end)
+UIS.InputBegan:Connect(function(input)
+	if input.KeyCode == Enum.KeyCode.E then
+		enabled = not enabled
+		StarterGui:SetCore("SendNotification", {
+			Title = "Info";
+			Text = "Auto-Strafe has been set to "..tostring(enabled);
+		})
+	end
+end)
 while true do
 	closest = nil
 	local part
-	if LPlrChar and LPlrRoot and LPlrHumanoid then
+	if enabled and LPlrChar and LPlrRoot and LPlrHumanoid then
 		for _, NPC in pairs(Players:GetPlayers()) do
 			if NPC ~= LocalPlayer and (not NPC.Team or NPC.Team ~= LocalPlayer.Team) then
 				local NPCChar = NPC.Character
@@ -78,7 +92,7 @@ while true do
 				Controls:Enable()
 			end
 		end
-		task.wait()
 		--part:Destroy()
 	end
+	task.wait()
 end
