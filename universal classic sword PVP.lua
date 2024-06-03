@@ -31,7 +31,6 @@ local count = 1
 
 function slash(tool)
 	if mouse.Icon ~= "rbxasset://textures/GunWaitCursor.png" then
-		print("slash")
 		tool:Activate()
 		task.wait(0.01)
 		tool:Activate()
