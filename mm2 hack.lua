@@ -2,7 +2,7 @@ local CoreGui = game:GetService("CoreGui")
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
-local TeleportService = game:GetService("TeleportService") 
+local TeleportService = game:GetService("TeleportService")
 local TweenService = game:GetService("TweenService")
 
 function notify(title,msg)
@@ -42,6 +42,7 @@ repeat task.wait() until game.Players.LocalPlayer -- Waits for LocalPlayer to lo
 
 local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
+local camera = workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
 
 local configs = { -- Library Configurations
@@ -87,11 +88,10 @@ local configs = { -- Library Configurations
 	GunDropColor = Color3.fromRGB(141, 112, 255);
 	ShowAimbotVisuals = false;
 }
-local players = {} --[[
-					Nikilis = {
-						Role = "Murderer";
-					}
-					--]]
+
+local players = {}
+local visuals = {}
+
 local weapons = {
 	Knife = {
 		Role = {"Murderer"};
@@ -115,7 +115,6 @@ local eventfunctions = {}
 local scriptvariables = {
 	IsFlinging = false;
 	AntiLagAlreadyExecuted = false;
-	ScriptActivated = true;
 	ExecuteOnTeleport = false;
 	TPCheck = false;
 	QueueOnTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport;
@@ -141,11 +140,26 @@ if Drawing then
 	Drawing2.ZIndex = -1
 	Drawing2.Filled = false
 else
-	notify("Info","Drawing is not supported on this executor, functions such as ShowFOVCircle will not work.")
+	notify("Info","Drawing is not supported on this executor, functions such as ShowFOVCircle and AimbotVisuals will not work.")
 end
 
 ---------------------------------------------------------------------------
 -- Functions
+
+function Draw(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Color = (), LifeTime = ()}
+	local line = Drawing.new("Line")
+	line.Visible = true
+	line.Color = dictionary.Color
+	line.Thickness = 1
+	line.Transparency = 1
+
+	table.insert(visuals, {Line = line, Spawn = tick(), Properties = {
+		StartPoint = dictionary.StartPoint;
+		EndPoint = dictionary.EndPoint;
+		Color = dictionary.Color;
+		LifeTime = dictionary.LifeTime;
+	}})
+end
 
 function AddChams(object,isacharmodel,chamsettings) -- Adds ESP
 	local function AddBoxHandleAdornment(part)
@@ -160,7 +174,7 @@ function AddChams(object,isacharmodel,chamsettings) -- Adds ESP
 	end
 	if isacharmodel then
 		if object.ClassName == "Model" and Players:FindFirstChild(object.Name) then
-			for _, limb in pairs(object:GetChildren()) do
+			for _, limb in ipairs(object:GetChildren()) do
 				if limb:IsA("BasePart") and limb.Name ~= "HumanoidRootPart" and not limb:FindFirstChild("MM2CHAMS") then
 					AddBoxHandleAdornment(limb)
 				end
@@ -176,7 +190,7 @@ function UpdateChams(object,isacharmodel,chamsettings) -- Updates ESP
 	end
 	if isacharmodel then
 		if object.ClassName == "Model" and Players:FindFirstChild(object.Name) then
-			for _, limb in pairs(object:GetChildren()) do
+			for _, limb in ipairs(object:GetChildren()) do
 				local BHA = limb:FindFirstChild("MM2CHAMS")
 				if BHA and BHA.ClassName == "BoxHandleAdornment" then
 					changeadornment(BHA)
@@ -193,7 +207,7 @@ end
 function RemoveChams(object,isacharmodel) -- Destroys ESP
 	if isacharmodel then
 		if object.ClassName == "Model" and Players:FindFirstChild(object.Name) then
-			for _, limb in pairs(object:GetChildren()) do
+			for _, limb in ipairs(object:GetChildren()) do
 				local BHA = limb:FindFirstChild("MM2CHAMS")
 				if BHA and BHA.ClassName == "BoxHandleAdornment" then
 					BHA:Destroy()
@@ -212,11 +226,10 @@ function GetClosestPlayer(FOV,maxdist)
 	if lplrchar then
 		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
 		if lplrhrp and lplrhrp:IsA("BasePart") then
-			local camera = workspace.CurrentCamera
 			local closest
 			local distance
 			local function getclosestplayertoscreenpoint(point)
-				for _, player in pairs(Players:GetPlayers()) do
+				for _, player in ipairs(Players:GetPlayers()) do
 					local character = player.Character
 					if character and character ~= lplrchar then
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
@@ -226,7 +239,7 @@ function GetClosestPlayer(FOV,maxdist)
 							local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
 							if onscreen and distancetemp <= FOV then
-								if not closest or distancetemp < distance and distancefromplayer <= maxdist then
+								if (not closest or distancetemp < distance) and distancefromplayer <= maxdist then
 									closest = character
 									distance = distancetemp
 								end
@@ -238,14 +251,14 @@ function GetClosestPlayer(FOV,maxdist)
 			if configs.AimbotMethod == "ClosestPlayerToCursor" and camera then
 				getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
 			elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
-				for _, player in pairs(Players:GetPlayers()) do
+				for _, player in ipairs(Players:GetPlayers()) do
 					local character = player.Character
 					if character and character ~= lplrchar  then
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 						if NPCRoot and NPCRoot:IsA("BasePart") then
 							local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
 							
-							if not closest or distancetemp < distance and distancetemp <= maxdist then
+							if (not closest or distancetemp < distance) and distancetemp <= maxdist then
 								closest = character
 								distance = distancetemp
 							end
@@ -260,7 +273,7 @@ function GetClosestPlayer(FOV,maxdist)
 				elseif players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
 				else
-					for _, player in pairs(Players:GetPlayers()) do
+					for _, player in ipairs(Players:GetPlayers()) do
 						if players[player.Name] and players[player.Name].Role and players[player.Name].Role == weapons.Knife.Role[1] then
 							local character = player.Character
 							if character and character ~= lplrchar then
@@ -268,7 +281,7 @@ function GetClosestPlayer(FOV,maxdist)
 								if NPCRoot and NPCRoot:IsA("BasePart") then
 									local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
-									if not closest or distancetemp < distance and distancetemp <= maxdist then
+									if (not closest or distancetemp < distance) and distancetemp <= maxdist then
 										closest = character
 										distance = distancetemp
 									end
@@ -284,7 +297,7 @@ function GetClosestPlayer(FOV,maxdist)
 	return nil
 end
 function ChamPlayerRoles() -- Chams Player Using Colors Based On Their Role
-	for _, player in pairs(Players:GetPlayers()) do
+	for _, player in ipairs(Players:GetPlayers()) do
 		local character = player.Character
 		if character and players[player.Name] and player ~= LocalPlayer then
 			local role = players[player.Name].Role
@@ -311,7 +324,7 @@ function ChamPlayerRoles() -- Chams Player Using Colors Based On Their Role
 	end
 end
 function UnchamPlayers()
-	for _, player in pairs(Players:GetPlayers()) do
+	for _, player in ipairs(Players:GetPlayers()) do
 		local character = player.Character
 		if character then
 			RemoveChams(character,true)
@@ -319,7 +332,7 @@ function UnchamPlayers()
 	end
 end
 function UpdateAllChams()
-	for _, child in pairs(workspace:GetChildren()) do
+	for _, child in ipairs(workspace:GetChildren()) do
 		local player = Players:GetPlayerFromCharacter(child)
 		if player and players[player.Name] and player ~= LocalPlayer then
 			local role = players[player.Name].Role
@@ -357,7 +370,7 @@ function RemoveDisplays(character)
 	if GunDisplay then GunDisplay:Destroy() end
 
 	if configs.IncludeAccessories then
-		for _, child in pairs(character:GetChildren()) do
+		for _, child in ipairs(character:GetChildren()) do
 			if child:IsA("Accessory") or child.Name == "Radio" or child.Name == "Pet" then
 				child:Destroy()
 			end
@@ -474,12 +487,12 @@ function eventfunctions.Initialize(player)
 	end)
 	CharacterAdded(character)
 
-	for _, child in pairs(backpack:GetChildren()) do
+	for _, child in ipairs(backpack:GetChildren()) do
 		if child.ClassName == "Tool" then
 			AssignRole(child)
 		end
 	end
-	for _, child in pairs(character:GetChildren()) do
+	for _, child in ipairs(character:GetChildren()) do
 		if child.ClassName == "Tool" then
 			AssignRole(child)
 		end
@@ -510,38 +523,28 @@ local function RemoveLagFromObject(object)
 		end
 	end
 end
-function AimbotVisuals(path)
+function AimbotVisuals(startpos,endpos,path)
 	task.wait()
-	local prevatt
-	local hue = 0
-
-	local container = Instance.new("Part", workspace)
-	container.Anchored = true
-	container.CanCollide = false
-	container.Transparency = 1
-
-	for _, i in path do
-		local att = Instance.new("Attachment", container)
-		att.WorldPosition = i
-
-		if prevatt then
-			local beam = Instance.new("Beam", container)
-			beam.FaceCamera = true
-			beam.Attachment0 = prevatt
-			beam.Attachment1 = att
-			beam.Color = ColorSequence.new(Color3.fromHSV(hue/360, 0.560784, 1),Color3.fromHSV((hue + 3)/360, 0.560784, 1))
-			beam.Segments = 1
-			beam.Width0 = 0.3
-			beam.Width1 = 0.3
+	if Drawing then
+		local prevpos
+		for _, v in path do
+			if prevpos then
+				Draw({
+					StartPoint = prevpos;
+					EndPoint = v; 
+					Color = Color3.new(0,0,1); 
+					LifeTime = 5;
+				})
+			end
+			prevpos = v
 		end
-		hue += 3
-		if hue >= 360 then
-			hue = 0
-		end
-		prevatt = att
+		Draw({
+			StartPoint = startpos;
+			EndPoint = endpos; 
+			Color = Color3.new(1,1,1); 
+			LifeTime = 5;
+		})
 	end
-	task.wait(5)
-	container:Destroy()
 end
 function GetAimVector(lplrchar,typ)
 	local p = (LocalPlayer:GetNetworkPing() * 2) + 175
@@ -564,8 +567,8 @@ function GetAimVector(lplrchar,typ)
 			PredictSpamJump = true;
 			IsAGun = true;
 		})
-		if configs.ShowAimbotVisuals then
-			coroutine.wrap(AimbotVisuals)(path)
+		if configs.ShowAimbotVisuals and aimpos then
+			coroutine.wrap(AimbotVisuals)(attachment.WorldPosition,aimpos,path)
 		end
 		attachment:Destroy()
 
@@ -599,8 +602,8 @@ function GetAimVector(lplrchar,typ)
 				IsAGun = false;
 			})
 		end
-		if configs.ShowAimbotVisuals then
-			coroutine.wrap(AimbotVisuals)(path)
+		if configs.ShowAimbotVisuals and aimpos then
+			coroutine.wrap(AimbotVisuals)(attachment.WorldPosition,aimpos,path)
 		end
 
 		powers.Sleight = false
@@ -898,7 +901,7 @@ local ShowGunDrop = Visuals:CreateToggle({
 	Flag = "Show Gun Drop";
 	Callback = function(value)
 		configs.ShowGunDrop = value
-		for _, child in pairs(workspace:GetChildren()) do
+		for _, child in ipairs(workspace:GetChildren()) do
 			if child:IsA("BasePart") and child.Name == "GunDrop" then
 				if configs.ShowGunDrop then
 					AddChams(child,false,{
@@ -918,7 +921,7 @@ local ShowTraps = Visuals:CreateToggle({
 	Flag = "Show Traps";
 	Callback = function(value)
 		configs.TrapESP = value
-		for _, descendant in pairs(workspace:GetDescendants()) do
+		for _, descendant in ipairs(workspace:GetDescendants()) do
 			if descendant:IsA("BasePart") and descendant.Name == "Trap" then
 				if configs.TrapESP then
 					AddChams(descendant,false,{
@@ -1034,12 +1037,12 @@ local RemoveMapLag = Visuals:CreateButton({
 			Lighting.FogEnd = 9e9
 			settings().Rendering.QualityLevel = 1
 
-			for _, child in pairs(Lighting:GetChildren()) do
+			for _, child in ipairs(Lighting:GetChildren()) do
 				if child:IsA("BlurEffect") or child:IsA("SunRaysEffect") or child:IsA("ColorCorrectionEffect") or child:IsA("BloomEffect") or child:IsA("DepthOfFieldEffect") then
 					child:Destroy()
 				end
 			end
-			for _, descendant in pairs(workspace:GetDescendants()) do
+			for _, descendant in ipairs(workspace:GetDescendants()) do
 				RemoveLagFromObject(descendant)
 			end
 		end
@@ -1050,7 +1053,7 @@ local RemoveAccessoryLag = Visuals:CreateButton({
     SectionParent = AntiLagSection;
 	Callback = function()
 		local lplrchar = LocalPlayer.Character
-		for _, player in pairs(Players:GetPlayers()) do
+		for _, player in ipairs(Players:GetPlayers()) do
 			local character = player.Character
 			if character and (configs.IncludeLocalPlayer or character ~= lplrchar) then
 				RemoveDisplays(character)
@@ -1091,7 +1094,7 @@ local AnnounceRoles = Blatant:CreateButton({
 	Callback = function()
 		local murderer = "nobody"
 		local sheriff = "nobody"
-		for _, player in pairs(Players:GetPlayers()) do
+		for _, player in ipairs(Players:GetPlayers()) do
 			if players[player.Name] then
 				if players[player.Name].Role == weapons.Knife.Role[1] then
 					murderer = player.Name
@@ -1110,7 +1113,7 @@ local AnnounceRoles = Blatant:CreateButton({
 local GrabGun = Blatant:CreateButton({
 	Name = "Grab Gun",
 	Callback = function()
-		for _, v in pairs(workspace:GetChildren()) do
+		for _, v in ipairs(workspace:GetChildren()) do
 			if v:IsA("BasePart") and v.Name == "GunDrop" then
 				GrabGunFunction(v)
 			end
@@ -1176,7 +1179,7 @@ local FlingPlayer = Blatant:CreateButton({
 							while true do
 								if not scriptvariables.IsFlinging or not Players:FindFirstChild(configs.FlingPlayer) then 
 									scriptvariables.IsFlinging = false
-									for _, v in pairs(lplrchar:GetChildren()) do
+									for _, v in ipairs(lplrchar:GetChildren()) do
 										if v:IsA("BasePart") then
 											v.CanCollide = true
 											v.Massless = false
@@ -1193,7 +1196,7 @@ local FlingPlayer = Blatant:CreateButton({
 									break
 								end
 								if lplrchar.Parent then -- if localplayer character has not been destroyed
-									for _, v in pairs(lplrchar:GetChildren()) do
+									for _, v in ipairs(lplrchar:GetChildren()) do
 										if v:IsA("BasePart") then
 											v.CanCollide = false
 											v.Massless = true
@@ -1268,7 +1271,7 @@ local CoinFarm = AutoFarm:CreateToggle({
 						if coins then
 							local closest
 							local distance
-							for _, v in pairs(coins:GetChildren()) do
+							for _, v in ipairs(coins:GetChildren()) do
 								local TouchInterest = v:FindFirstChildWhichIsA("TouchTransmitter")
 								if TouchInterest and v:IsA("BasePart") and v.Name == "Coin_Server" and v.Transparency ~= 1 then
 									local distancetemp = (v.Position - lplrhrp.Position).Magnitude
@@ -1285,7 +1288,7 @@ local CoinFarm = AutoFarm:CreateToggle({
 								local tween = TweenService:Create(lplrhrp,info,{CFrame = CFrame.new(closest.Position - Vector3.new(0,4,0))})
 								tween:Play()
 								tween.Completed:Wait()
-								spawn(function()
+								task.spawn(function()
 									firetouchinterest(closest, lplrhrp, 1)
 									wait()
 									firetouchinterest(closest, lplrhrp, 0)
@@ -1383,14 +1386,6 @@ local Rejoin = Others:CreateButton({
 		TeleportService:Teleport(game.PlaceId, LocalPlayer)
 	end;
 })
-local Unload = Others:CreateButton({
-	Name = "Unload";
-	Callback = function()
-		_G.mm2hacksalreadyloadedbyCITY512 = false
-		scriptvariables.ScriptActivated = false
-		Library:Destroy()
-	end;
-})
 local KeepGUI = Others:CreateToggle({
 	Name = "Keep GUI";
 	CurrentValue = false;
@@ -1442,7 +1437,7 @@ eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(desc
 	end
 end)
 eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
-	if scriptvariables.ScriptActivated and not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and scriptvariables.ExecuteOnTeleport then
+	if not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and scriptvariables.ExecuteOnTeleport then
 		scriptvariables.TPCheck = true
 		scriptvariables.QueueOnTeleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20hack.lua"))()')
 	end
@@ -1467,7 +1462,7 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
 
-	if scriptvariables.ScriptActivated and not checkcaller() and LocalPlayer.Character then
+	if not checkcaller() and LocalPlayer.Character then
 		local lplrchar = LocalPlayer.Character
 		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
 			local aimpos = GetAimVector(lplrchar,1)
@@ -1487,11 +1482,11 @@ end)
 ---------------------------------------------------------------------------
 -- Loops
 
-for _, player in pairs(Players:GetPlayers()) do
+for _, player in ipairs(Players:GetPlayers()) do
 	FlingPlayerType:Add(player.Name)
 	eventfunctions.Initialize(player)
 end
-for _, v in pairs(workspace:GetChildren()) do
+for _, v in ipairs(workspace:GetChildren()) do
 	if v.Name == "Normal" and not v:FindFirstChildOfClass("Humanoid") then
 		match.Map = v
 	end
@@ -1512,7 +1507,6 @@ while true do
 		Drawing1.Position = mousepos
 		Drawing2.Position = mousepos
 	end
-	if not scriptvariables.ScriptActivated then break end
 
 	local lplrchar = LocalPlayer.Character
 	if lplrchar then
@@ -1523,7 +1517,7 @@ while true do
 				local Knife = lplrchar:FindFirstChild("Knife")
 				if Knife and Knife.ClassName == "Tool" then
 					local closest
-					for _, player in pairs(Players:GetPlayers()) do
+					for _, player in ipairs(Players:GetPlayers()) do
 						local character = player.Character
 						if character and character ~= lplrchar then
 							local NPCRoot = character:FindFirstChild("HumanoidRootPart")
@@ -1555,7 +1549,7 @@ while true do
 				if configs.AutoEquip and (not Gun or Gun.ClassName ~= "Tool") then
 					local bp = LocalPlayer:FindFirstChild("Backpack")
 					if bp then
-						for _, child in pairs(bp:GetChildren()) do
+						for _, child in ipairs(bp:GetChildren()) do
 							if child.ClassName == "Tool" and child.Name == "Gun" then
 								lplrhum:EquipTool(child)
 							end
@@ -1563,7 +1557,7 @@ while true do
 					end
 				end
 				if configs.AutoShoot and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeServer") and Gun.KnifeServer:FindFirstChild("ShootGun") then
-					for _, player in pairs(Players:GetPlayers()) do
+					for _, player in ipairs(Players:GetPlayers()) do
 						local character = player.Character
 						if character then
 							local NPCRoot = character:FindFirstChild("HumanoidRootPart") 
@@ -1591,6 +1585,25 @@ while true do
 					end
 				end
 			end
+		end
+	end
+	for i, v in ipairs(visuals) do
+		local properties = v.Properties
+		local line = v.Line
+		local spawn = v.Spawn
+
+		line.From, onscreen1 = camera:WorldToViewportPoint(properties.StartPoint)
+		line.To, onscreen2 = camera:WorldToViewportPoint(properties.EndPoint)
+
+		if onscreen1 and onscreen2 then
+			line.Transparency = 1
+		else
+			line.Transparency = 0
+		end
+
+		if spawn + properties.LifeTime < tick() then
+			line:Remove()
+			visuals[i] = nil
 		end
 	end
 	task.wait()
