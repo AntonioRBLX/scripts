@@ -46,7 +46,7 @@ while true do
 			end
 		end
 	end
-	if enabled and closest then
+	if closest then
 		local distance = (closesthrp.Position - lplrhrp.Position).Magnitude
 		local leadvector = closesthrp.Position + (closesthum.MoveDirection * closesthum.WalkSpeed) * (distance / lplrhum.WalkSpeed)
 		local leaddistance = (leadvector - lplrhrp.Position).Magnitude
