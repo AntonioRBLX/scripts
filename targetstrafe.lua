@@ -8,12 +8,13 @@ local lplrchar = lplr.Character or lplr.CharacterAdded:Wait()
 local lplrhum = lplrchar:WaitForChild("Humanoid")
 local lplrhrp = lplrchar:WaitForChild("HumanoidRootPart")
 
+local Controls = require(lplr.PlayerScripts.PlayerModule):GetControls()
 local enabled = false
 
-LocalPlayer.CharacterAdded:Connect(function(char)
+lplr.CharacterAdded:Connect(function(char)
 	lplrchar = char
-	lplrhrp = LPlrChar:WaitForChild("HumanoidRootPart")
-	lplrhum = LPlrChar:WaitForChild("Humanoid")
+	lplrhrp = lplrchar:WaitForChild("HumanoidRootPart")
+	lplrhum = lplrchar:WaitForChild("Humanoid")
 end)
 UIS.InputBegan:Connect(function(input)
 	if input.KeyCode == Enum.KeyCode.E then
@@ -58,4 +59,5 @@ while true do
 	else
 		Controls:Enable()
 	end
+	task.wait()
 end
