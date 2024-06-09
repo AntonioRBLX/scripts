@@ -51,9 +51,9 @@ while true do
 		local leadvector = closesthrp.Position + (closesthum.MoveDirection * closesthum.WalkSpeed) * ((distance - 1) / lplrhum.WalkSpeed)
 		local leaddistance = (leadvector - lplrhrp.Position).Magnitude
 		if leaddistance < 2 and distance < 6 then
-			lplrhum:MoveTo(lplrhrp.Position + (lplrhrp.Position - closesthrp.Position))
+			lplrhum:Move(CFrame.new(lplrhrp,lplrhrp.Position + (lplrhrp.Position - closesthrp.Position)).LookVector)
 		else
-			lplrhum:MoveTo(leadvector)
+			lplrhum:Move(CFrame.new(lplrhrp.Position,leadvector).LookVector)
 		end
 	end
 	task.wait()
