@@ -1,5 +1,6 @@
 local CoreGui = game:GetService("CoreGui")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
+local RS = game:GetService("RunService")
+local REPS = game:GetService("ReplicatedStorage")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
@@ -1122,7 +1123,7 @@ local AnnounceRoles = Blatant:CreateButton({
 			[1] = "The murderer is "..murderer.." and the sheriff is "..sheriff;
 			[2] = "normalchat"
 		}
-		ReplicatedStorage:WaitForChild("DefaultChatSystemEvents"):WaitForChild("SayMessageRequest"):FireServer(table.unpack(args))
+		REPS:WaitForChild("DefaultChatSystemEvents"):WaitForChild("SayMessageRequest"):FireServer(table.unpack(args))
 	end,
 })
 local GrabGun = Blatant:CreateButton({
@@ -1508,7 +1509,7 @@ for _, v in ipairs(workspace:GetChildren()) do
 end
 
 local prevtarget
-while true do
+RS.Heartbeat:Connect(function()
 	if prevtarget then
 		local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
 		if PrevTargetRoot and PrevTargetRoot:IsA("BasePart") then
@@ -1621,5 +1622,4 @@ while true do
 			visuals[i] = nil
 		end
 	end
-	task.wait()
-end
+end)
