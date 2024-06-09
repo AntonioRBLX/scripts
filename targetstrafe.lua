@@ -46,7 +46,8 @@ while true do
 			end
 		end
 	end
-	if closest then
+	if enabled and closest then
+		Controls:Disable()
 		local distance = (closesthrp.Position - lplrhrp.Position).Magnitude
 		local leadvector = closesthrp.Position + (closesthum.MoveDirection * closesthum.WalkSpeed) * ((distance - 1) / lplrhum.WalkSpeed)
 		local leaddistance = (leadvector - lplrhrp.Position).Magnitude
@@ -55,6 +56,8 @@ while true do
 		else
 			lplrhum:Move(CFrame.new(lplrhrp.Position,leadvector).LookVector)
 		end
+	else
+		Controls:Enable()
 	end
 	task.wait()
 end
