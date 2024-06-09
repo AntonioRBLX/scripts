@@ -486,6 +486,15 @@ function eventfunctions.Initialize(player)
 				AssignRole(child)
 			end
 		end)
+		connections[b - 3] = char.ChildAdded:Connect(function(child)
+			if child.ClassName == "Tool" then
+				local Handle = child:FindFirstChild("Handle")
+				if Handle then
+					local decal = Handle:FindFirstChildOfClass("Decal")
+					if decal then decal:Destroy() end
+				end
+			end
+		end)
 	end
 
 	connections[b - 2] = player.CharacterAdded:Connect(function(character)
