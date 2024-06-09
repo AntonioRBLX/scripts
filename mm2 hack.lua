@@ -366,8 +366,14 @@ function RemoveDisplays(character)
 	local KnifeDisplay = character:WaitForChild("KnifeDisplay", 10)
 	local GunDisplay = character:WaitForChild("GunDisplay", 10)
 
-	if KnifeDisplay then KnifeDisplay:Destroy() end
-	if GunDisplay then GunDisplay:Destroy() end
+	if KnifeDisplay then
+		local decal = KnifeDisplay:FindFirstChildOfClass("Decal")
+		if decal then decal:Destroy() end
+	end
+	if GunDisplay then 
+		local decal = GunDisplay:FindFirstChildOfClass("Decal")
+		if decal then decal:Destroy() end
+	end
 
 	if configs.IncludeAccessories then
 		for _, child in ipairs(character:GetChildren()) do
