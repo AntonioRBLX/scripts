@@ -45,6 +45,7 @@ local LocalPlayer = Players.LocalPlayer
 local PlayerGui = LocalPlayer:WaitForChild("PlayerGui")
 local camera = workspace.CurrentCamera
 local Mouse = LocalPlayer:GetMouse()
+local prevtarget
 
 local configs = { -- Library Configurations
 	GunAimbot = false;
@@ -1469,47 +1470,7 @@ eventfunctions.PlayerRemoved = Players.PlayerRemoving:Connect(function(removedpl
 	end
 	FlingPlayerType:Remove(removedplayer.Name)
 end)
-
----------------------------------------------------------------------------
--- Hooks
-
-local namecall
-namecall = hookmetamethod(game, "__namecall", function(self,...)
-	local args = {...}
-	local method = getnamecallmethod()
-
-	if not checkcaller() and LocalPlayer.Character then
-		local lplrchar = LocalPlayer.Character
-		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
-			local aimpos = GetAimVector(lplrchar,1)
-			args[2] = aimpos
-
-			return aimpos and self.InvokeServer(self,table.unpack(args)) or self.InvokeServer(self,...)
-		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
-			local aimpos = GetAimVector(lplrchar,2)
-			args[1] = CFrame.new(aimpos)
-
-			return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
-		end
-	end
-	return namecall(self,...)
-end)
-
----------------------------------------------------------------------------
--- Loops
-
-for _, player in ipairs(Players:GetPlayers()) do
-	FlingPlayerType:Add(player.Name)
-	eventfunctions.Initialize(player)
-end
-for _, v in ipairs(workspace:GetChildren()) do
-	if v.Name == "Normal" and not v:FindFirstChildOfClass("Humanoid") then
-		match.Map = v
-	end
-end
-
-local prevtarget
-RS.Heartbeat:Connect(function()
+eventfunctions.Heartbeat = RS.Heartbeat:Connect(function()
 	if prevtarget then
 		local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
 		if PrevTargetRoot and PrevTargetRoot:IsA("BasePart") then
@@ -1623,3 +1584,41 @@ RS.Heartbeat:Connect(function()
 		end
 	end
 end)
+
+---------------------------------------------------------------------------
+-- Hooks
+
+local namecall
+namecall = hookmetamethod(game, "__namecall", function(self,...)
+	local args = {...}
+	local method = getnamecallmethod()
+
+	if not checkcaller() and LocalPlayer.Character then
+		local lplrchar = LocalPlayer.Character
+		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
+			local aimpos = GetAimVector(lplrchar,1)
+			args[2] = aimpos
+
+			return aimpos and self.InvokeServer(self,table.unpack(args)) or self.InvokeServer(self,...)
+		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
+			local aimpos = GetAimVector(lplrchar,2)
+			args[1] = CFrame.new(aimpos)
+
+			return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
+		end
+	end
+	return namecall(self,...)
+end)
+
+---------------------------------------------------------------------------
+-- Loops
+
+for _, player in ipairs(Players:GetPlayers()) do
+	FlingPlayerType:Add(player.Name)
+	eventfunctions.Initialize(player)
+end
+for _, v in ipairs(workspace:GetChildren()) do
+	if v.Name == "Normal" and not v:FindFirstChildOfClass("Humanoid") then
+		match.Map = v
+	end
+end
