@@ -48,9 +48,9 @@ while true do
 	end
 	if closest then
 		local distance = (closesthrp.Position - lplrhrp.Position).Magnitude
-		local leadvector = closesthrp.Position + (closesthum.MoveDirection * closesthum.WalkSpeed) * (distance / lplrhum.WalkSpeed)
+		local leadvector = closesthrp.Position + (closesthum.MoveDirection * closesthum.WalkSpeed) * ((distance - 1) / lplrhum.WalkSpeed)
 		local leaddistance = (leadvector - lplrhrp.Position).Magnitude
-		if leaddistance < 2 then
+		if leaddistance < 2 and distance < 6 then
 			lplrhum:MoveTo(lplrhrp.Position + (lplrhrp.Position - closesthrp.Position))
 		else
 			lplrhum:MoveTo(leadvector)
