@@ -1470,7 +1470,7 @@ eventfunctions.PlayerRemoved = Players.PlayerRemoving:Connect(function(removedpl
 	end
 	FlingPlayerType:Remove(removedplayer.Name)
 end)
-eventfunctions.Heartbeat = RS.Heartbeat:Connect(function()
+eventfunctions.Stepped = RS.Stepped:Connect(function()
 	if prevtarget then
 		local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
 		if PrevTargetRoot and PrevTargetRoot:IsA("BasePart") then
