@@ -26,15 +26,18 @@ local enabled = false
 function getClosest()
 	local closest
 	local dist
-	for _, child in pairs(workspace:GetChildren()) do
-		local NPCHum = child:FindFirstChildOfClass("Humanoid")
-		local NPCHrp = child:FindFirstChild("HumanoidRootPart")
-
-		if child ~= killerChar and NPCHum and NPCHum.Health > 0 and NPCHrp and NPCHrp:IsA("BasePart") then
-			local dist2 = (NPCHrp.Position - killerHrp.Position).Magnitude
-			if (not closest or dist2 < dist) and dist2 <= MaxDist then
-				closest = child
-				dist = dist2
+	for _, plr in pairs(Players:GetPlayers()) do
+		local plrchar = plr.Character
+		if plrchar and plrchar ~= killerChar then
+			local NPCHum = plrchar:FindFirstChildOfClass("Humanoid")
+			local NPCHrp = plrchar:FindFirstChild("HumanoidRootPart")
+	
+			if NPCHum and NPCHum.Health > 0 and NPCHrp and NPCHrp:IsA("BasePart") then
+				local dist2 = (NPCHrp.Position - killerHrp.Position).Magnitude
+				if (not closest or dist2 < dist) and dist2 <= MaxDist then
+					closest = plrchar
+					dist = dist2
+				end
 			end
 		end
 	end
