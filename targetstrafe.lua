@@ -13,6 +13,8 @@ local pivotDirection = 1
 local pivotDistance = 3
 local prevtimer
 
+local Controls = require(lplr:WaitForChild("PlayerScripts"):WaitForChild("PlayerModule")):GetControls()
+
 lplr.CharacterAdded:Connect(function(char)
 	killerChar = char
 	killerHum = char:WaitForChild("Humanoid")
@@ -48,12 +50,13 @@ UIS.InputBegan:Connect(function(input)
 	end
 end)
 RS.Stepped:Connect(function(timer)
-	if not enabled or not killerChar.Parent or not killerHum.Parent or killerHum.Health <= 0 or not killerHrp.Parent then return end
+	if not enabled or not killerChar.Parent or not killerHum.Parent or killerHum.Health <= 0 or not killerHrp.Parent then Controls:Enable() return end
 	local closest = getClosest()
 	if math.random(1,21) == 1 then
 		pivotDistance = math.random(32,75)/10
 	end
 	if closest and prevtimer then
+		Controls:Disable()
 		local enemyroot = closest.HumanoidRootPart
 		local enemypos = enemyroot.Position
 
