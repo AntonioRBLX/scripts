@@ -59,48 +59,54 @@ RS.Stepped:Connect(function(timer)
 		pivotDistance = math.random(32,75)/10
 	end
 	if closest and prevtimer then
-		Controls:Disable()
 		local enemyroot = closest.HumanoidRootPart
 		local enemypos = enemyroot.Position
+		local enemyvel = enemyroot.Velocity
 
 		local killerhrppos = killerHrp.Position
 		local killerhumvel = killerHrp.Velocity
 		
 		local dist = (killerhrppos - enemypos).Magnitude
+		if dist <= 10 then
+			Controls:Disable()
+			local x,y,z = CFrame.new(enemypos,killerhrppos):ToEulerAnglesYXZ()
+			local aim_target_look = Vector3.new(x,y,z)
 
-		local x,y,z = CFrame.new(enemypos,killerhrppos):ToEulerAnglesYXZ()
-		local aim_target_look = Vector3.new(x,y,z)
+			local x,y,z = CFrame.new(enemypos,enemypos + enemyroot.CFrame.LookVector):ToEulerAnglesYXZ()
+			local aim_cframeunit_look = Vector3.new(x,y,z)
 
-		local x,y,z = CFrame.new(enemypos,enemypos + enemyroot.CFrame.LookVector):ToEulerAnglesYXZ()
-		local aim_cframeunit_look = Vector3.new(x,y,z)
-
-		local diff = aim_target_look - aim_cframeunit_look
-		if math.deg(diff.X) <= 45 and math.deg(diff.X) >= -45 and math.deg(diff.Y) <= 45 and math.deg(diff.Y) >= -45 then
-			local circumference = 2 * math.pi * pivotDistance
-			local duration = circumference / killerHum.WalkSpeed
-			pivotAngle += (1/duration * (timer - prevtimer)) * 360 * pivotDirection
-			if pivotAngle >= 360 then
-				pivotAngle = 0
-			end
-
-			local moveto = enemypos + CFrame.Angles(0,math.rad(pivotAngle),0).LookVector * pivotDistance
-			killerHum:MoveTo(moveto)
-			if killerHum:GetState() ~= Enum.HumanoidStateType.Freefall and math.random(1,7) then
-				pivotDirection = -pivotDirection
-				if math.random(1,2) == 1 then
-					killerHum.Jump = true
+			local diff = aim_target_look - aim_cframeunit_look
+			if math.deg(diff.X) <= 45 and math.deg(diff.X) >= -45 and math.deg(diff.Y) <= 45 and math.deg(diff.Y) >= -45 then
+				local circumference = 2 * math.pi * pivotDistance
+				local duration = circumference / killerHum.WalkSpeed
+				pivotAngle += (1/duration * (timer - prevtimer)) * 360 * pivotDirection
+				if pivotAngle >= 360 then
+					pivotAngle = 0
 				end
-			elseif killerHum:GetState() == Enum.HumanoidStateType.Freefall and killerhumvel.Y >= -2 and killerhumvel.Y <= 2 and math.random(1,3) == 1 then
-				pivotDirection = -pivotDirection
+
+				local moveto = enemypos + CFrame.Angles(0,math.rad(pivotAngle),0).LookVector * pivotDistance
+				killerHum:MoveTo(moveto)
+				if killerHum:GetState() ~= Enum.HumanoidStateType.Freefall and math.random(1,7) then
+					pivotDirection = -pivotDirection
+					if math.random(1,2) == 1 then
+						killerHum.Jump = true
+					end
+				elseif killerHum:GetState() == Enum.HumanoidStateType.Freefall and killerhumvel.Y >= -2 and killerhumvel.Y <= 2 and math.random(1,3) == 1 then
+					pivotDirection = -pivotDirection
+				end
+			else
+				killerHum:MoveTo(enemypos)
 			end
-		else
-			killerHum:MoveTo(enemypos)
-		end
-		if enemypos.Y > killerhrppos.Y + 1 then
-			killerHum.Jump = true
-		end
-		if math.random(1,21) == 1 then
-			killerHum.Jump = true
+			if enemypos.Y > killerhrppos.Y + 1 then
+				killerHum.Jump = true
+			end
+			if math.random(1,21) == 1 then
+				killerHum.Jump = true
+			end
+		elseif dist <= 60 then
+			Controls:Disable()
+			local prediction = enemypos + enemyvel * dist / killerHum.WalkSpeed
+			killerHum:MoveTo(prediction)
 		end
 	end
 	prevtimer = timer
