@@ -59,6 +59,7 @@ RS.Stepped:Connect(function(timer)
 		pivotDistance = math.random(32,75)/10
 	end
 	if closest and prevtimer then
+		Controls:Enable()
 		local enemyroot = closest.HumanoidRootPart
 		local enemypos = enemyroot.Position
 		local enemyvel = enemyroot.Velocity
