@@ -81,6 +81,10 @@ local Knight = Instance.new("TextButton")
 local KnightUICorner = Instance.new("UICorner")
 local KnightOutline = Instance.new("Frame")
 local KnightOutlineUICorner = Instance.new("UICorner")
+local FakeR6 = Instance.new("TextButton")
+local FakeR6UICorner = Instance.new("UICorner")
+local FakeR6Outline = Instance.new("Frame")
+local FakeR6OutlineUICorner = Instance.new("UICorner")
 local GirlCombo1 = Instance.new("TextButton")
 local GirlCombo1UICorner = Instance.new("UICorner")
 local GirlCombo1Outline = Instance.new("Frame")
@@ -713,6 +717,39 @@ KnightOutline.ZIndex = 4
 KnightOutlineUICorner.CornerRadius = UDim.new(0, 4)
 KnightOutlineUICorner.Name = "Knight Outline UICorner"
 KnightOutlineUICorner.Parent = KnightOutline
+
+FakeR6.Name = "FakeR6"
+FakeR6.Parent = Container
+FakeR6.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
+FakeR6.BorderColor3 = Color3.fromRGB(31, 31, 31)
+FakeR6.LayoutOrder = 12
+FakeR6.Position = UDim2.new(0, 0, 0.0903614461, 0)
+FakeR6.Size = UDim2.new(1, 0, 0, 12)
+FakeR6.ZIndex = 5
+FakeR6.AutoButtonColor = false
+FakeR6.Font = Enum.Font.SourceSansBold
+FakeR6.Text = "FakeR6"
+FakeR6.TextColor3 = Color3.fromRGB(255, 255, 255)
+FakeR6.TextScaled = true
+FakeR6.TextSize = 13.000
+FakeR6.TextStrokeTransparency = 0.000
+FakeR6.TextWrapped = true
+
+FakeR6UICorner.CornerRadius = UDim.new(0, 4)
+FakeR6UICorner.Name = "FakeR6 UICorner"
+FakeR6UICorner.Parent = FakeR6
+
+FakeR6Outline.Name = "FakeR6 Outline"
+FakeR6Outline.Parent = FakeR6
+FakeR6Outline.AnchorPoint = Vector2.new(0.5, 0.5)
+FakeR6Outline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+FakeR6Outline.Position = UDim2.new(0.5, 0, 0.5, 0)
+FakeR6Outline.Size = UDim2.new(1, 2, 1, 2)
+FakeR6Outline.ZIndex = 4
+
+FakeR6OutlineUICorner.CornerRadius = UDim.new(0, 4)
+FakeR6OutlineUICorner.Name = "FakeR6 Outline UICorner"
+FakeR6OutlineUICorner.Parent = FakeR6Outline
 
 GirlCombo1.Name = "Girl Combo #1"
 GirlCombo1.Parent = Container
@@ -1601,6 +1638,18 @@ local anims = {
 		Swim = "rbxassetid://616165109";
 		SwimIdle = "rbxassetid://616166655"
 	};
+	faker6 = {
+		Button = FakeR6;
+		Idle1 = "rbxassetid://12521158637";
+		Idle2 = "rbxassetid://12521162526";
+		Walk = "rbxassetid://12518152696";
+		Run = "rbxassetid://12518152696";
+		Fall = "rbxassetid://12520972571";
+		Jump = "rbxassetid://12520880485";
+		Climb = "rbxassetid://12520982150";
+		Swim = "rbxassetid://12520993168";
+		SwimIdle = "rbxassetid://2510201162"
+	}
 	girlcombo1 = {
 		Button = GirlCombo1;
 		Idle1 = "rbxassetid://16738333868";
@@ -1610,7 +1659,7 @@ local anims = {
 		Fall = "rbxassetid://5319839762";
 		Jump = "rbxassetid://5319841935";
 		Climb = "rbxassetid://5319816685";
-		Swim = "rbxassetid://5319850266";
+		Swim = "rbxassetid://2510199791";
 		SwimIdle = "rbxassetid://5319852613"
 	};
 	girlcombo2 = {
