@@ -17,9 +17,6 @@ local Controls = require(lplr:WaitForChild("PlayerScripts"):WaitForChild("Player
 -- Main
 local enabled = false
 
--- Tool
-local Tool = lplrchar:WaitForChild("ClassicSword")
-
 -- Combat Variables
 local behavior = 1 -- 1: Attack, 2: Evade, 3: Counter
 local pivotdistance = 3
@@ -67,11 +64,12 @@ UIS.InputBegan:Connect(function(input)
 	end
 end)
 function attack()
-	if enemy and enemyhrp and enemyla and enemyra and lplrswordtip then
-		if mouse.Icon ~= "rbxasset://textures/GunWaitCursor.png" then
+	if lplrchar and enemy and enemyhrp and enemyla and enemyra and lplrswordtip then
+		local Tool = lplrchar:FindFirstChildOfClass("Tool")
+		if Tool and mouse.Icon ~= "rbxasset://textures/GunWaitCursor.png" then
 			local CFrameLook = CFrame.new(lplrswordtip.WorldPosition,enemyhrp.Position * Vector3.new(1,0,1) + lplrswordtip.WorldPosition * Vector3.new(0,1,0))
 			lplrhrp.CFrame = CFrame.new(lplrhrp.Position,lplrhrp.Position + CFrameLook.LookVector)
-			
+
 			Tool:Activate()
 			task.wait(0.01)
 			Tool:Activate()
@@ -90,7 +88,7 @@ end
 -- {Loops} --
 RS.Stepped:Connect(function(_, t)
 	if not lplrchar or not lplrhrp or not lplrhrp.Parent or not lplrhum or not lplrhum.Parent or lplrhum.Health <= 0 then return end
-	ping = lplr
+	ping = lplr:GetNetworkPing()
 	timer = t
 	if enabled then
 		local distance
@@ -100,9 +98,9 @@ RS.Stepped:Connect(function(_, t)
 		enemyanimator = nil
 		enemyla = nil
 		enemyra = nil
-		
-		for _, plr in pairs(Players:GetPlayers()) do
-			local char = plr.Character
+
+		for _, plr in pairs(workspace:GetChildren()) do
+			local char = plr
 			if char and char ~= lplrchar then
 				local temphrp = char:FindFirstChild("Torso") or char:FindFirstChild("HumanoidRootPart")
 				local temphum = char:FindFirstChildOfClass("Humanoid")
@@ -131,9 +129,9 @@ RS.Stepped:Connect(function(_, t)
 			if enemyattack and tick() + ping - 0.8 > enemyattack then enemyattack = nil end
 			if not enemyattack then safetoenter = true end
 			behavior = 1
-			
+
 			local dist = (enemyhrp.Position - lplrhrp.Position).Magnitude
-			
+
 			if not lplrswordtip or not lplrswordtip.Parent then
 				local temp = Instance.new("Attachment", lplrhrp)
 				temp.Position = Vector3.new(1.5, 0.5, -5)
@@ -151,21 +149,21 @@ RS.Stepped:Connect(function(_, t)
 				temp.Shape = Enum.PartType.Ball
 				dangerzone = temp
 			end
-			
+
 			if not enemyattack then
 				local anims = enemyanimator:GetPlayingAnimationTracks()
 				for _, anim in pairs(anims) do
-					if anim.Animation and (anim.Animation.AnimationId == "rbxassetid://522635514" or anim.Animation.AnimationId == "rbxassetid://522638767") then
+					if anim.Animation and (anim.Animation.AnimationId == "rbxassetid://522635514" or anim.Animation.AnimationId == "rbxassetid://522638767" or anim.Animation.AnimationId == "http://www.roblox.com/asset/?id=129967390" or anim.Animation.AnimationId == "http://www.roblox.com/asset/?id=129967478") then
 						safetoenter = false
 						enemyattack = tick()
 						break
 					end
 				end
 			end
-			
+
 			evasionzone.Size = Vector3.new(30+ping*2,30+ping*2,30+ping*2)
 			dangerzone.Size = Vector3.new(15+ping*2,15+ping*2,15+ping*2)
-			
+
 			if not safetoenter then
 				dangerzone.Position = Vector3.new(99999,99999,99999)
 				evasionzone.Position = enemyhrp.Position
@@ -178,12 +176,12 @@ RS.Stepped:Connect(function(_, t)
 					end
 				end
 			end
-			
+
 			dangerzone.Position = enemyhrp.Position
 			evasionzone.Position = Vector3.new(99999,99999,99999)
 			local dangerzoneinterceptingparts = dangerzone:GetTouchingParts()
 			dangerzone.Position = Vector3.new(99999,99999,99999)
-			
+
 			for _, v in pairs(dangerzoneinterceptingparts) do
 				local char = v:FindFirstAncestorOfClass("Model")
 				if char and char == lplrchar then
@@ -191,7 +189,7 @@ RS.Stepped:Connect(function(_, t)
 					break
 				end
 			end
-			
+
 			if behavior == 1 then
 				lplrhum:MoveTo(enemyhrp.Position + enemyhrp.Velocity * dist / lplrhum.WalkSpeed)
 				if dist <= 15 then
