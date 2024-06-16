@@ -99,8 +99,8 @@ RS.Stepped:Connect(function(_, t)
 		enemyla = nil
 		enemyra = nil
 
-		for _, plr in pairs(workspace:GetChildren()) do
-			local char = plr
+		for _, plr in pairs(Players:GetPlayers()) do
+			local char = plr.Character
 			if char and char ~= lplrchar then
 				local temphrp = char:FindFirstChild("Torso") or char:FindFirstChild("HumanoidRootPart")
 				local temphum = char:FindFirstChildOfClass("Humanoid")
