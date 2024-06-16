@@ -134,7 +134,7 @@ RS.Stepped:Connect(function(_, t)
 
 			if not lplrswordtip or not lplrswordtip.Parent then
 				local temp = Instance.new("Attachment", lplrhrp)
-				temp.Position = Vector3.new(1.5, 0.5, -5)
+				temp.Position = Vector3.new(1.5, 0.5, 0)
 				lplrswordtip = temp
 			end
 			if not evasionzone or not evasionzone.Parent then
