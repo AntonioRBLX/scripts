@@ -225,7 +225,6 @@ RS.Stepped:Connect(function(_, t)
 					lplrhum:MoveTo(enemyhrp.Position + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
 				end
 			end
-			print(behavior)
 		else
 			Controls:Enable()
 		end
