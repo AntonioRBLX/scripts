@@ -1,6 +1,6 @@
 -- {Services} --
 local UIS = game:GetService("UserInputService")
-local StarterGui = game:GetService("StarterGui")
+local SG = game:GetService("StarterGui")
 local RS = game:GetService("RunService")
 local Players = game:GetService("Players")
 
@@ -56,6 +56,15 @@ lplr.CharacterAdded:Connect(function(char)
 	lplrchar = char
 	lplrhum = lplrchar:WaitForChild("Humanoid")
 	lplrhrp = lplrchar:WaitForChild("HumanoidRootPart")
+end)
+UIS.InputBegan:Connect(function(input)
+	if input.KeyCode == Enum.KeyCode.E then
+		enabled = not enabled
+		SG:SetCore("SendNotification",{
+			Title = "Info", -- Required
+			Text = "Combat AI has been set to "..tostring(enabled),
+		})
+	end
 end)
 function attack()
 	if enemy and enemyhrp and enemyla and enemyra and lplrswordtip then
