@@ -365,8 +365,8 @@ function UpdateAllChams()
 	end
 end
 function RemoveDisplays(character)
-	local KnifeDisplay = character:WaitForChild("KnifeDisplay", 10)
-	local GunDisplay = character:WaitForChild("GunDisplay", 10)
+	local KnifeDisplay = character:WaitForChild("KnifeDisplay")
+	local GunDisplay = character:WaitForChild("GunDisplay")
 
 	if KnifeDisplay then
 		local decal = KnifeDisplay:FindFirstChildOfClass("Decal")
