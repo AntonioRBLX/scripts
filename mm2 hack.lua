@@ -365,21 +365,10 @@ function UpdateAllChams()
 	end
 end
 function RemoveDisplays(character)
-	local function cleanuplag(display)
-		for _, v in pairs(display:GetChildren()) do
-			if not v:IsA("DataModelMesh") and not v:IsA("WeldConstraint") and not v:IsA("Weld") then
-				v:Destroy()
-			elseif v.ClassName == "SpecialMesh" then
-				v.TextureId = "rbxassetid://0"
-			end
-		end
-	end
-	
 	local KnifeDisplay = character:WaitForChild("KnifeDisplay")
 	local GunDisplay = character:WaitForChild("GunDisplay")
-
-	if KnifeDisplay then cleanuplag(KnifeDisplay) end
-	if GunDisplay then cleanuplag(GunDisplay) end
+	KnifeDisplay:Destroy()
+	GunDisplay:Destroy()
 
 	if configs.IncludeAccessories then
 		for _, child in ipairs(character:GetChildren()) do
