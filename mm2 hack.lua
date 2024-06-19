@@ -367,8 +367,10 @@ end
 function RemoveDisplays(character)
 	local function cleanuplag(display)
 		for _, v in pairs(display:GetChildren()) do
-			if not v:IsA("DataModelMesh") then
+			if not v:IsA("DataModelMesh") and not v:IsA("WeldConstraint") and not v:IsA("Weld") then
 				v:Destroy()
+			elseif v.ClassName == "SpecialMesh" then
+				v.TextureId = "rbxassetid://0"
 			end
 		end
 	end
