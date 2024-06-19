@@ -365,17 +365,19 @@ function UpdateAllChams()
 	end
 end
 function RemoveDisplays(character)
+	local function cleanuplag(display)
+		for _, v in pairs(display:GetChildren()) do
+			if not v:IsA("DataModelMesh") then
+				v:Destroy()
+			end
+		end
+	end
+	
 	local KnifeDisplay = character:WaitForChild("KnifeDisplay")
 	local GunDisplay = character:WaitForChild("GunDisplay")
 
-	if KnifeDisplay then
-		local decal = KnifeDisplay:FindFirstChildOfClass("Decal")
-		if decal then decal:Destroy() end
-	end
-	if GunDisplay then 
-		local decal = GunDisplay:FindFirstChildOfClass("Decal")
-		if decal then decal:Destroy() end
-	end
+	if KnifeDisplay then cleanuplag(KnifeDisplay) end
+	if GunDisplay then cleanuplag(GunDisplay) end
 
 	if configs.IncludeAccessories then
 		for _, child in ipairs(character:GetChildren()) do
