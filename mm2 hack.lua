@@ -89,6 +89,7 @@ local configs = { -- Library Configurations
 	SheriffColor = Color3.fromRGB(112, 136, 255);
 	GunDropColor = Color3.fromRGB(141, 112, 255);
 	ShowAimbotVisuals = false;
+	ShowFOVCircle = false;
 }
 
 local players = {}
@@ -259,7 +260,7 @@ function GetClosestPlayer(FOV,maxdist)
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 						if NPCRoot and NPCRoot:IsA("BasePart") then
 							local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
-							
+
 							if (not closest or distancetemp < distance) and distancetemp <= maxdist then
 								closest = character
 								distance = distancetemp
@@ -566,11 +567,11 @@ function GetAimVector(lplrchar,typ)
 		local lplrhrp = lplrchar.HumanoidRootPart
 		local attachment = Instance.new("Attachment", lplrhrp)
 		attachment.Position = Vector3.new(1.6, 1.2, -3)
-		
+
 		if not configs.Automatic then
 			p = configs.GunPrediction
 		end
-		
+
 		local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
 			IgnoreList = nil;
 			Ping = p;
@@ -595,7 +596,7 @@ function GetAimVector(lplrchar,typ)
 		if not configs.Automatic then
 			p = configs.KnifePrediction
 		end
-		
+
 		local path, aimpos
 		if powers.Sleight then
 			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
@@ -893,7 +894,7 @@ local ChamsSection = Visuals:CreateSection("Chams", false) -- The 2nd argument i
 local PlayerChams = Visuals:CreateToggle({
 	Name = "Player Chams";
 	CurrentValue = false;
-    SectionParent = ChamsSection;
+	SectionParent = ChamsSection;
 	Flag = "Player Chams";
 	Callback = function(value)
 		configs.Chams = value
@@ -907,7 +908,7 @@ local PlayerChams = Visuals:CreateToggle({
 local ShowGunDrop = Visuals:CreateToggle({
 	Name = "Show Gun Drop";
 	CurrentValue = false;
-    SectionParent = ChamsSection;
+	SectionParent = ChamsSection;
 	Flag = "Show Gun Drop";
 	Callback = function(value)
 		configs.ShowGunDrop = value
@@ -927,7 +928,7 @@ local ShowGunDrop = Visuals:CreateToggle({
 local ShowTraps = Visuals:CreateToggle({
 	Name = "Show Traps";
 	CurrentValue = false;
-    SectionParent = ChamsSection;
+	SectionParent = ChamsSection;
 	Flag = "Show Traps";
 	Callback = function(value)
 		configs.TrapESP = value
@@ -947,7 +948,7 @@ local ShowTraps = Visuals:CreateToggle({
 local MurdererColor = Visuals:CreateColorPicker({
 	Name = "Murderer Color";
 	Color = configs.MurdererColor;
-    SectionParent = ChamsSection;
+	SectionParent = ChamsSection;
 	Flag = "Murderer Color";
 	Callback = function(value)
 		configs.MurdererColor = value
@@ -957,7 +958,7 @@ local MurdererColor = Visuals:CreateColorPicker({
 local TrapColor = Visuals:CreateColorPicker({
 	Name = "Trap Color";
 	Color = configs.TrapColor;
-    SectionParent = ChamsSection;
+	SectionParent = ChamsSection;
 	Flag = "Trap Color";
 	Callback = function(value)
 		configs.TrapColor = value
@@ -967,7 +968,7 @@ local TrapColor = Visuals:CreateColorPicker({
 local HeroColor = Visuals:CreateColorPicker({
 	Name = "Hero/Target Color";
 	Color = configs.HeroColor;
-    SectionParent = ChamsSection;
+	SectionParent = ChamsSection;
 	Flag = "Hero/Target Color";
 	Callback = function(value)
 		configs.HeroColor = value
@@ -977,7 +978,7 @@ local HeroColor = Visuals:CreateColorPicker({
 local InnocentColor = Visuals:CreateColorPicker({
 	Name = "Innocent Color";
 	Color = configs.InnocentColor;
-    SectionParent = ChamsSection;
+	SectionParent = ChamsSection;
 	Flag = "Innocent Color";
 	Callback = function(value)
 		configs.InnocentColor = value
@@ -987,7 +988,7 @@ local InnocentColor = Visuals:CreateColorPicker({
 local SheriffColor = Visuals:CreateColorPicker({
 	Name = "Sheriff Color";
 	Color = configs.SheriffColor;
-    SectionParent = ChamsSection;
+	SectionParent = ChamsSection;
 	Flag = "Sheriff Color";
 	Callback = function(value)
 		configs.SheriffColor = value
@@ -997,7 +998,7 @@ local SheriffColor = Visuals:CreateColorPicker({
 local GunDropColor = Visuals:CreateColorPicker({
 	Name = "Gun Drop Color";
 	Color = configs.GunDropColor;
-    SectionParent = ChamsSection;
+	SectionParent = ChamsSection;
 	Flag = "Gun Drop Color";
 	Callback = function(value)
 		configs.GunDropColor = value
@@ -1009,18 +1010,17 @@ if Drawing then
 	local ShowFOVCircle = Visuals:CreateToggle({
 		Name = "Show FOV Circle";
 		CurrentValue = false;
-        SectionParent = AimbotVisualsSection;
+		SectionParent = AimbotVisualsSection;
 		Flag = "Show FOV Circle";
 		Callback = function(value)
-			Drawing1.Visible = value
-			Drawing2.Visible = value
+			configs.ShowFOVCircle = value
 		end;
 	})
 end
 local ShowAimbotVisuals = Visuals:CreateToggle({
 	Name = "Show Aimbot Visuals";
 	CurrentValue = false;
-    SectionParent = AimbotVisualsSection;
+	SectionParent = AimbotVisualsSection;
 	Flag = "Show Aimbot Visuals";
 	Callback = function(value)
 		configs.ShowAimbotVisuals = value
@@ -1031,7 +1031,7 @@ local AntiLagSection = Visuals:CreateSection("Anti-Lag", false) -- The 2nd argum
 
 local RemoveMapLag = Visuals:CreateButton({
 	Name = "Remove Map Lag";
-    SectionParent = AntiLagSection;
+	SectionParent = AntiLagSection;
 	Callback = function()
 		if not scriptvariables.AntiLagAlreadyExecuted then
 			scriptvariables.AntiLagAlreadyExecuted = true
@@ -1060,7 +1060,7 @@ local RemoveMapLag = Visuals:CreateButton({
 })
 local RemoveAccessoryLag = Visuals:CreateButton({
 	Name = "Remove Accessory Lag";
-    SectionParent = AntiLagSection;
+	SectionParent = AntiLagSection;
 	Callback = function()
 		local lplrchar = LocalPlayer.Character
 		for _, player in ipairs(Players:GetPlayers()) do
@@ -1074,7 +1074,7 @@ local RemoveAccessoryLag = Visuals:CreateButton({
 local AutoRemoveLag = Visuals:CreateToggle({
 	Name = "Auto Remove Lag";
 	CurrentValue = false;
-    SectionParent = AntiLagSection;
+	SectionParent = AntiLagSection;
 	Flag = "Auto Remove Lag";
 	Callback = function(value)
 		configs.AutoRemoveLag = value
@@ -1083,7 +1083,7 @@ local AutoRemoveLag = Visuals:CreateToggle({
 local IncludeHats = Visuals:CreateToggle({
 	Name = "Include Hats";
 	CurrentValue = false;
-    SectionParent = AntiLagSection;
+	SectionParent = AntiLagSection;
 	Flag = "Include Hats";
 	Callback = function(value)
 		configs.IncludeAccessories = value
@@ -1092,7 +1092,7 @@ local IncludeHats = Visuals:CreateToggle({
 local IncludeLocalPlayer = Visuals:CreateToggle({
 	Name = "Include LocalPlayer";
 	CurrentValue = false;
-    SectionParent = AntiLagSection;
+	SectionParent = AntiLagSection;
 	Flag = "Include LocalPlayer";
 	Callback = function(value)
 		configs.IncludeLocalPlayer = value
@@ -1153,7 +1153,7 @@ local FlingPlayerType = Blatant:CreateDropdown({
 	Options = {},
 	CurrentOption = nil;
 	MultiSelection = false; -- If MultiSelections is allowed
-    SectionParent = FlingSection;
+	SectionParent = FlingSection;
 	Flag = nil; -- A flag is the identifier for the configuration file, make sure every element has a different flag if you're using configuration saving to ensure no overlaps
 	Callback = function(Option)
 		configs.FlingPlayer = Option
@@ -1161,7 +1161,7 @@ local FlingPlayerType = Blatant:CreateDropdown({
 })
 local FlingPlayer = Blatant:CreateButton({
 	Name = "Fling Player";
-    SectionParent = FlingSection;
+	SectionParent = FlingSection;
 	Callback = function()
 		local function AddBodyFling(basepart)
 			local bav = Instance.new("BodyAngularVelocity", basepart)
@@ -1247,7 +1247,7 @@ local FlingPlayer = Blatant:CreateButton({
 })
 local StopFlinging = Blatant:CreateButton({
 	Name = "Stop Flinging";
-    SectionParent = FlingSection;
+	SectionParent = FlingSection;
 	Callback = function()
 		scriptvariables.IsFlinging = false
 	end;
@@ -1258,7 +1258,7 @@ local AutoFarmSection = Blatant:CreateSection("Auto Farm", false)
 local CoinFarm = AutoFarm:CreateToggle({
 	Name = "Coin Farm";
 	CurrentValue = false;
-    SectionParent = AutoFarmSection;
+	SectionParent = AutoFarmSection;
 	Flag = "Coin Farm";
 	Callback = function(value)
 		configs.CoinFarm = value
@@ -1317,7 +1317,7 @@ local CoinFarm = AutoFarm:CreateToggle({
 local XPFarm = AutoFarm:CreateToggle({
 	Name = "XP Farm";
 	CurrentValue = false;
-    SectionParent = AutoFarmSection;
+	SectionParent = AutoFarmSection;
 	Flag = "XP Farm";
 	Callback = function(value)
 		configs.XPFarm = value
@@ -1326,7 +1326,7 @@ local XPFarm = AutoFarm:CreateToggle({
 local AutoUnbox = AutoFarm:CreateToggle({
 	Name = "Auto Unbox";
 	CurrentValue = false;
-    SectionParent = AutoFarmSection;
+	SectionParent = AutoFarmSection;
 	Flag = "Auto Unbox";
 	Callback = function(value)
 		configs.AutoUnbox = value
@@ -1337,7 +1337,7 @@ local AutoUnboxCrate = AutoFarm:CreateDropdown({
 	Options = {"Crate #1","Crate #2","Crate #3"};
 	CurrentOption = "Crate #1";
 	MultiSelection = true; -- If MultiSelections is allowed
-    SectionParent = AutoFarmSection;
+	SectionParent = AutoFarmSection;
 	Flag = "Auto Unbox Crate";
 	Callback = function(option)
 		configs.AutoUnboxCrate = option
@@ -1472,10 +1472,14 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 		end
 		prevtarget = nil
 	end
-	if Drawing and configs.ShowFOVCircle then
-		local mousepos = Vector2.new(Mouse.X,Mouse.Y)
-		Drawing1.Position = mousepos
-		Drawing2.Position = mousepos
+	if Drawing then
+		Drawing1.Visible = configs.ShowFOVCircle
+		Drawing2.Visible = configs.ShowFOVCircle
+		if configs.ShowFOVCircle then
+			local mousepos = Vector2.new(Mouse.X,Mouse.Y)
+			Drawing1.Position = mousepos
+			Drawing2.Position = mousepos
+		end
 	end
 
 	local lplrchar = LocalPlayer.Character
