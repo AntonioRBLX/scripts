@@ -163,7 +163,13 @@ function Draw(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Color
 		LifeTime = dictionary.LifeTime;
 	}})
 end
-
+function RemoveLag(knife)
+	for i, v in ipairs(knife:GetDescendants()) do
+		if v.ClassName == "Script" or v.ClassName == "LocalScript" then
+			v:Destroy()
+		end
+	end
+end
 function AddChams(object,isacharmodel,chamsettings) -- Adds ESP
 	local function AddBoxHandleAdornment(part)
 		local BHA = Instance.new("BoxHandleAdornment", part)
@@ -368,9 +374,9 @@ end
 function RemoveDisplays(character)
 	local KnifeDisplay = character:WaitForChild("KnifeDisplay")
 	local GunDisplay = character:WaitForChild("GunDisplay")
-	KnifeDisplay:Destroy()
-	GunDisplay:Destroy()
-
+	RemoveLag(KnifeDisplay)
+	RemoveLag(GunDisplay)
+	
 	if configs.IncludeAccessories then
 		for _, child in ipairs(character:GetChildren()) do
 			if child:IsA("Accessory") or child.Name == "Radio" or child.Name == "Pet" then
@@ -483,12 +489,8 @@ function eventfunctions.Initialize(player)
 			end
 		end)
 		connections[b - 3] = char.ChildAdded:Connect(function(child)
-			if child.ClassName == "Tool" then
-				local Handle = child:FindFirstChild("Handle")
-				if Handle then
-					local decal = Handle:FindFirstChildOfClass("Decal")
-					if decal then decal:Destroy() end
-				end
+			if child.ClassName == "Tool" and configs.AutoRemoveLag then
+				RemoveLag(child)
 			end
 		end)
 	end
@@ -1424,11 +1426,13 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 			Color = configs.GunDropColor;
 		})
 		if configs.AutoGrabGun then
-			GrabGunFunction(instance)
+			GrabGunFunction(instanqce)
 		end
 	elseif instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
 		match.SheriffDied = false
 		match.Map = instance
+	elseif instance:IsA("BasePart") and instance.Name == "ThrowingKnife" and configs.AutoRemoveLag then
+		RemoveLag(instance)
 	end
 end)
 eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(instance)
