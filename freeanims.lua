@@ -1649,7 +1649,7 @@ local anims = {
 		Climb = "rbxassetid://12520982150";
 		Swim = "rbxassetid://12520993168";
 		SwimIdle = "rbxassetid://2510201162"
-	}
+	};
 	girlcombo1 = {
 		Button = GirlCombo1;
 		Idle1 = "rbxassetid://16738333868";
