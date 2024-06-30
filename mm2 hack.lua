@@ -165,7 +165,7 @@ function Draw(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Color
 end
 function RemoveLag(knife)
 	for i, v in ipairs(knife:GetDescendants()) do
-		if v.ClassName == "Script" or v.ClassName == "LocalScript" then
+		if v.ClassName == "Script" or v.ClassName == "LocalScript" or v.ClassName == "ModuleScript" then
 			v:Destroy()
 		end
 	end
@@ -473,7 +473,7 @@ function eventfunctions.Initialize(player)
 			HumanoidDiedEvent(NPCHum)
 		end
 		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or player ~= LocalPlayer) then
-			RemoveDisplays(char)
+			coroutine.wrap(RemoveDisplays)(char)
 		end
 		if configs.Chams and player ~= LocalPlayer then
 			AddChams(char,true,{
