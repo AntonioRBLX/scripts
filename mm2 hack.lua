@@ -489,7 +489,7 @@ function eventfunctions.Initialize(player)
 			end
 		end)
 		connections[b - 3] = char.ChildAdded:Connect(function(child)
-			if child.ClassName == "Tool" and configs.AutoRemoveLag then
+			if child.ClassName == "Tool" and configs.AutoRemoveLag and player ~= LocalPlayer then
 				RemoveLag(child)
 			end
 		end)
