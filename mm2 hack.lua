@@ -164,12 +164,11 @@ function Draw(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Color
 	}})
 end
 function RemoveLag(knife)
-	--for i, v in ipairs(knife:GetDescendants()) do
-		--if v.ClassName == "Script" or v.ClassName == "LocalScript" or v.ClassName == "ModuleScript" then
-			--v:Destroy()
-		--end
-	--end
-	knife:Destroy()
+	for i, v in ipairs(knife:GetDescendants()) do
+		if v.ClassName == "Script" or v.ClassName == "LocalScript" or v.ClassName == "ModuleScript" then
+			v:Destroy()
+		end
+	end
 end
 function AddChams(object,isacharmodel,chamsettings) -- Adds ESP
 	local function AddBoxHandleAdornment(part)
