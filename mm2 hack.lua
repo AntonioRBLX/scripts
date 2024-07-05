@@ -1429,11 +1429,12 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 		if configs.AutoGrabGun then
 			GrabGunFunction(instanqce)
 		end
+	elseif instance:IsA("BasePart") and instance.Name == "ThrowingKnife" then
+		task.wait(10)
+		instance:Destroy()
 	elseif instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
 		match.SheriffDied = false
 		match.Map = instance
-	elseif instance:IsA("BasePart") and instance.Name == "ThrowingKnife" and configs.AutoRemoveLag then
-		RemoveLag(instance)
 	end
 end)
 eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(instance)
