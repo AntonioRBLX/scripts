@@ -18,7 +18,7 @@ if not game:IsLoaded() then
 	game.Loaded:Wait()
 	message:Destroy()
 end
-if not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod or not getgenv or not firetouchinterest then -- Checks if executor is supported
+if not rawget or not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod or not getgenv or not firetouchinterest then -- Checks if executor is supported
 	notify("Error","Incompatible Executor! Required functions are not supported by this executor.")
 	return
 end
@@ -1613,14 +1613,18 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 
 	if not checkcaller() and LocalPlayer.Character then
 		local lplrchar = LocalPlayer.Character
-		if configs.GunAimbot and tostring(self) == "ShootGun" and tostring(method) == "InvokeServer" then
-			local aimpos = GetAimVector(lplrchar,1)
-			args[2] = aimpos
-
+		if configs.GunAimbot and tostring(method) == "InvokeServer" then
+			local script = rawget(getfenv(2), "script")
+			local aimpos
+			if script.Name == "KnifeLocal" then
+				aimpos = GetAimVector(lplrchar,1)
+				args[2] = aimpos
+			end
 			return aimpos and self.InvokeServer(self,table.unpack(args)) or self.InvokeServer(self,...)
 		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
 			local aimpos = GetAimVector(lplrchar,2)
 			args[1] = CFrame.new(aimpos)
+			args[2] = aimpos
 
 			return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
 		end
