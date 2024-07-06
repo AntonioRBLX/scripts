@@ -154,7 +154,7 @@ function Draw(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Color
 	line.Visible = true
 	line.Color = dictionary.Color
 	line.Thickness = 1
-	line.Transparency = 1
+	line.Transparency = 0
 
 	table.insert(visuals, {Line = line, Spawn = tick(), Properties = {
 		StartPoint = dictionary.StartPoint;
@@ -1575,9 +1575,9 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 		line.To, onscreen2 = camera:WorldToViewportPoint(properties.EndPoint)
 
 		if onscreen1 and onscreen2 then
-			line.Transparency = 1
-		else
 			line.Transparency = 0
+		else
+			line.Transparency = 1
 		end
 
 		if spawn + properties.LifeTime < tick() then
