@@ -1932,7 +1932,7 @@ for i, v in pairs(customanims) do
 		local text = TextBox.Text
 		local ID = tonumber(text)
 		if ID then
-			local suc, result = pcall(MarketplaceService:GetProductInfo)(ID)
+			local suc, result = pcall(MarketplaceService.GetProductInfo)(ID)
 			if suc then
 				if result and result.AssetTypeId == 24 then
 					currentanims[i] = "rbxassetid://"..tostring(ID)
