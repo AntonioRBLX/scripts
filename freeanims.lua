@@ -1940,7 +1940,7 @@ for i, v in pairs(customanims) do
 						coroutine.wrap(setAnimations)(lplrchar)
 					end
 				else
-					textBoxErrorMessage("ID Must Be A Number or Animation Name")
+					textBoxErrorMessage("Invalid ID")
 				end
 			else
 				textBoxErrorMessage("Invalid ID")
@@ -1950,7 +1950,7 @@ for i, v in pairs(customanims) do
 				currentanims[i] = anims[text:lower()][i]
 				coroutine.wrap(setAnimations)(lplrchar)
 			else
-				textBoxErrorMessage("ID Must Be A Number or Animation Name")
+				textBoxErrorMessage("Invalid Animation Package")
 			end
 		end
 		TextBox.Interactable = true
