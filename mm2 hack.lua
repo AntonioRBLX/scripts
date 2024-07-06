@@ -672,7 +672,7 @@ end)
 -- Library
 
 local Window = Library:CreateWindow({
-	Name = "Murder Mystery 2";
+	Name = "🏖️Murder Mystery 2🏖️";
 	LoadingTitle = "Murder Mystery 2 Main";
 	LoadingSubtitle = "by CITY512";
 	ConfigurationSaving = {
