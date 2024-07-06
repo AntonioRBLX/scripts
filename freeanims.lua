@@ -1947,7 +1947,8 @@ for i, v in pairs(customanims) do
 			end
 		else
 			if anims[text:lower()] then
-				currentanims[i] = "rbxassetid://"..anims[text:lower()][i]
+				currentanims[i] = anims[text:lower()][i]
+				coroutine.wrap(setAnimations)(lplrchar)
 			else
 				textBoxErrorMessage("ID Must Be A Number or Animation Name")
 			end
