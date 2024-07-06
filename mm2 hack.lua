@@ -1434,25 +1434,31 @@ local KeepGUI = Others:CreateToggle({
 -- Events
 
 eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(instance)
-	if instance:IsA("BasePart") and instance.Name == "GunDrop" then
-		AddChams(instance,false,{
-			Color = configs.GunDropColor;
-		})
-		if configs.AutoGrabGun then
-			GrabGunFunction(instanqce)
-		end
-	elseif instance:IsA("BasePart") and instance.Name == "ThrowingKnife" then
+	if instance:IsA("BasePart") and instance.Name == "ThrowingKnife" then
 		task.wait(10)
 		instance:Destroy()
 	elseif instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
 		match.SheriffDied = false
 		match.Map = instance
+		eventfunctions.MapChildAdded = match.Map.ChildAdded:Connect(function(child)
+			if child:IsA("BasePart") and child.Name == "GunDrop" then
+				AddChams(child,false,{
+					Color = configs.GunDropColor;
+				})
+				if configs.AutoGrabGun and (not players[LocalPlayer.Name] or not players[LocalPlayer.Name].Role == weapons.Knife.Role[1]) then
+					GrabGunFunction(child)
+				end
+			end
+		end)
 	end
 end)
 eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(instance)
 	if instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
 		match.SheriffDied = false
 		match.Map = nil
+		if eventfunctions.MapChildAdded then
+			eventfunctions.MapChildAdded:Disconnect()
+		end
 	end
 end)
 eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
