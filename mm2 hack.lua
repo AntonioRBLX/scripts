@@ -1597,9 +1597,9 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 		line.To = pos2
 		
 		if onscreen1 and onscreen2 then
-			line.Transparency = 0
-		else
 			line.Transparency = 1
+		else
+			line.Transparency = 0
 		end
 
 		if spawn + properties.LifeTime < tick() then
