@@ -1940,10 +1940,10 @@ for i, v in pairs(customanims) do
 						coroutine.wrap(setAnimations)(lplrchar)
 					end
 				else
-					textBoxErrorMessage("Invalid ID")
+					textBoxErrorMessage("ID Must Be A Number or Animation Name")
 				end
 			else
-				textBoxErrorMessage("Something Went Wrong. Please Try Again.")
+				textBoxErrorMessage("Invalid ID")
 			end
 		else
 			if anims[text:lower()] then
