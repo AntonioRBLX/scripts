@@ -149,7 +149,7 @@ end
 ---------------------------------------------------------------------------
 -- Functions
 
-function Draw(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Color = (), LifeTime = ()}
+function Draw3D(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Color = (), LifeTime = ()}
 	local line = Drawing.new("Line")
 	line.Visible = true
 	line.Color = dictionary.Color
@@ -555,7 +555,7 @@ function AimbotVisuals(startpos,endpos,path)
 		local prevpos
 		for _, v in path do
 			if prevpos then
-				Draw({
+				Draw3D({
 					StartPoint = prevpos;
 					EndPoint = v; 
 					Color = Color3.new(0,0,1); 
@@ -564,7 +564,7 @@ function AimbotVisuals(startpos,endpos,path)
 			end
 			prevpos = v
 		end
-		Draw({
+		Draw3D({
 			StartPoint = startpos;
 			EndPoint = endpos; 
 			Color = Color3.new(1,1,1); 
