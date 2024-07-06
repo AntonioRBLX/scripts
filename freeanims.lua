@@ -1929,24 +1929,25 @@ for i, v in pairs(customanims) do
 	end
 	TextBox.FocusLost:Connect(function()
 		TextBox.Interactable = false
-		local ID = tonumber(TextBox.Text)
+		local text = TextBox.Text
+		local ID = tonumber(text)
 		if ID then
-			local suc, err = pcall(function()
-				local asset = MarketplaceService:GetProductInfo(ID)
-				if asset.AssetTypeId ~= 24 then error("") end
-			end)
+			local suc, result = pcall(MarketplaceService:GetProductInfo)(ID)
 			if suc then
-				currentanims[i] = "rbxassetid://"..tostring(ID)
-				if lplrchar then
-					coroutine.wrap(setAnimations)(lplrchar)
+				if result and result.AssetTypeId == 24 then
+					currentanims[i] = "rbxassetid://"..tostring(ID)
+					if lplrchar then
+						coroutine.wrap(setAnimations)(lplrchar)
+					end
+				else
+					textBoxErrorMessage("Invalid ID")
 				end
-			end
-			if err then
-				textBoxErrorMessage("Invalid ID")
+			else
+				textBoxErrorMessage("Something Went Wrong. Please Try Again.")
 			end
 		else
-			if anims[ID:lower()] then
-				currentanims[i] = "rbxassetid://"..anims[ID:lower()][i]
+			if anims[text:lower()] then
+				currentanims[i] = "rbxassetid://"..anims[text:lower()][i]
 			else
 				textBoxErrorMessage("ID Must Be A Number or Animation Name")
 			end
