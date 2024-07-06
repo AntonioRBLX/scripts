@@ -372,11 +372,24 @@ function UpdateAllChams()
 	end
 end
 function RemoveDisplays(character)
-	local KnifeDisplay = character:WaitForChild("KnifeDisplay")
-	local GunDisplay = character:WaitForChild("GunDisplay")
-	RemoveLag(KnifeDisplay)
-	RemoveLag(GunDisplay)
-	
+	local weapondisplays = workspace:FindFirstChild("WeaponDisplays")
+	if weapondisplays and weapondisplays.ClassName == "Folder" then
+		for i, v in ipairs(weapondisplays:GetChildren()) do
+			local rconst = v:FindFirstAncestorOfClass("RigidConstraint")
+			if rconst then
+				local att = rconst.Attachment0
+				if att then
+					local name = att.Name
+					if name == "GunBelt" or name == "KnifeBelt" or name == "KnifeBack" then
+						local char = att:FindFirstAncestorOfClass("Model")
+						if char and char == character then
+							RemoveLag(v)
+						end
+					end
+				end
+			end
+		end
+	end
 	if configs.IncludeAccessories then
 		for _, child in ipairs(character:GetChildren()) do
 			if child:IsA("Accessory") or child.Name == "Radio" or child.Name == "Pet" then
@@ -1571,9 +1584,12 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 		local line = v.Line
 		local spawn = v.Spawn
 
-		line.From, onscreen1 = camera:WorldToViewportPoint(properties.StartPoint)
-		line.To, onscreen2 = camera:WorldToViewportPoint(properties.EndPoint)
+		local pos1, onscreen1 = camera:WorldToViewportPoint(properties.StartPoint)
+		local pos2, onscreen2 = camera:WorldToViewportPoint(properties.EndPoint)
 
+		line.From = pos1
+		line.To = pos2
+		
 		if onscreen1 and onscreen2 then
 			line.Transparency = 0
 		else
