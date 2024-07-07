@@ -32,7 +32,7 @@ function getClosest()
 			local enemyhrp = enemychar:FindFirstChild("HumanoidRootPart")
 			local enemyhum = enemychar:FindFirstChildOfClass("Humanoid")
 			if enemyhum and enemyhum.Health > 0 and enemyhrp then
-				enemyhrp.Size = Vector3.new(10,10,10)
+				enemyhrp.Size = Vector3.new(6,6,6)
 				enemyhrp.Transparency = 0.5
 				enemyhrp.BrickColor = BrickColor.new("Bright red")
 				local distance = (enemyhrp.Position - hrp.Position).Magnitude
