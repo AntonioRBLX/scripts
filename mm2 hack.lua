@@ -163,14 +163,6 @@ function Draw3D(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Col
 		LifeTime = dictionary.LifeTime;
 	}})
 end
-function RemoveLag(knife)
-	--for i, v in ipairs(knife:GetDescendants()) do
-		--if v.ClassName == "Script" or v.ClassName == "LocalScript" or v.ClassName == "ModuleScript" then
-			--v:Destroy()
-		--end
-	--end
-	knife:Destroy()
-end
 function AddChams(object,isacharmodel,chamsettings) -- Adds ESP
 	local function AddBoxHandleAdornment(part)
 		local BHA = Instance.new("BoxHandleAdornment", part)
@@ -372,46 +364,60 @@ function UpdateAllChams()
 		end
 	end
 end
-
-function RemoveDisplays(character)
+function RemoveLag(character)
+	local function RemoveAccessories(char)
+		for _, child in ipairs(char:GetChildren()) do
+			if child:IsA("Accessory") or child.Name == "Radio" or child.Name == "Pet" then
+				child:Destroy()
+			end
+		end
+	end
 	local weapondisplays = workspace:FindFirstChild("WeaponDisplays")
 	if weapondisplays and weapondisplays.ClassName == "Folder" then
-		local gunfound
-		local knifefound
-		local spawn = tick()
-		repeat
-			for i, v in ipairs(weapondisplays:GetChildren()) do
-				local rconst = v:FindFirstChildOfClass("RigidConstraint")
-				if rconst then
-					local att = rconst.Attachment0
-					if att then
-						local name = att.Name
-						if name == "GunBelt" or name == "KnifeBelt" or name == "KnifeBack" then
-							local found
-							if name == "GunBelt" then
-								gunfound = true
-								found = true
-							elseif name == "KnifeBelt" or name == "KnifeBack" then
-								knifefound = true
-								found = true
-							end
-							if found then
-								local char = att:FindFirstAncestorOfClass("Model")
-								if char and char == character then
-									RemoveLag(v)
+		if character then
+			local uppertorso = character:FindFirstChild("UpperTorso")
+			local lowertorso = character:FindFirstChild("LowerTorso")
+			if uppertorso and lowertorso then
+				local knifebelt = uppertorso:FindFirstChild("KnifeBack") or lowertorso:FindFirstChild("KnifeBelt")
+				local gunbelt = lowertorso:FindFirstChild("GunBelt")
+				if knifebelt and gunbelt then
+					local knifefound
+					local gunfound
+					local spawn = tick()
+					repeat
+						for _, v in ipairs(weapondisplays:GetChildren()) do
+							local rconst = v:FindFirstChildOfClass("RigidConstraint")
+							if rconst then
+								if rconst.Attachment0 == gunbelt or rconst.Attachment1 == gunbelt then
+									v:Destroy()
+									gunfound = true
+								elseif rconst.Attachment0 == knifebelt or rconst.Attachment1 == knifebelt then
+									v:Destroy()
+									knifefound = true
 								end
 							end
 						end
-					end
+						task.wait()
+					until knifefound and gunfound or spawn + 5 <= tick()
 				end
 			end
-			task.wait()
-		until gunfound and knifefound or spawn + 10 < tick()
+		else
+			for _, v in ipairs(weapondisplays:GetChildren()) do
+				v:Destroy()
+			end
+		end
 	end
 	if configs.IncludeAccessories then
-		for _, child in ipairs(character:GetChildren()) do
-			if child:IsA("Accessory") or child.Name == "Radio" or child.Name == "Pet" then
-				child:Destroy()
+		if character then
+			RemoveAccessories(character)
+		else
+			for _, plr in ipairs(Players:GetChildren()) do
+				if configs.IncludeLocalPlayer or plr ~= LocalPlayer then
+					local char = plr.Character
+					if char then
+						RemoveAccessories(char)
+					end
+				end
 			end
 		end
 	end
@@ -504,7 +510,7 @@ function eventfunctions.Initialize(player)
 			HumanoidDiedEvent(NPCHum)
 		end
 		if configs.AutoRemoveLag and (configs.IncludeLocalPlayer or player ~= LocalPlayer) then
-			coroutine.wrap(RemoveDisplays)(char)
+			coroutine.wrap(RemoveLag)(char)
 		end
 		if configs.Chams and player ~= LocalPlayer then
 			AddChams(char,true,{
@@ -521,7 +527,11 @@ function eventfunctions.Initialize(player)
 		end)
 		connections[b - 3] = char.ChildAdded:Connect(function(child)
 			if child.ClassName == "Tool" and configs.AutoRemoveLag and player ~= LocalPlayer then
-				RemoveLag(child)
+				for _, v in ipairs(child:GetDescendants()) do
+					if v:IsA("Decal") or v:IsA("DataModelMesh") then
+						v:Destroy()
+					end
+				end
 			end
 		end)
 	end
@@ -1096,12 +1106,7 @@ local RemoveAccessoryLag = Visuals:CreateButton({
 	SectionParent = AntiLagSection;
 	Callback = function()
 		local lplrchar = LocalPlayer.Character
-		for _, player in ipairs(Players:GetPlayers()) do
-			local character = player.Character
-			if character and (configs.IncludeLocalPlayer or character ~= lplrchar) then
-				RemoveDisplays(character)
-			end
-		end
+		RemoveLag()
 	end;
 })
 local AutoRemoveLag = Visuals:CreateToggle({
