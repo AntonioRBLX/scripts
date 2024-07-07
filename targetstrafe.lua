@@ -53,7 +53,7 @@ RS.Stepped:Connect(function(_,delta)
 		end
 		local targethrp = target.HumanoidRootPart
 		local targethum = target.Humanoid
-		targethrp.Size = Vector3.new(10,10,2)
+		targethrp.Size = Vector3.new(10,10,10)
 		targethrp.Transparency = 0.5
 		targethrp.BrickColor = BrickColor.new("Bright red")
 		prevroot = targethrp
