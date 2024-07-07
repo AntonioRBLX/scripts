@@ -378,6 +378,7 @@ function RemoveDisplays(character)
 	if weapondisplays and weapondisplays.ClassName == "Folder" then
 		local gunfound
 		local knifefound
+		local spawn = tick()
 		repeat
 			for i, v in ipairs(weapondisplays:GetChildren()) do
 				local rconst = v:FindFirstChildOfClass("RigidConstraint")
@@ -405,7 +406,7 @@ function RemoveDisplays(character)
 				end
 			end
 			task.wait()
-		until gunfound and knifefound
+		until gunfound and knifefound or spawn + 10 < tick()
 	end
 	if configs.IncludeAccessories then
 		for _, child in ipairs(character:GetChildren()) do
