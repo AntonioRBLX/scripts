@@ -49,10 +49,13 @@ RS.Stepped:Connect(function(_,delta)
 		controls:Disable()
 		if prevroot then
 			prevroot.Size = Vector3.new(2,2,1)
+			prevroot.Transparency = 1
 		end
 		local targethrp = target.HumanoidRootPart
 		local targethum = target.Humanoid
-		targethrp.Size = Vector3.new(5,5,1)
+		targethrp.Size = Vector3.new(10,10,2)
+		targethrp.Transparency = 0.5
+		targethrp.BrickColor = BrickColor.new("Bright red")
 		prevroot = targethrp
 		local att = Instance.new("Attachment", hrp)
 		att.Position = Vector3.new(1.49,0,0)
