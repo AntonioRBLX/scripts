@@ -14,6 +14,14 @@ lplr.CharacterAdded:Connect(function(newchar)
 	hum = newchar:WaitForChild("Humanoid")
 	hrp = newchar:WaitForChild("HumanoidRootPart")
 end)
+function slash(tool)
+	if mouse.Icon ~= "rbxasset://textures/GunWaitCursor.png" then
+		tool:Activate()
+		task.wait(0.01)
+		tool:Activate()
+		task.wait(0.049)
+	end
+end
 function getClosest()
 	local closest
 	local closestdistance = math.huge
