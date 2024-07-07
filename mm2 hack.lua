@@ -1630,7 +1630,6 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 		elseif configs.KnifeAimbot and tostring(self) == "Throw" and tostring(method) == "FireServer" then
 			local aimpos = GetAimVector(lplrchar,2)
 			args[1] = CFrame.new(aimpos)
-			args[2] = aimpos
 
 			return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
 		end
