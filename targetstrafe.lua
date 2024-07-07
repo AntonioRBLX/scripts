@@ -52,7 +52,7 @@ RS.Stepped:Connect(function(_,delta)
 		end
 		local targethrp = target.HumanoidRootPart
 		local targethum = target.Humanoid
-		targethrp.Size = Vector3.new(4.5,4.5,4.5)
+		targethrp.Size = Vector3.new(5,5,1)
 		prevroot = targethrp
 		local att = Instance.new("Attachment", hrp)
 		att.Position = Vector3.new(1.49,0,0)
