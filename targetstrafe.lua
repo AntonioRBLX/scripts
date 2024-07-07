@@ -1,6 +1,7 @@
 local RS = game:GetService("RunService")
 local Players = game:GetService("Players")
 local lplr = Players.LocalPlayer
+local mouse = lplr:GetMouse()
 local playermodule = require(game.Players.LocalPlayer.PlayerScripts:WaitForChild("PlayerModule"))
 local controls = playermodule:GetControls()
 local char = lplr.Character or lplr.CharacterAdded:Wait()
