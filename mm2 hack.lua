@@ -1616,8 +1616,8 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 		local pos1, onscreen1 = camera:WorldToViewportPoint(properties.StartPoint)
 		local pos2, onscreen2 = camera:WorldToViewportPoint(properties.EndPoint)
 
-		line.From = pos1
-		line.To = pos2
+		line.From = Vector2.new(pos1.X,pos1.Y)
+		line.To = Vector2.new(pos2.X,pos2.Y)
 		
 		if onscreen1 and onscreen2 then
 			line.Transparency = 1
