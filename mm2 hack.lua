@@ -372,24 +372,40 @@ function UpdateAllChams()
 		end
 	end
 end
+
 function RemoveDisplays(character)
 	local weapondisplays = workspace:FindFirstChild("WeaponDisplays")
 	if weapondisplays and weapondisplays.ClassName == "Folder" then
-		for i, v in ipairs(weapondisplays:GetChildren()) do
-			local rconst = v:FindFirstChildOfClass("RigidConstraint")
-			if rconst then
-				local att = rconst.Attachment0
-				if att then
-					local name = att.Name
-					if name == "GunBelt" or name == "KnifeBelt" or name == "KnifeBack" then
-						local char = att:FindFirstAncestorOfClass("Model")
-						if char and char == character then
-							RemoveLag(v)
+		local gunfound
+		local knifefound
+		repeat
+			for i, v in ipairs(weapondisplays:GetChildren()) do
+				local rconst = v:FindFirstChildOfClass("RigidConstraint")
+				if rconst then
+					local att = rconst.Attachment0
+					if att then
+						local name = att.Name
+						if name == "GunBelt" or name == "KnifeBelt" or name == "KnifeBack" then
+							local found
+							if name == "GunBelt" then
+								gunfound = true
+								found = true
+							elseif name == "KnifeBelt" or name == "KnifeBack" then
+								knifefound = true
+								found = true
+							end
+							if found then
+								local char = att:FindFirstAncestorOfClass("Model")
+								if char and char == character then
+									RemoveLag(v)
+								end
+							end
 						end
 					end
 				end
 			end
-		end
+			task.wait()
+		until gunfound and knifefound
 	end
 	if configs.IncludeAccessories then
 		for _, child in ipairs(character:GetChildren()) do
