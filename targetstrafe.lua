@@ -10,7 +10,6 @@ local hrp = char:WaitForChild("HumanoidRootPart")
 local pivotangle = 0
 local pivotdirection = 1
 local pivotdistance = 7
-local prevroot
 lplr.CharacterAdded:Connect(function(newchar)
 	char = newchar
 	hum = newchar:WaitForChild("Humanoid")
@@ -33,6 +32,9 @@ function getClosest()
 			local enemyhrp = enemychar:FindFirstChild("HumanoidRootPart")
 			local enemyhum = enemychar:FindFirstChildOfClass("Humanoid")
 			if enemyhum and enemyhum.Health > 0 and enemyhrp then
+				enemyhrp.Size = Vector3.new(10,10,10)
+				enemyhrp.Transparency = 0.5
+				enemyhrp.BrickColor = BrickColor.new("Bright red")
 				local distance = (enemyhrp.Position - hrp.Position).Magnitude
 				if distance < closestdistance then
 					closest = enemychar
@@ -47,16 +49,8 @@ RS.Stepped:Connect(function(_,delta)
 	local target = getClosest()
 	if target then
 		controls:Disable()
-		if prevroot then
-			prevroot.Size = Vector3.new(2,2,1)
-			prevroot.Transparency = 1
-		end
 		local targethrp = target.HumanoidRootPart
 		local targethum = target.Humanoid
-		targethrp.Size = Vector3.new(10,10,10)
-		targethrp.Transparency = 0.5
-		targethrp.BrickColor = BrickColor.new("Bright red")
-		prevroot = targethrp
 		local att = Instance.new("Attachment", hrp)
 		att.Position = Vector3.new(1.49,0,0)
 		local Look = CFrame.new(att.WorldPosition,targethrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
