@@ -10,6 +10,7 @@ local hrp = char:WaitForChild("HumanoidRootPart")
 local pivotangle = 0
 local pivotdirection = 1
 local pivotdistance = 7
+local prevroot
 lplr.CharacterAdded:Connect(function(newchar)
 	char = newchar
 	hum = newchar:WaitForChild("Humanoid")
@@ -46,8 +47,13 @@ RS.Stepped:Connect(function(_,delta)
 	local target = getClosest()
 	if target then
 		controls:Disable()
+		if prevroot then
+			prevroot.Size = Vector3.new(2,2,1)
+		end
 		local targethrp = target.HumanoidRootPart
 		local targethum = target.Humanoid
+		targethrp.Size = Vector3.new(4.5,4.5,4.5)
+		prevroot = targethrp
 		local att = Instance.new("Attachment", hrp)
 		att.Position = Vector3.new(1.49,0,0)
 		local Look = CFrame.new(att.WorldPosition,targethrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
