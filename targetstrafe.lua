@@ -32,7 +32,7 @@ function getClosest()
 			local enemyhrp = enemychar:FindFirstChild("HumanoidRootPart")
 			local enemyhum = enemychar:FindFirstChildOfClass("Humanoid")
 			if enemyhum and enemyhum.Health > 0 and enemyhrp then
-				enemyhrp.Size = Vector3.new(6,6,6)
+				enemyhrp.Size = Vector3.new(9,9,9)
 				enemyhrp.Transparency = 0.5
 				enemyhrp.BrickColor = BrickColor.new("Bright red")
 				local distance = (enemyhrp.Position - hrp.Position).Magnitude
@@ -56,7 +56,7 @@ RS.Stepped:Connect(function(_,delta)
 		local Look = CFrame.new(att.WorldPosition,targethrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 		hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + Look.LookVector)
 		if math.random(1,20) == 1 then
-			pivotdistance = math.random(6,12)
+			pivotdistance = math.random(8,12)
 		end
 		if math.random(1,4) == 1 then
 			if math.random(1,2) == 1 then
