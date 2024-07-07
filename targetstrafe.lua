@@ -72,7 +72,7 @@ RS.Stepped:Connect(function(_,delta)
 		if distance <= 11 then
 			local tool = char:FindFirstChildOfClass("Tool")
 			if tool then
-				tool:Activate()
+				slash(tool)
 			end
 			hum:MoveTo(predictedpos + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
 			if distance <= 7 then
