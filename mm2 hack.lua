@@ -376,7 +376,7 @@ function RemoveDisplays(character)
 	local weapondisplays = workspace:FindFirstChild("WeaponDisplays")
 	if weapondisplays and weapondisplays.ClassName == "Folder" then
 		for i, v in ipairs(weapondisplays:GetChildren()) do
-			local rconst = v:FindFirstAncestorOfClass("RigidConstraint")
+			local rconst = v:FindFirstChildOfClass("RigidConstraint")
 			if rconst then
 				local att = rconst.Attachment0
 				if att then
