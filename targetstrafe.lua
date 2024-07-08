@@ -58,8 +58,8 @@ RS.Stepped:Connect(function(_,delta)
 		att.Position = Vector3.new(1.49,0,0)
 		local Look = CFrame.new(att.WorldPosition,targethrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 		hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + Look.LookVector)
-		if math.random(1,13) == 1 then
-			pivotdistance = math.random(7,11)
+		if math.random(1,20) == 1 then
+			pivotdistance = math.random(5,8)
 		end
 		if math.random(1,8) == 1 then
 			pivotdirection = -pivotdirection
@@ -71,13 +71,13 @@ RS.Stepped:Connect(function(_,delta)
 		end
 		local distance = (targethrp.Position - hrp.Position).Magnitude
 		local predictedpos = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
-		if distance <= 9 then
+		if distance <= 7 then
 			hum:MoveTo(predictedpos + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
 			local tool = char:FindFirstChildOfClass("Tool")
 			if tool then
 			    coroutine.wrap(slash)(tool)
 			end
-			if distance <= 5.4 and targethrp.Position.Y - 1 > hrp.Position.Y then
+			if targethrp.Position.Y - 1 > hrp.Position.Y then
 			    hum.Jump = true
 			end
 		elseif distance <= 35 then
