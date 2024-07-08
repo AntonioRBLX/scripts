@@ -71,7 +71,7 @@ RS.Stepped:Connect(function(_,delta)
 			pivotangle = 0
 		end
 		local distance = (targethrp.Position - hrp.Position).Magnitude
-		local predictedpos = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
+		local predictedpos = targethrp.Position + targethum.MoveDirection * targethum.WalkSpeed * (distance / hum.WalkSpeed)
 		if distance <= 7 then
 			hum:MoveTo(predictedpos + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
 			local tool = char:FindFirstChildOfClass("Tool")
