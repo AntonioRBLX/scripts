@@ -77,8 +77,8 @@ RS.Stepped:Connect(function(_,delta)
 			pivotangle = 0
 		end
 		local distance = (targethrp.Position - hrp.Position).Magnitude
-		local chaseprediction = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
-		local movementprediction = targethrp.Position + targethrp.Velocity * (2.5 + lplr:GetNetworkPing() * targethum.WalkSpeed)
+		local chaseprediction = targethrp.Position + targethum.MoveDirection * targethum.WalkSpeed * (distance / hum.WalkSpeed)
+		local movementprediction = targethrp.Position + targethum.MoveDirection * targethum.WalkSpeed * (2.5 + lplr:GetNetworkPing() * targethum.WalkSpeed)
 		local movementpredictiondist = (movementprediction - hrp.Position).Magnitude
 	        if distance <= 6.25 then
 	            if slashing then
