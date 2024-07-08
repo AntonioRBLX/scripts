@@ -59,16 +59,9 @@ RS.Stepped:Connect(function(_,delta)
 		local Look = CFrame.new(att.WorldPosition,targethrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 		hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + Look.LookVector)
 		if math.random(1,20) == 1 then
-			pivotdistance = math.random(8560,11000)/1000
+			pivotdistance = math.random(7,11)
 		end
-		if math.random(1,2) == 1 then
-			pivotdirection = -pivotdirection
-		end
-		local params = RaycastParams.new()
-		params.FilterDescendantsInstances = {char}
-		params.FilterType = Enum.RaycastFilterType.Exclude
-		local raycastresult = workspace:Raycast(hrp.Position,Vector3.new(0,-5,0),params)
-		if not raycastresult then
+		if math.random(1,8) == 1 then
 			pivotdirection = -pivotdirection
 		end
 		local circumference = 2 * math.pi * pivotdistance
@@ -76,31 +69,21 @@ RS.Stepped:Connect(function(_,delta)
 		if pivotangle >= 360 or pivotangle <= -360 then
 			pivotangle = 0
 		end
-        local pingprediction = lplr:GetNetworkPing() * targethum.WalkSpeed
 		local distance = (targethrp.Position - hrp.Position).Magnitude
-		local chaseprediction = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
-		local movementprediction = targethrp.Position + targethrp.Velocity * (2.5 + pingprediction)
-		local movementpredictiondist = (movementprediction - hrp.Position).Magnitude
-	        if distance <= 7.5 + pingprediction then -- 6.25
-                if slashing then
-                    hum.Jump = true
-                    hum:MoveTo(hrp.Position + ((hrp.Position * Vector3.new(1,0,1) - targethrp.Position * Vector3.new(1,0,1)) * 999))
-                else
-                    if movementpredictiondist <= 3 + pingprediction or distance <= 5.5 + pingprediction then
-                        hum.Jump = true
-                        local tool = char:FindFirstChildOfClass("Tool")
-                        if tool then
-                            coroutine.wrap(slash)(tool)
-                        end
-                    end
-                    if distance <= 5.5 + pingprediction then
-                        hum:MoveTo(hrp.Position + targethum.MoveDirection * 5)
-                    else
-                        hum:MoveTo(chaseprediction + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
-                    end
+		local predictedpos = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
+		if distance <= 11 then
+			hum:MoveTo(predictedpos + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
+			if distance <= 7 then
+                local tool = char:FindFirstChildOfClass("Tool")
+                if tool then
+                    coroutine.wrap(slash)(tool)
                 end
-		elseif distance <= 100 then
-			hum:MoveTo(chaseprediction)
+                if distance <= 5.4 and targethrp.Position.Y - 1 > hrp.Position.Y then
+                    hum.Jump = true
+                end
+			end
+		elseif distance <= 35 then
+			hum:MoveTo(predictedpos)
 		end
 	else
 		controls:Enable()
