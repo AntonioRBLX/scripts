@@ -74,7 +74,7 @@ RS.Stepped:Connect(function(_,delta)
         local walkdistance = targethum.WalkSpeed * ping
 		local chaseprediction = targethrp.Position + targethum.MoveDirection * targethum.WalkSpeed * (distance / hum.WalkSpeed)
         local movementprediction = targethrp.Position + targethum.MoveDirection * walkdistance
-        local movementpredictiondistance = (movementprediction.Position - hrp.Position).Magnitude
+        local movementpredictiondistance = (movementprediction - hrp.Position).Magnitude
 		if movementpredictiondistance <= 10 + walkdistance then
 			hum:MoveTo(chaseprediction + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
             if movementpredictiondistance <= 7 + walkdistance then
