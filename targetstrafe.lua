@@ -10,17 +10,20 @@ local hrp = char:WaitForChild("HumanoidRootPart")
 local pivotangle = 0
 local pivotdirection = 1
 local pivotdistance = 5
+local slashing = false
 lplr.CharacterAdded:Connect(function(newchar)
 	char = newchar
 	hum = newchar:WaitForChild("Humanoid")
 	hrp = newchar:WaitForChild("HumanoidRootPart")
 end)
 function slash(tool)
-	if mouse.Icon ~= "rbxasset://textures/GunWaitCursor.png" then
+	if not slashing then
+        slashing = true
 		tool:Activate()
 		task.wait(0.01)
 		tool:Activate()
 		task.wait(0.049)
+        slashing = false
 	end
 end
 function getClosest()
@@ -56,9 +59,9 @@ RS.Stepped:Connect(function(_,delta)
 		local Look = CFrame.new(att.WorldPosition,targethrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 		hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + Look.LookVector)
 		if math.random(1,20) == 1 then
-			pivotdistance = math.random(3,6)
+			pivotdistance = math.random(690,6250)/1000
 		end
-		if math.random(1,4) == 1 then
+		if math.random(1,2) == 1 then
 			pivotdirection = -pivotdirection
 		end
 		local params = RaycastParams.new()
@@ -74,19 +77,25 @@ RS.Stepped:Connect(function(_,delta)
 			pivotangle = 0
 		end
 		local distance = (targethrp.Position - hrp.Position).Magnitude
-		local predictedpos = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
-		local predictedposdist = (predictedpos - hrp.Position).Magnitude
-		if distance <= 11 then
-			if predictedposdist <= 3 then
-				hum.Jump = true
-				local tool = char:FindFirstChildOfClass("Tool")
-				if tool then
-					coroutine.wrap(slash)(tool)
-				end
-			end
-			hum:MoveTo(predictedpos + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
-		elseif distance <= 35 then
-			hum:MoveTo(predictedpos)
+		local chaseprediction = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
+		local movementprediction = targethrp.Position + targethrp.Velocity * (2.5 + lplr:GetNetworkPing() * targethum.WalkSpeed)
+		local movementpredictiondist = (movementprediction - hrp.Position).Magnitude
+	        if distance <= 6.25 then
+	            if slashing then
+	                hum.Jump = true
+	                hum:MoveTo(targethrp.Position + (hrp.Position - targethrp.Position))
+	            else
+	                if movementpredictiondist <= 3 or distance <= 5.5 then
+	                    hum.Jump = true
+	                    local tool = char:FindFirstChildOfClass("Tool")
+	                    if tool then
+	                        coroutine.wrap(slash)(tool)
+	                    end
+	                end
+	                hum:MoveTo(chaseprediction + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
+	            end
+		elseif distance <= 100 then
+			hum:MoveTo(chaseprediction)
 		end
 	else
 		controls:Enable()
