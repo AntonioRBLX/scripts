@@ -52,7 +52,7 @@ RS.Stepped:Connect(function(_,delta)
 	local target = getClosest()
 	if target then
 		controls:Disable()
-		hum.Jump = true
+		local ping = lplr:GetNetworkPing()
 		local targethrp = target.HumanoidRootPart
 		local targethum = target.Humanoid
 		local att = Instance.new("Attachment", hrp)
@@ -60,7 +60,7 @@ RS.Stepped:Connect(function(_,delta)
 		local Look = CFrame.new(att.WorldPosition,targethrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 		hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + Look.LookVector)
 		if math.random(1,20) == 1 then
-			pivotdistance = math.random(350,500)/100
+			pivotdistance = math.random(3500,5500)/1000
 		end
 		if math.random(1,8) == 1 then
 			pivotdirection = -pivotdirection
@@ -70,16 +70,21 @@ RS.Stepped:Connect(function(_,delta)
 		if pivotangle >= 360 or pivotangle <= -360 then
 			pivotangle = 0
 		end
-		local distance = (targethrp.Position - hrp.Position).Magnitude
-		local predictedpos = targethrp.Position + targethum.MoveDirection * targethum.WalkSpeed * (distance / hum.WalkSpeed)
-		if distance <= 7 then
-			hum:MoveTo(predictedpos + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
-			local tool = char:FindFirstChildOfClass("Tool")
-			if tool then
-			    coroutine.wrap(slash)(tool)
-			end
-		elseif distance <= 35 then
-			hum:MoveTo(predictedpos)
+        local distance = (targethrp.Position - hrp.Position).Magnitude
+        local walkdistance = targethum.WalkSpeed * ping
+		local chaseprediction = targethrp.Position + targethum.MoveDirection * targethum.WalkSpeed * (distance / hum.WalkSpeed)
+        local movementprediction = targethrp.Position + targethum.MoveDirection * walkdistance
+        local movementpredictiondistance = (movementprediction.Position - hrp.Position).Magnitude
+		if movementpredictiondistance <= 10 + walkdistance then
+			hum:MoveTo(chaseprediction + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
+            if movementpredictiondistance <= 7 + walkdistance then
+                local tool = char:FindFirstChildOfClass("Tool")
+                if tool then
+                    coroutine.wrap(slash)(tool)
+                end
+            end
+		elseif distance <= 100 then
+			hum:MoveTo(chaseprediction)
 		end
 	else
 		controls:Enable()
