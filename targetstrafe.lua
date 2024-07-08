@@ -52,6 +52,7 @@ RS.Stepped:Connect(function(_,delta)
 	local target = getClosest()
 	if target then
 		controls:Disable()
+		hum.Jump = true
 		local targethrp = target.HumanoidRootPart
 		local targethum = target.Humanoid
 		local att = Instance.new("Attachment", hrp)
@@ -76,9 +77,6 @@ RS.Stepped:Connect(function(_,delta)
 			local tool = char:FindFirstChildOfClass("Tool")
 			if tool then
 			    coroutine.wrap(slash)(tool)
-			end
-			if targethrp.Position.Y - 1 > hrp.Position.Y then
-			    hum.Jump = true
 			end
 		elseif distance <= 35 then
 			hum:MoveTo(predictedpos)
