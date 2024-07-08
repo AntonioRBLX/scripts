@@ -76,7 +76,7 @@ RS.Stepped:Connect(function(_,delta)
 				hum.Jump = true
 				local tool = char:FindFirstChildOfClass("Tool")
 				if tool then
-					slash(tool)
+					coroutine.wrap(slash)(tool)
 				end
 			end
 			hum:MoveTo(predictedpos + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
