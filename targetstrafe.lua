@@ -58,7 +58,7 @@ RS.Stepped:Connect(function(_,delta)
 		att.Position = Vector3.new(1.49,0,0)
 		local Look = CFrame.new(att.WorldPosition,targethrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 		hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + Look.LookVector)
-		if math.random(1,20) == 1 then
+		if math.random(1,13) == 1 then
 			pivotdistance = math.random(4,11)
 		end
 		if math.random(1,8) == 1 then
