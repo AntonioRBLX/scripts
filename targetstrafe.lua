@@ -56,12 +56,12 @@ RS.Stepped:Connect(function(_,delta)
 		local Look = CFrame.new(att.WorldPosition,targethrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 		hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + Look.LookVector)
 		if math.random(1,20) == 1 then
-			pivotdistance = math.random(4,7)
+			pivotdistance = math.random(3,6)
 		end
 		if math.random(1,4) == 1 then
-			if math.random(1,2) == 1 then
+			if math.random(1,5) == 1 then
 				pivotdirection = -pivotdirection
-				if math.random(1,3) == 1 then
+				if math.random(1,2) == 1 then
 					hum.Jump = true
 				end
 			end
@@ -74,7 +74,7 @@ RS.Stepped:Connect(function(_,delta)
 		local distance = (targethrp.Position - hrp.Position).Magnitude
 		local predictedpos = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
 		if distance <= 11 then
-			if distance <= 9 then
+			if distance <= 7 then
 				local tool = char:FindFirstChildOfClass("Tool")
 				if tool then
 					slash(tool)
