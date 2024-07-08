@@ -9,7 +9,7 @@ local hum = char:WaitForChild("Humanoid")
 local hrp = char:WaitForChild("HumanoidRootPart")
 local pivotangle = 0
 local pivotdirection = 1
-local pivotdistance = 7
+local pivotdistance = 5
 lplr.CharacterAdded:Connect(function(newchar)
 	char = newchar
 	hum = newchar:WaitForChild("Humanoid")
@@ -56,7 +56,7 @@ RS.Stepped:Connect(function(_,delta)
 		local Look = CFrame.new(att.WorldPosition,targethrp.Position * Vector3.new(1,0,1) + att.WorldPosition * Vector3.new(0,1,0))
 		hrp.CFrame = CFrame.new(hrp.Position,hrp.Position + Look.LookVector)
 		if math.random(1,20) == 1 then
-			pivotdistance = math.random(9,12)
+			pivotdistance = math.random(4,7)
 		end
 		if math.random(1,4) == 1 then
 			if math.random(1,2) == 1 then
