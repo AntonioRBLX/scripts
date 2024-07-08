@@ -59,9 +59,14 @@ RS.Stepped:Connect(function(_,delta)
 			pivotdistance = math.random(3,6)
 		end
 		if math.random(1,4) == 1 then
-			if math.random(1,5) == 1 then
-				pivotdirection = -pivotdirection
-			end
+			pivotdirection = -pivotdirection
+		end
+		local params = RaycastParams.new()
+		params.FilterDescendantsInstances = {char}
+		params.FilterType = Enum.RaycastFilterType.Exclude
+		local raycastresult = workspace:Raycast(hrp.Position,Vector3.new(0,-5,0),params)
+		if not raycastresult then
+			pivotdirection = -pivotdirection
 		end
 		local circumference = 2 * math.pi * pivotdistance
 		pivotangle += 360 / (circumference / hum.WalkSpeed) * delta * pivotdirection
@@ -72,7 +77,7 @@ RS.Stepped:Connect(function(_,delta)
 		local predictedpos = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
 		local predictedposdist = (predictedpos - hrp.Position).Magnitude
 		if distance <= 11 then
-			if predictedposdist <= 6 then
+			if predictedposdist <= 3 then
 				hum.Jump = true
 				local tool = char:FindFirstChildOfClass("Tool")
 				if tool then
