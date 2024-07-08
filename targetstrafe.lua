@@ -83,7 +83,7 @@ RS.Stepped:Connect(function(_,delta)
 	        if distance <= 6.25 then
 	            if slashing then
 	                hum.Jump = true
-	                hum:MoveTo(hrp.Position + (hrp.Position - targethrp.Position))
+	                hum:MoveTo(hrp.Position + (hrp.Position * Vector3.new(1,0,1) - targethrp.Position * Vector3.new(0,1,0)))
 	            else
 	                if movementpredictiondist <= 3 or distance <= 5.5 then
 	                    hum.Jump = true
