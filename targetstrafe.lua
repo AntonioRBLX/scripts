@@ -61,9 +61,6 @@ RS.Stepped:Connect(function(_,delta)
 		if math.random(1,4) == 1 then
 			if math.random(1,5) == 1 then
 				pivotdirection = -pivotdirection
-				if math.random(1,2) == 1 then
-					hum.Jump = true
-				end
 			end
 		end
 		local circumference = 2 * math.pi * pivotdistance
@@ -74,17 +71,15 @@ RS.Stepped:Connect(function(_,delta)
 		local distance = (targethrp.Position - hrp.Position).Magnitude
 		local predictedpos = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
 		local predictedposdist = (predictedpos - hrp.Position).Magnitude
-		if predictedposdist <= 11 then
-			if distance <= 7 then
+		if distance <= 11 then
+			if predictedposdist <= 6 then
+				hum.Jump = true
 				local tool = char:FindFirstChildOfClass("Tool")
 				if tool then
 					slash(tool)
 				end
 			end
 			hum:MoveTo(predictedpos + CFrame.Angles(0,math.rad(pivotangle),0).LookVector * pivotdistance)
-			if distance <= 7 then
-				hum.Jump = true
-			end
 		elseif distance <= 35 then
 			hum:MoveTo(predictedpos)
 		end
