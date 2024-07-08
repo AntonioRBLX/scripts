@@ -73,7 +73,8 @@ RS.Stepped:Connect(function(_,delta)
 		end
 		local distance = (targethrp.Position - hrp.Position).Magnitude
 		local predictedpos = targethrp.Position + targethrp.Velocity * (distance / hum.WalkSpeed)
-		if distance <= 11 then
+		local predictedposdist = (predictedpos - hrp.Position).Magnitude
+		if predictedposdist <= 11 then
 			if distance <= 7 then
 				local tool = char:FindFirstChildOfClass("Tool")
 				if tool then
