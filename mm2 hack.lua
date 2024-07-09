@@ -1181,7 +1181,7 @@ local RemoveCoinLagToggle = Visuals:CreateToggle({
 		if configs.RemoveCoinLag and match.Map then
 			if match.Map:FindFirstChild("CoinContainer") then
 				for _, coin in ipairs(match.Map.CoinContainer:GetChildren()) do
-					coroutine.wrao(RemoveCoinLag)(coin)
+					coroutine.wrap(RemoveCoinLag)(coin)
 				end
 				if not eventfunctions.CoinAdded then
 					eventfunctions.CoinAdded = match.Map.CoinContainer.ChildAdded:Connect(function(coin)
