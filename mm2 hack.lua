@@ -18,7 +18,7 @@ if not game:IsLoaded() then
 	game.Loaded:Wait()
 	message:Destroy()
 end
-if not rawget or not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod or not getgenv or not firetouchinterest then -- Checks if executor is supported
+if not rawget or not hookmetamethod or not setreadonly or not newcclosure or not getnamecallmethod or not getgenv or not firetouchinterest or not keypress or not keyrelease then -- Checks if executor is supported
 	notify("Error","Incompatible Executor! Required functions are not supported by this executor.")
 	return
 end
@@ -53,7 +53,8 @@ local configs = { -- Library Configurations
 	GunPrediction = 150;
 	KnifePrediction = 100;
 	Automatic = false;
-	AimbotMethod = "Murderer/Target";
+	AimbotMethod = "Murderer";
+	MurdererAimbotMethod = "ClosestPlayerToCursor";
 	FOV = 350;
 	AutoEquip = false;
 	AutoShoot = false;
@@ -97,7 +98,7 @@ local visuals = {}
 
 local weapons = {
 	Knife = {
-		Role = {"Murderer"};
+		Role = {"Murderer","Target"};
 		Speed = {
 			Normal = 80;
 			Sleight = 100;
@@ -225,11 +226,11 @@ function RemoveChams(object,isacharmodel) -- Destroys ESP
 end
 function GetClosestPlayer(FOV,maxdist)
 	local lplrchar = LocalPlayer.Character
-	if lplrchar then
+	local closest
+	local distance
+	if lplrchar and players[LocalPlayer.Name] then
 		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
 		if lplrhrp and lplrhrp:IsA("BasePart") then
-			local closest
-			local distance
 			local function getclosestplayertoscreenpoint(point)
 				for _, player in ipairs(Players:GetPlayers()) do
 					local character = player.Character
@@ -250,9 +251,7 @@ function GetClosestPlayer(FOV,maxdist)
 					end
 				end
 			end
-			if configs.AimbotMethod == "ClosestPlayerToCursor" and camera then
-				getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
-			elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
+			local function closestplayertocharacter()
 				for _, player in ipairs(Players:GetPlayers()) do
 					local character = player.Character
 					if character and character ~= lplrchar  then
@@ -267,25 +266,40 @@ function GetClosestPlayer(FOV,maxdist)
 						end
 					end
 				end
-			elseif configs.AimbotMethod == "ClosestPlayerToScreenCenter" and camera then
-				getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y - 58)/2)
-			elseif configs.AimbotMethod == "Murderer/Target" then
-				if game.PlaceId == "636649648" then
-
-				elseif players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
+			end
+			if players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
+				if configs.MurdererAimbotMethod == "ClosestPlayerToCursor" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
-				else
-					for _, player in ipairs(Players:GetPlayers()) do
-						if players[player.Name] and players[player.Name].Role and players[player.Name].Role == weapons.Knife.Role[1] then
-							local character = player.Character
-							if character and character ~= lplrchar then
-								local NPCRoot = character:FindFirstChild("HumanoidRootPart")
-								if NPCRoot and NPCRoot:IsA("BasePart") then
-									local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
+				elseif configs.MurdererAimbotMethod == "ClosestPlayerToScreenCenter" and camera then
+					getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y)/2)
+				elseif configs.MurdererAimbotMethod == "ClosestPlayerToCharacter" then
+					closestplayertocharacter()
+				end
+			else
+				if configs.AimbotMethod == "ClosestPlayerToCursor" then
+					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
+				elseif configs.AimbotMethod == "ClosestPlayerToScreenCenter" and camera then
+					getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y)/2)
+				elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
+					closestplayertocharacter()
+				elseif configs.AimbotMethod == "Murderer" then
+					if game.PlaceId == "636649648" then
 
-									if (not closest or distancetemp < distance) and distancetemp <= maxdist then
-										closest = character
-										distance = distancetemp
+					elseif players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
+						getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
+					else
+						for _, player in ipairs(Players:GetPlayers()) do
+							if players[player.Name] and players[player.Name].Role and players[player.Name].Role == weapons.Knife.Role[1] then
+								local character = player.Character
+								if character and character ~= lplrchar then
+									local NPCRoot = character:FindFirstChild("HumanoidRootPart")
+									if NPCRoot and NPCRoot:IsA("BasePart") then
+										local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
+
+										if (not closest or distancetemp < distance) and distancetemp <= maxdist then
+											closest = character
+											distance = distancetemp
+										end
 									end
 								end
 							end
@@ -787,14 +801,25 @@ local Automatic = Main:CreateToggle({
 	end;
 })
 local Dropdown = Main:CreateDropdown({
-	Name = "Aimbot Method";
-	Options = {"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter","Murderer/Target"};
-	CurrentOption = "Murderer/Target";
+	Name = "Sheriff Aimbot Method";
+	Options = {"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter","Murderer"};
+	CurrentOption = "Murderer";
 	MultiSelection = false; -- If MultiSelections is allowed
 	SectionParent = AimbotSection;
 	Flag = "Aimbot Method";
 	Callback = function(option)
 		configs.AimbotMethod = option
+	end,
+})
+local Dropdown = Main:CreateDropdown({
+	Name = "Murderer Aimbot Method";
+	Options = {"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter"};
+	CurrentOption = "ClosestPlayerToCursor";
+	MultiSelection = false; -- If MultiSelections is allowed
+	SectionParent = AimbotSection;
+	Flag = "Aimbot Method";
+	Callback = function(option)
+		configs.MurdererAimbotMethod = option
 	end,
 })
 local FOV = Main:CreateSlider({
