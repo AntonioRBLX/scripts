@@ -1827,51 +1827,51 @@ function assignButtonFunctions(button,callback)
 end
 function setAnimations(char)
 	if char then
-		local animatescript = char:WaitForChild("Animate")
+		local animatescript = char:FindFirstChild("Animate")
 		if animatescript then
-			local idle = animatescript:WaitForChild("idle")
-			local walk = animatescript:WaitForChild("walk")
-			local run = animatescript:WaitForChild("run")
-			local swim = animatescript:WaitForChild("swim")
-			local swimidle = animatescript:WaitForChild("swimidle")
-			local jump = animatescript:WaitForChild("jump")
-			local fall = animatescript:WaitForChild("fall")
-			local climb = animatescript:WaitForChild("climb")
+			local idle = animatescript:FindFirstChild("idle")
+			local walk = animatescript:FindFirstChild("walk")
+			local run = animatescript:FindFirstChild("run")
+			local swim = animatescript:FindFirstChild("swim")
+			local swimidle = animatescript:FindFirstChild("swimidle")
+			local jump = animatescript:FindFirstChild("jump")
+			local fall = animatescript:FindFirstChild("fall")
+			local climb = animatescript:FindFirstChild("climb")
 
 			if idle and walk and run and swim and swimidle and jump and fall and climb then
-				local IdleAnim1 = idle:WaitForChild("Animation1")
+				local IdleAnim1 = idle:FindFirstChild("Animation1")
 				if currentanims.Idle1 and IdleAnim1 then
 					IdleAnim1.AnimationId = currentanims.Idle1
 				end
-				local IdleAnim2 = idle:WaitForChild("Animation2")
+				local IdleAnim2 = idle:FindFirstChild("Animation2")
 				if currentanims.Idle2 and IdleAnim2 then
 					IdleAnim2.AnimationId = currentanims.Idle2
 				end
-				local WalkAnim = walk:WaitForChild("WalkAnim")
+				local WalkAnim = walk:FindFirstChild("WalkAnim")
 				if currentanims.Walk and WalkAnim then
 					WalkAnim.AnimationId = currentanims.Walk
 				end
-				local RunAnim = run:WaitForChild("RunAnim")
+				local RunAnim = run:FindFirstChild("RunAnim")
 				if currentanims.Run and RunAnim then
 					RunAnim.AnimationId = currentanims.Run
 				end
-				local SwimAnim = swim:WaitForChild("Swim")
+				local SwimAnim = swim:FindFirstChild("Swim")
 				if currentanims.Swim and SwimAnim then
 					SwimAnim.AnimationId = currentanims.Swim
 				end
-				local SwimIdleAnim = swimidle:WaitForChild("SwimIdle")
+				local SwimIdleAnim = swimidle:FindFirstChild("SwimIdle")
 				if currentanims.SwimIdle and SwimIdleAnim then
 					SwimIdleAnim.AnimationId = currentanims.SwimIdle
 				end
-				local JumpAnim = jump:WaitForChild("JumpAnim")
+				local JumpAnim = jump:FindFirstChild("JumpAnim")
 				if currentanims.Jump and JumpAnim then
 					JumpAnim.AnimationId = currentanims.Jump
 				end
-				local FallAnim = fall:WaitForChild("FallAnim")
+				local FallAnim = fall:FindFirstChild("FallAnim")
 				if currentanims.Fall and FallAnim then
 					FallAnim.AnimationId = currentanims.Fall
 				end
-				local ClimbAnim = climb:WaitForChild("ClimbAnim")
+				local ClimbAnim = climb:FindFirstChild("ClimbAnim")
 				if currentanims.Climb and ClimbAnim then
 					ClimbAnim.AnimationId = currentanims.Climb
 				end
