@@ -1161,6 +1161,20 @@ local IncludeLocalPlayer = Visuals:CreateToggle({
 		configs.IncludeLocalPlayer = value
 	end;
 })
+local RemoveCoinLag = Visuals:CreateToggle({
+	Name = "Remove Coin Lag";
+	CurrentValue = false;
+	SectionParent = AntiLagSection;
+	Flag = "Remove Coin Lag";
+	Callback = function(value)
+		configs.RemoveCoinLag = value
+		if match.Map then
+			if match.Map:FindFirstChild("CoinContainer") then
+				match.Map.CoinContainer:Destroy()
+			end
+		end
+	end;
+})
 ---------------------------------------------------------------------------
 local AnnounceRoles = Blatant:CreateButton({
 	Name = "Announce Roles";
@@ -1498,6 +1512,10 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 				end
 			end
 		end)
+		if configs.RemoveCoinLag then
+			local cc = instance:WaitForChild("CoinContainer")
+			cc:Destroy()
+		end
 	end
 end)
 eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(instance)
