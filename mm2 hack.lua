@@ -65,6 +65,7 @@ local configs = { -- Library Configurations
 	AutoRemoveLag = false;
 	IncludeAccessories = false;
 	IncludeLocalPlayer = false;
+	RemoveCoinLag = false;
 	ToggleWalkSpeed = false;
 	ToggleJumpPower = false;
 	WalkSpeed = 16;
@@ -434,6 +435,13 @@ function RemoveLag(character)
 				end
 			end
 		end
+	end
+end
+function RemoveCoinLag(coin)
+	if coin.Name == "Coin_Server" then
+		local visualeffect = coin:WaitForChild("CoinVisual")
+		visualeffect:Destroy()
+		coin.Transparency = 0
 	end
 end
 function GrabGunFunction(gundrop)
@@ -1161,16 +1169,18 @@ local IncludeLocalPlayer = Visuals:CreateToggle({
 		configs.IncludeLocalPlayer = value
 	end;
 })
-local RemoveCoinLag = Visuals:CreateToggle({
+local RemoveCoinLagToggle = Visuals:CreateToggle({
 	Name = "Remove Coin Lag";
 	CurrentValue = false;
 	SectionParent = AntiLagSection;
 	Flag = "Remove Coin Lag";
 	Callback = function(value)
 		configs.RemoveCoinLag = value
-		if match.Map then
+		if configs.RemoveCoinLag and match.Map then
 			if match.Map:FindFirstChild("CoinContainer") then
-				match.Map.CoinContainer:Destroy()
+				for _, coin in ipairs(match.Map.CoinContainer) do
+					RemoveCoinLag(coin)
+				end
 			end
 		end
 	end;
@@ -1514,7 +1524,9 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 		end)
 		if configs.RemoveCoinLag then
 			local cc = instance:WaitForChild("CoinContainer")
-			cc:Destroy()
+			eventfunctions.CoinAdded = cc.ChildAdded:Connect(function(coin)
+				RemoveCoinLag(coin)
+			end)
 		end
 	end
 end)
@@ -1524,6 +1536,9 @@ eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(i
 		match.Map = nil
 		if eventfunctions.MapChildAdded then
 			eventfunctions.MapChildAdded:Disconnect()
+		end
+		if eventfunctions.CoinAdded then
+			eventfunctions.CoinAdded:Disconnect()
 		end
 	end
 end)
