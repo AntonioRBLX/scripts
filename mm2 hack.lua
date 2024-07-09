@@ -439,8 +439,10 @@ function RemoveLag(character)
 end
 function RemoveCoinLag(coin)
 	if coin.Name == "Coin_Server" then
-		local visualeffect = coin:WaitForChild("CoinVisual", 5)
-		visualeffect:Destroy()
+		local visualeffect = coin:WaitForChild("CoinVisual", 5
+		if visualeffect then
+			visualeffect:Destroy()
+		end
 		coin.Transparency = 0
 	end
 end
