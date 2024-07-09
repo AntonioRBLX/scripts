@@ -439,7 +439,7 @@ function RemoveLag(character)
 end
 function RemoveCoinLag(coin)
 	if coin.Name == "Coin_Server" then
-		local visualeffect = coin:WaitForChild("CoinVisual")
+		local visualeffect = coin:WaitForChild("CoinVisual", 5)
 		visualeffect:Destroy()
 		coin.Transparency = 0
 	end
@@ -1179,7 +1179,7 @@ local RemoveCoinLagToggle = Visuals:CreateToggle({
 		if configs.RemoveCoinLag and match.Map then
 			if match.Map:FindFirstChild("CoinContainer") then
 				for _, coin in ipairs(match.Map.CoinContainer:GetChildren()) do
-					RemoveCoinLag(coin)
+					coroutine.wrao(RemoveCoinLag)(coin)
 				end
 				if not eventfunctions.CoinAdded then
 					eventfunctions.CoinAdded = match.Map.CoinContainer.ChildAdded:Connect(function(coin)
