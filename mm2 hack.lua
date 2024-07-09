@@ -1178,7 +1178,7 @@ local RemoveCoinLagToggle = Visuals:CreateToggle({
 		configs.RemoveCoinLag = value
 		if configs.RemoveCoinLag and match.Map then
 			if match.Map:FindFirstChild("CoinContainer") then
-				for _, coin in ipairs(match.Map.CoinContainer) do
+				for _, coin in ipairs(match.Map.CoinContainer:GetChildren()) do
 					RemoveCoinLag(coin)
 				end
 			end
