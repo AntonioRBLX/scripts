@@ -1181,7 +1181,14 @@ local RemoveCoinLagToggle = Visuals:CreateToggle({
 				for _, coin in ipairs(match.Map.CoinContainer:GetChildren()) do
 					RemoveCoinLag(coin)
 				end
+				if not eventfunctions.CoinAdded then
+					eventfunctions.CoinAdded = match.Map.CoinContainer.ChildAdded:Connect(function(coin)
+						RemoveCoinLag(coin)
+					end)
+				end
 			end
+		elseif eventfunctions.CoinAdded then
+			eventfunctions.CoinAdded:Disconnect()
 		end
 	end;
 })
