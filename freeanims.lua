@@ -1829,6 +1829,9 @@ function setAnimations(char)
 	if char then
 		local animatescript = char:WaitForChild("Animate")
 		animatescript.Enabled = false
+		for i, v in pairs(char:WaitForChild("Humanoid"):WaitForChild("Animator"):GetPlayingAnimationTracks()) do
+			v:Stop()
+		end
 		
 		local idle = animatescript:WaitForChild("idle")
 		local walk = animatescript:WaitForChild("walk")
