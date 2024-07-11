@@ -1825,62 +1825,60 @@ function assignButtonFunctions(button,callback)
 		fadeOutRipple(rippleeffect)
 	end)
 end
-function setAnimations(char)
-	if char then
-		local animatescript = char:WaitForChild("Animate")
-		animatescript.Enabled = false
-		for i, v in pairs(char:WaitForChild("Humanoid"):WaitForChild("Animator"):GetPlayingAnimationTracks()) do
-			v:Stop()
-		end
-		
-		local idle = animatescript:WaitForChild("idle")
-		local walk = animatescript:WaitForChild("walk")
-		local run = animatescript:WaitForChild("run")
-		local swim = animatescript:WaitForChild("swim")
-		local swimidle = animatescript:WaitForChild("swimidle")
-		local jump = animatescript:WaitForChild("jump")
-		local fall = animatescript:WaitForChild("fall")
-		local climb = animatescript:WaitForChild("climb")
-		
-		local IdleAnim1 = idle:WaitForChild("Animation1")
-		if currentanims.Idle1 then
-			IdleAnim1.AnimationId = currentanims.Idle1
-		end
-		local IdleAnim2 = idle:WaitForChild("Animation2")
-		if currentanims.Idle2 then
-			IdleAnim2.AnimationId = currentanims.Idle2
-		end
-		local WalkAnim = walk:WaitForChild("WalkAnim")
-		if currentanims.Walk then
-			WalkAnim.AnimationId = currentanims.Walk
-		end
-		local RunAnim = run:WaitForChild("RunAnim")
-		if currentanims.Run then
-			RunAnim.AnimationId = currentanims.Run
-		end
-		local SwimAnim = swim:WaitForChild("Swim")
-		if currentanims.Swim then
-			SwimAnim.AnimationId = currentanims.Swim
-		end
-		local SwimIdleAnim = swimidle:WaitForChild("SwimIdle")
-		if currentanims.SwimIdle then
-			SwimIdleAnim.AnimationId = currentanims.SwimIdle
-		end
-		local JumpAnim = jump:WaitForChild("JumpAnim")
-		if currentanims.Jump then
-			JumpAnim.AnimationId = currentanims.Jump
-		end
-		local FallAnim = fall:WaitForChild("FallAnim")
-		if currentanims.Fall then
-			FallAnim.AnimationId = currentanims.Fall
-		end
-		local ClimbAnim = climb:WaitForChild("ClimbAnim")
-		if currentanims.Climb then
-			ClimbAnim.AnimationId = currentanims.Climb
-		end
-		
-		animatescript.Enabled = true
+function setAnimations()
+	local animatescript = lplrchar:WaitForChild("Animate")
+	animatescript.Enabled = false
+	for i, v in pairs(lplrchar:WaitForChild("Humanoid"):WaitForChild("Animator"):GetPlayingAnimationTracks()) do
+		v:Stop()
 	end
+	
+	local idle = animatescript:WaitForChild("idle")
+	local walk = animatescript:WaitForChild("walk")
+	local run = animatescript:WaitForChild("run")
+	local swim = animatescript:WaitForChild("swim")
+	local swimidle = animatescript:WaitForChild("swimidle")
+	local jump = animatescript:WaitForChild("jump")
+	local fall = animatescript:WaitForChild("fall")
+	local climb = animatescript:WaitForChild("climb")
+	
+	local IdleAnim1 = idle:WaitForChild("Animation1")
+	if currentanims.Idle1 then
+		IdleAnim1.AnimationId = currentanims.Idle1
+	end
+	local IdleAnim2 = idle:WaitForChild("Animation2")
+	if currentanims.Idle2 then
+		IdleAnim2.AnimationId = currentanims.Idle2
+	end
+	local WalkAnim = walk:WaitForChild("WalkAnim")
+	if currentanims.Walk then
+		WalkAnim.AnimationId = currentanims.Walk
+	end
+	local RunAnim = run:WaitForChild("RunAnim")
+	if currentanims.Run then
+		RunAnim.AnimationId = currentanims.Run
+	end
+	local SwimAnim = swim:WaitForChild("Swim")
+	if currentanims.Swim then
+		SwimAnim.AnimationId = currentanims.Swim
+	end
+	local SwimIdleAnim = swimidle:WaitForChild("SwimIdle")
+	if currentanims.SwimIdle then
+		SwimIdleAnim.AnimationId = currentanims.SwimIdle
+	end
+	local JumpAnim = jump:WaitForChild("JumpAnim")
+	if currentanims.Jump then
+		JumpAnim.AnimationId = currentanims.Jump
+	end
+	local FallAnim = fall:WaitForChild("FallAnim")
+	if currentanims.Fall then
+		FallAnim.AnimationId = currentanims.Fall
+	end
+	local ClimbAnim = climb:WaitForChild("ClimbAnim")
+	if currentanims.Climb then
+		ClimbAnim.AnimationId = currentanims.Climb
+	end
+	
+	animatescript.Enabled = true
 end
 function changeAnimations(anims)
 	currentanims.Idle1 = anims.Idle1
@@ -1892,14 +1890,12 @@ function changeAnimations(anims)
 	currentanims.Climb = anims.Climb
 	currentanims.Swim = anims.Swim
 	currentanims.SwimIdle = anims.SwimIdle
-	setAnimations(lplrchar)
+	setAnimations()
 	print("animations changed")
 end
-workspace.ChildAdded:Connect(function(char)
-	if char:IsA("Model") and char.Name == lplr.Name then
-		lplrchar = char
-		setAnimations(lplrchar)
-	end
+lplr.CharacterAdded:Connect(function(char)
+	lplrchar = char
+	setAnimations()
 end)
 for _, v in pairs(anims) do
 	assignButtonFunctions(v.Button,function()
@@ -1940,7 +1936,7 @@ for i, v in pairs(customanims) do
 				if result and result.AssetTypeId == 24 then
 					currentanims[i] = "rbxassetid://"..tostring(ID)
 					if lplrchar then
-						coroutine.wrap(setAnimations)(lplrchar)
+						task.spawn(setAnimations)
 					end
 				else
 					textBoxErrorMessage("Invalid ID")
@@ -1951,7 +1947,7 @@ for i, v in pairs(customanims) do
 		else
 			if anims[text:lower()] then
 				currentanims[i] = anims[text:lower()][i]
-				coroutine.wrap(setAnimations)(lplrchar)
+				task.spawn(setAnimations)
 			else
 				textBoxErrorMessage("Invalid Animation Package")
 			end
