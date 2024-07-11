@@ -1828,55 +1828,55 @@ end
 function setAnimations(char)
 	if char then
 		local animatescript = char:WaitForChild("Animate")
-		if animatescript then
-			local idle = animatescript:WaitForChild("idle")
-			local walk = animatescript:WaitForChild("walk")
-			local run = animatescript:WaitForChild("run")
-			local swim = animatescript:WaitForChild("swim")
-			local swimidle = animatescript:WaitForChild("swimidle")
-			local jump = animatescript:WaitForChild("jump")
-			local fall = animatescript:WaitForChild("fall")
-			local climb = animatescript:WaitForChild("climb")
-
-			if idle and walk and run and swim and swimidle and jump and fall and climb then
-				local IdleAnim1 = idle:WaitForChild("Animation1")
-				if currentanims.Idle1 and IdleAnim1 then
-					IdleAnim1.AnimationId = currentanims.Idle1
-				end
-				local IdleAnim2 = idle:WaitForChild("Animation2")
-				if currentanims.Idle2 and IdleAnim2 then
-					IdleAnim2.AnimationId = currentanims.Idle2
-				end
-				local WalkAnim = walk:WaitForChild("WalkAnim")
-				if currentanims.Walk and WalkAnim then
-					WalkAnim.AnimationId = currentanims.Walk
-				end
-				local RunAnim = run:WaitForChild("RunAnim")
-				if currentanims.Run and RunAnim then
-					RunAnim.AnimationId = currentanims.Run
-				end
-				local SwimAnim = swim:WaitForChild("Swim")
-				if currentanims.Swim and SwimAnim then
-					SwimAnim.AnimationId = currentanims.Swim
-				end
-				local SwimIdleAnim = swimidle:WaitForChild("SwimIdle")
-				if currentanims.SwimIdle and SwimIdleAnim then
-					SwimIdleAnim.AnimationId = currentanims.SwimIdle
-				end
-				local JumpAnim = jump:WaitForChild("JumpAnim")
-				if currentanims.Jump and JumpAnim then
-					JumpAnim.AnimationId = currentanims.Jump
-				end
-				local FallAnim = fall:WaitForChild("FallAnim")
-				if currentanims.Fall and FallAnim then
-					FallAnim.AnimationId = currentanims.Fall
-				end
-				local ClimbAnim = climb:WaitForChild("ClimbAnim")
-				if currentanims.Climb and ClimbAnim then
-					ClimbAnim.AnimationId = currentanims.Climb
-				end
-			end
+		animatescript.Enabled = false
+		
+		local idle = animatescript:WaitForChild("idle")
+		local walk = animatescript:WaitForChild("walk")
+		local run = animatescript:WaitForChild("run")
+		local swim = animatescript:WaitForChild("swim")
+		local swimidle = animatescript:WaitForChild("swimidle")
+		local jump = animatescript:WaitForChild("jump")
+		local fall = animatescript:WaitForChild("fall")
+		local climb = animatescript:WaitForChild("climb")
+		
+		local IdleAnim1 = idle:WaitForChild("Animation1")
+		if currentanims.Idle1 then
+			IdleAnim1.AnimationId = currentanims.Idle1
 		end
+		local IdleAnim2 = idle:WaitForChild("Animation2")
+		if currentanims.Idle2 then
+			IdleAnim2.AnimationId = currentanims.Idle2
+		end
+		local WalkAnim = walk:WaitForChild("WalkAnim")
+		if currentanims.Walk then
+			WalkAnim.AnimationId = currentanims.Walk
+		end
+		local RunAnim = run:WaitForChild("RunAnim")
+		if currentanims.Run then
+			RunAnim.AnimationId = currentanims.Run
+		end
+		local SwimAnim = swim:WaitForChild("Swim")
+		if currentanims.Swim then
+			SwimAnim.AnimationId = currentanims.Swim
+		end
+		local SwimIdleAnim = swimidle:WaitForChild("SwimIdle")
+		if currentanims.SwimIdle then
+			SwimIdleAnim.AnimationId = currentanims.SwimIdle
+		end
+		local JumpAnim = jump:WaitForChild("JumpAnim")
+		if currentanims.Jump then
+			JumpAnim.AnimationId = currentanims.Jump
+		end
+		local FallAnim = fall:WaitForChild("FallAnim")
+		if currentanims.Fall then
+			FallAnim.AnimationId = currentanims.Fall
+		end
+		local ClimbAnim = climb:WaitForChild("ClimbAnim")
+		if currentanims.Climb then
+			ClimbAnim.AnimationId = currentanims.Climb
+		end
+		
+		animatescript.Enabled = true
 	end
 end
 function changeAnimations(anims)
