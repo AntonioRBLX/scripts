@@ -27,11 +27,11 @@ if game.PlaceId ~= 142823291 and game.PlaceId ~= 636649648 then
 	return
 end
 
-if _G.mm2hacksalreadyloadedbyCITY512 then
+if MM2MAIN then
 	notify("Error","Already Executed!")
 	return
 end -- Checks if the script is already executed
-_G.mm2hacksalreadyloadedbyCITY512 = true
+getgenv().MM2MAIN = true
 
 -- Modules
 
