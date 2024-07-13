@@ -7,7 +7,7 @@ local TeleportService = game:GetService("TeleportService")
 local TweenService = game:GetService("TweenService")
 
 function notify(title,msg)
-	game:GetService("StarterGui"):SetCore("SendNotification" ,{
+	StarterGui:SetCore("SendNotification" ,{
 		Title = title;
 		Text = msg;
 	})
