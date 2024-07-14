@@ -75,7 +75,6 @@ local eventfunctions = {}
 local scriptvariables = {
 	IsFlinging = false;
 	AntiLagAlreadyExecuted = false;
-	ExecuteOnTeleport = false;
 	TPCheck = false;
 	QueueOnTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport;
 }
@@ -1431,9 +1430,7 @@ local KeepGUI = Others:CreateToggle({
 	CurrentValue = false;
 	Flag = "KeepGUI";
 	Callback = function(value)
-		if scriptvariables.QueueOnTeleport then
-			scriptvariables.ExecuteOnTeleport = value
-		else
+		if not scriptvariables.QueueOnTeleport then
 			Library:Notify({
 				Title = "Error";
 				Content = 'The function "queue_on_teleport" is not supported on this executor';
@@ -1563,7 +1560,7 @@ eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(desc
 	end
 end)
 eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
-	if not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and scriptvariables.ExecuteOnTeleport then
+	if not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and configs.KeepGUI then
 		scriptvariables.TPCheck = true
 		scriptvariables.QueueOnTeleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20hack.lua"))()')
 	end
