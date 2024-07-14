@@ -1,3 +1,4 @@
+local CollectionService = game:GetService("CollectionService")
 local CoreGui = game:GetService("CoreGui")
 local RS = game:GetService("RunService")
 local REPS = game:GetService("ReplicatedStorage")
@@ -186,11 +187,9 @@ function GetClosestPlayer(FOV,maxdist)
 							local distancetemp = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
 							local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
-							if onscreen and (not FOV or distancetemp <= FOV) then
-								if (not closest or distancetemp < distance) and distancefromplayer <= maxdist then
-									closest = character
-									distance = distancetemp
-								end
+							if onscreen and (not FOV or distancetemp <= FOV) and (not closest or distancetemp < distance) and distancefromplayer <= maxdist then
+								closest = character
+								distance = distancetemp
 							end
 						end
 					end
@@ -362,7 +361,7 @@ function RemoveLag(character)
 							end
 						end
 						task.wait()
-					until knifefound and gunfound or spawn + 5 <= tick()
+					until knifefound and gunfound or spawn + 5 < tick()
 				end
 			end
 		else
@@ -401,8 +400,20 @@ function GrabGunFunction(gundrop)
 		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
 		if lplrhrp then
 			local prevCFrame = lplrhrp.CFrame
-			lplrhrp.CFrame = CFrame.new(gundrop.Position)
-			task.wait(0.5)
+			local collected = false
+			task.spawn(function()
+				local collectedevent = gundrop:GetPropertyChangedSignal("Parent"):Connect(function()
+					collectedevent:Disconnect()
+					collected = true
+				end)
+				task.wait(10)
+				collectedevent:Disconnect()
+				collected = true
+			end)
+			repeat 
+				task.wait()
+				lplrhrp.CFrame = CFrame.new(gundrop.Position)
+			until collected
 			lplrhrp.CFrame = prevCFrame
 		end
 	end
@@ -915,17 +926,27 @@ local ShowGunDrop = Visuals:CreateToggle({
 	SectionParent = ChamsSection;
 	Flag = "ShowGunDrop";
 	Callback = function(value)
-		for _, child in ipairs(workspace:GetChildren()) do
-			if child:IsA("BasePart") and child.Name == "GunDrop" then
+		if match.Map then
+			local gundrop = match.Map:FindFirstChild("GunDrop")
+			if gundrop then
 				if configs.ShowGunDrop.CurrentValue then
-					AddChams(child,false,{
+					AddChams(gundrop,false,{
 						Color = configs.GunDropColor.CurrentValue;
 					})
 				else
-					RemoveChams(child,false)
+					RemoveChams(gundrop,false)
 				end
 			end
 		end
+	end;
+})
+local ShowKnifeTraces = Visuals:CreateToggle({
+	Name = "Show Knife Traces";
+	CurrentValue = false;
+	SectionParent = ChamsSection;
+	Info = "Purple = Far Away, Red = Close Knife";
+	Flag = "ShowKnifeTraces";
+	Callback = function(value)
 	end;
 })
 local ShowTraps = Visuals:CreateToggle({
@@ -1139,9 +1160,10 @@ local AnnounceRoles = Blatant:CreateButton({
 local GrabGun = Blatant:CreateButton({
 	Name = "Grab Gun",
 	Callback = function()
-		for _, v in ipairs(workspace:GetChildren()) do
-			if v:IsA("BasePart") and v.Name == "GunDrop" then
-				GrabGunFunction(v)
+		if match.Map then
+			local gundrop = match.Map:FindFirstChild("GunDrop")
+			if gundrop then
+				GrabGunFunction(gundrop)
 			end
 		end
 	end,
@@ -1422,33 +1444,100 @@ local KeepGUI = Others:CreateToggle({
 		end
 	end;
 })
+Library:LoadConfiguration()
 configs = Library.Flags
 
 ---------------------------------------------------------------------------
 -- Events
 
 eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(instance)
-	if instance:IsA("BasePart") and instance.Name == "ThrowingKnife" then
-		task.wait(10)
-		instance:Destroy()
-	elseif instance:IsA("Model") and not instance:FindFirstChildOfClass("Humanoid") and instance.Name == "Normal" then
-		match.SheriffDied = false
-		match.Map = instance
-		eventfunctions.MapChildAdded = match.Map.ChildAdded:Connect(function(child)
-			if child:IsA("BasePart") and child.Name == "GunDrop" then
-				AddChams(child,false,{
-					Color = configs.GunDropColor.CurrentValue;
-				})
-				if configs.AutoGrabGun.CurrentValue and (not players[LocalPlayer.Name] or not players[LocalPlayer.Name].Role == weapons.Knife.Role[1]) then
-					GrabGunFunction(child)
+	if not instance:FindFirstChildOfClass("Humanoid") then
+		if instance.Name == "ThrowingKnife" and not instance:FindFirstChildOfClass("Humanoid") then
+			task.spawn(function()
+				if configs.ShowKnifeTraces.CurrentValue then
+					local knife = instance:WaitForChild("ThrowingKnife", 5)
+					if knife then
+						local Spawn = tick()
+						repeat 
+							task.wait() 
+							if Spawn + 5 < tick() then 
+								return 
+							end 
+						until knife.Velocity ~= Vector3.new(0,0,0)
+						
+						local ignorelist = {knife}
+						for _, plr in ipairs(Players:GetPlayers()) do
+							local char = plr.Character
+							if char then
+								table.insert(ignorelist,char)
+							end
+						end
+
+						local params = RaycastParams.new()
+						params.FilterDescendantsInstances = ignorelist
+						params.FilterType = Enum.RaycastFilterType.Exclude
+
+						local raycastresult = workspace:Raycast(knife.Position,knife.Velocity * 9999)
+						if raycastresult then
+							local container = Instance.new("Part", workspace)
+							container.Anchored = true
+							container.CanCollide = false
+							container.Transparency = 1
+							container.Position = Vector3.new(0,0,0)
+
+							local att0 = Instance.new("Attachment", knife)
+							att0.Position = Vector3.new(0,0,0)
+							local att1 = Instance.new("Attachment", container)
+							att1.WorldPosition = raycastresult.Position
+
+							local beam = Instance.new("Beam", knife)
+							beam.Attachment0 = att0
+							beam.Attachment1 = att1
+							beam.Color = ColorSequence.new(Color3.new(1,0,0))
+							beam.FaceCamera = true
+							
+							local Spawn = tick()
+							repeat
+								local char = LocalPlayer.Character
+								if char then
+									local hrp = char:FindFirstChild("HumanoidRootPart")
+									if hrp then
+										local hue = (knife.Position - hrp.Position).Magnitude / 15
+										if hue > 1 then
+											hue = 1
+										end
+										beam.Color = ColorSequence.new(Color3.fromHSV(hue,0.6,1))
+									end
+								end
+								task.wait()
+							until not knife.Parent or Spawn + 5 < tick()
+							container:Destroy()
+							att0:Destroy()
+						end
+					end
 				end
-			end
-		end)
-		if configs.RemoveCoinLag.CurrentValue then
-			local cc = instance:WaitForChild("CoinContainer")
-			eventfunctions.CoinAdded = cc.ChildAdded:Connect(function(coin)
-				RemoveCoinLag(coin)
 			end)
+			task.wait(10)
+			instance:Destroy()
+		elseif instance.Name == "Normal" then
+			match.SheriffDied = false
+			match.Map = instance
+			eventfunctions.MapChildAdded = match.Map.ChildAdded:Connect(function(child)
+				if child:IsA("BasePart") and child.Name == "GunDrop" then
+					AddChams(child,false,{
+						Color = configs.GunDropColor.CurrentValue;
+					})
+					if configs.AutoGrabGun.CurrentValue and (not players[LocalPlayer.Name] or not players[LocalPlayer.Name].Role == weapons.Knife.Role[1]) then
+						coroutine.wrap(GrabGunFunction)(child)
+					end
+				end
+			end)
+			if configs.RemoveCoinLag.CurrentValue then
+				local cc = instance:WaitForChild("CoinContainer")
+				eventfunctions.CoinAdded = cc.ChildAdded:Connect(function(coin)
+					RemoveCoinLag(coin)
+				end)
+			end
 		end
 	end
 end)
@@ -1501,7 +1590,7 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 	end
 	if Drawing1 then
 		Drawing1.Position = Vector2.new(Mouse.X,Mouse.Y)
-		if configs.ShowFOVCircle.CurrentValue and (players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Gun.Role[1] and configs.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" or players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] and configs.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle") then
+		if configs.ShowFOVCircle.CurrentValue and (players[LocalPlayer.Name] and ((players[LocalPlayer.Name].Role == weapons.Gun.Role[1] or players[LocalPlayer.Name].Role == weapons.Gun.Role[2]) and configs.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" or players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] and configs.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle")) then
 			Drawing1.Visible = true
 		else
 			Drawing1.Visible = false
