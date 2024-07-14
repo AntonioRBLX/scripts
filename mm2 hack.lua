@@ -688,8 +688,8 @@ local Window = Library:CreateWindow({
 	LoadingSubtitle = "by CITY512";
 	ConfigurationSaving = {
 		Enabled = true;
-		FolderName = "CITY512 - MM2 Main"; -- Create a custom folder for your hub/game
-		FileName = "configdata"
+		FolderName = nil; -- Create a custom folder for your hub/game
+		FileName = "MM2MAIN"
 	};
 	Discord = {
 		Enabled = false;
