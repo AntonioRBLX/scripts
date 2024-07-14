@@ -1712,9 +1712,7 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 			local aimpos
 			if script.Name == "KnifeLocal" then
 				aimpos = GetAimVector(lplrchar,1)
-				if aimpos then
-					args[2] = aimpos
-				end
+				args[2] = aimpos
 			end
 			return aimpos and self.InvokeServer(self,table.unpack(args)) or self.InvokeServer(self,...)
 		elseif configs.KnifeAimbot.CurrentValue and tostring(self) == "Throw" and tostring(method) == "FireServer" then
