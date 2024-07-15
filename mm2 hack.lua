@@ -77,6 +77,7 @@ local scriptvariables = {
 	AntiLagAlreadyExecuted = false;
 	TPCheck = false;
 	QueueOnTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport;
+	AutoShootCooldown = nil;
 }
 local connections = {}
 local a = 0
@@ -688,8 +689,8 @@ local Window = Library:CreateWindow({
 	LoadingSubtitle = "by CITY512";
 	ConfigurationSaving = {
 		Enabled = true;
-		FolderName = nil; -- Create a custom folder for your hub/game
-		FileName = "MM2MAIN"
+		FolderName = "MM2SCRIPTBYCITY512"; -- Create a custom folder for your hub/game
+		FileName = "configs"
 	};
 	Discord = {
 		Enabled = false;
@@ -1551,11 +1552,7 @@ eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(i
 	end
 end)
 eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
-	if descendant:IsA("BasePart") and descendant.Name == "Trap" then
-		AddChams(descendant,false,{
-			Color = configs.TrapColor.CurrentValue;
-		})
-	elseif scriptvariables.AntiLagAlreadyExecuted then
+	if scriptvariables.AntiLagAlreadyExecuted then
 		RemoveLagFromObject(descendant)
 	end
 end)
@@ -1630,24 +1627,27 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 					end
 				end
 			end
-			if players[LocalPlayer.Name] and (players[LocalPlayer.Name].Role == weapons.Gun.Role[1] or players[LocalPlayer.Name].Role == weapons.Gun.Role[2]) and not lplrchar:FindFirstChild("Gun") then
-				local Gun = lplrchar:FindFirstChild("Gun")
-				if configs.AutoEquip.CurrentValue and (not Gun or Gun.ClassName ~= "Tool") then
-					local bp = LocalPlayer:FindFirstChild("Backpack")
-					if bp then
-						for _, child in ipairs(bp:GetChildren()) do
-							if child.ClassName == "Tool" and child.Name == "Gun" then
-								lplrhum:EquipTool(child)
-							end
+			local Gun = lplrchar:FindFirstChild("Gun")
+			if configs.AutoEquip.CurrentValue and not Gun then
+				local bp = LocalPlayer:FindFirstChild("Backpack")
+				if bp then
+					for _, tool in ipairs(bp:GetChildren()) do
+						if tool.ClassName == "Tool" and tool.Name == "Gun" then
+							lplrhum:EquipTool(tool)
 						end
 					end
 				end
-				if configs.AutoShoot.CurrentValue and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeServer") and Gun.KnifeServer:FindFirstChild("ShootGun") then
-					for _, player in ipairs(Players:GetPlayers()) do
-						local character = player.Character
-						if character then
-							local NPCRoot = character:FindFirstChild("HumanoidRootPart") 
-							if NPCRoot and NPCRoot:IsA("BasePart") and players[player.Name] and players[player.Name].Role == weapons.Knife.Role[1] then
+			end
+			if (not scriptvariables.AutoShootCooldown or scriptvariables.AutoShootCooldown + 3.3 < tick()) and configs.AutoShoot.CurrentValue and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeLocal") and Gun.KnifeLocal:FindFirstChild("CreateBeam") and Gun.KnifeLocal.CreateBeam:FindFirstChild("RemoteFunction") then
+				local closest
+				local distance
+				for _, player in ipairs(Players:GetPlayers()) do
+					local character = player.Character
+					if character then
+						local NPCRoot = character:FindFirstChild("HumanoidRootPart") 
+						if NPCRoot and NPCRoot:IsA("BasePart") and players[player.Name] and players[player.Name].Role == weapons.Knife.Role[1] then
+							local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
+							if not closest or distancetemp < distance then
 								local startpos = lplrchar.Gun.Handle.Position
 
 								local params = RaycastParams.new()
@@ -1656,23 +1656,29 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 
 								local raycast = workspace:Raycast(startpos, NPCRoot.Position - startpos, params)
 								if not raycast or not raycast.Position then
-									local aimpos = GetAimVector(lplrchar,1)
-									if aimpos then
-										local args = {
-											[1] = 1;
-											[2] = aimpos;
-											[3] = "AH"
-										}
-										lplrchar.Gun.KnifeServer.ShootGun:InvokeServer(table.unpack(args))
-									end
+									closest = character
+									distance = distancetemp
 								end
 							end
 						end
 					end
 				end
+				if closest then
+					local aimpos = GetAimVector(lplrchar,1)
+					if aimpos then
+						scriptvariables.AutoShootCooldown = tick()
+						local args = {
+							[1] = 1;
+							[2] = aimpos;
+							[3] = "AH2"
+						}
+						lplrchar.Gun.KnifeLocal.CreateBeam.RemoteFunction:InvokeServer(table.unpack(args))
+					end
+				end
 			end
 		end
 	end
+	local bin = {}
 	for i, v in ipairs(visuals) do
 		local properties = v.Properties
 		local line = v.Line
@@ -1680,11 +1686,10 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 
 		local pos1, onscreen1 = camera:WorldToViewportPoint(properties.StartPoint)
 		local pos2, onscreen2 = camera:WorldToViewportPoint(properties.EndPoint)
-
-		line.From = Vector2.new(pos1.X,pos1.Y)
-		line.To = Vector2.new(pos2.X,pos2.Y)
 		
 		if onscreen1 and onscreen2 then
+			line.From = Vector2.new(pos1.X,pos1.Y)
+			line.To = Vector2.new(pos2.X,pos2.Y)
 			line.Transparency = 1
 		else
 			line.Transparency = 0
@@ -1692,8 +1697,11 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 
 		if spawn + properties.LifeTime < tick() then
 			line:Remove()
-			visuals[i] = nil
+			table.insert(bin,i)
 		end
+	end
+	for i, v in ipairs(bin) do
+		table.remove(visuals,v)
 	end
 end)
 
