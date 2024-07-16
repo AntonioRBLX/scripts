@@ -821,6 +821,26 @@ local AutoShoot = Main:CreateToggle({
 	Callback = function(value)
 	end;
 })
+local AutoShootDelay = Main:CreateSlider({
+	Name = "Auto Shoot Delay";
+	Range = {0, 5};
+	Increment = 0.1;
+	Suffix = "s";
+	CurrentValue = 0;
+	SectionParent = AimbotSection;
+	Flag = "AutoShootDelay";
+	Callback = function(value)
+	end;
+})
+local LegitMode = Main:CreateToggle({
+	Name = "Legit Mode";
+	CurrentValue = false;
+	SectionParent = GunModsSection;
+	Info = "Only Shoots When Murd Equips Knife";
+	Flag = "LegitMode";
+	Callback = function(value)
+	end;
+})
 
 local KillAuraSection = Main:CreateSection("Kill Aura", false) -- The 2nd argument is to tell if its only a Title and doesnt contain element
 
@@ -1577,6 +1597,7 @@ eventfunctions.PlayerRemoved = Players.PlayerRemoving:Connect(function(removedpl
 	FlingPlayerType:Remove(removedplayer.Name)
 end)
 eventfunctions.Stepped = RS.Stepped:Connect(function()
+	local t = tick()
 	if prevtarget then
 		local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
 		if PrevTargetRoot and PrevTargetRoot:IsA("BasePart") then
@@ -1641,12 +1662,12 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 					end
 				end
 			end
-			if (not scriptvariables.AutoShootCooldown or scriptvariables.AutoShootCooldown + 3.3 < tick()) and configs.AutoShoot.CurrentValue and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeLocal") and Gun.KnifeLocal:FindFirstChild("CreateBeam") and Gun.KnifeLocal.CreateBeam:FindFirstChild("RemoteFunction") then
+			if (not scriptvariables.AutoShootCooldown or scriptvariables.AutoShootCooldown + 3.3 < t) and configs.AutoShoot.CurrentValue and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeLocal") and Gun.KnifeLocal:FindFirstChild("CreateBeam") and Gun.KnifeLocal.CreateBeam:FindFirstChild("RemoteFunction") then
 				local closest
 				local distance
 				for _, player in ipairs(Players:GetPlayers()) do
 					local character = player.Character
-					if character then
+					if character and (not configs.LegitMode.CurrentValue or character:FindFirstChild("Knife")) then
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart") 
 						if NPCRoot and NPCRoot:IsA("BasePart") and players[player.Name] and players[player.Name].Role == weapons.Knife.Role[1] then
 							local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
@@ -1669,7 +1690,7 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 				if closest then
 					local aimpos = GetAimVector(lplrchar,1)
 					if aimpos then
-						scriptvariables.AutoShootCooldown = tick()
+						scriptvariables.AutoShootCooldown = t
 						local args = {
 							[1] = 1;
 							[2] = aimpos;
@@ -1681,7 +1702,6 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 			end
 		end
 	end
-	local bin = {}
 	for i, v in ipairs(visuals) do
 		local properties = v.Properties
 		local line = v.Line
@@ -1698,13 +1718,15 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 			line.Transparency = 0
 		end
 
-		if spawn + properties.LifeTime < tick() then
+		if spawn + properties.LifeTime < t then
 			line:Remove()
-			table.insert(bin,i)
+			visuals[i] = "nil"
 		end
 	end
-	for i, v in ipairs(bin) do
-		table.remove(visuals,v)
+	local tablefind = table.find(visuals,"nil")
+	while tablefind do
+		table.remove(visuals,tablefind)
+		local tablefind = table.find(visuals,"nil")
 	end
 end)
 
