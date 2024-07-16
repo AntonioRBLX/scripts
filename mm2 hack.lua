@@ -78,6 +78,7 @@ local scriptvariables = {
 	TPCheck = false;
 	QueueOnTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport;
 	AutoShootCooldown = nil;
+	AutoShootDelay = nil;
 }
 local connections = {}
 local a = 0
@@ -818,17 +819,6 @@ local AutoShoot = Main:CreateToggle({
 	CurrentValue = false;
 	SectionParent = GunModsSection;
 	Flag = "AutoShoot";
-	Callback = function(value)
-	end;
-})
-local AutoShootDelay = Main:CreateSlider({
-	Name = "Auto Shoot Delay";
-	Range = {0, 5};
-	Increment = 0.1;
-	Suffix = "s";
-	CurrentValue = 0;
-	SectionParent = AimbotSection;
-	Flag = "AutoShootDelay";
 	Callback = function(value)
 	end;
 })
@@ -1688,9 +1678,9 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 					end
 				end
 				if closest then
-					local aimpos = GetAimVector(lplrchar,1)
-					if aimpos then
-						scriptvariables.AutoShootCooldown = t
+					local suc, aimpos = pcall(GetAimVector,lplrchar,1)
+					scriptvariables.AutoShootCooldown = t
+					if suc and aimpos then
 						local args = {
 							[1] = 1;
 							[2] = aimpos;
