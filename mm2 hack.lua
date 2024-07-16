@@ -1496,7 +1496,7 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 		if instance.Name == "ThrowingKnife" and not instance:FindFirstChildOfClass("Humanoid") then
 			task.spawn(function()
 				if configs.ShowKnifeTraces.CurrentValue then
-					local knife = instance:WaitForChild("ThrowingKnife", 5)
+					local knife = instance:WaitForChild("KnifeDisplay", 5)
 					if knife then
 						local Spawn = tick()
 						repeat 
