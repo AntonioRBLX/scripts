@@ -82,6 +82,7 @@ local scriptvariables = {
 }
 local connections = {}
 local a = 0
+local ID = 0
 
 if Drawing then
 	Drawing1 = Drawing.new("Circle")
@@ -98,18 +99,47 @@ end
 -- Functions
 
 function Draw3D(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Color = (), LifeTime = ()}
+	local module = {}
+
+	ID = ID + 1
+	local CurrentID = ID
+	
 	local line = Drawing.new("Line")
 	line.Visible = true
 	line.Color = dictionary.Color
 	line.Thickness = 1
-	line.Transparency = 0
+	line.Transparency = 1
 
-	table.insert(visuals, {Line = line, Spawn = tick(), Properties = {
+	table.insert(visuals, {ID = CurrentID,Line = line, Spawn = tick(), Properties = {
 		StartPoint = dictionary.StartPoint;
 		EndPoint = dictionary.EndPoint;
 		Color = dictionary.Color;
 		LifeTime = dictionary.LifeTime;
 	}})
+	local function find()
+		for i, v in ipairs(visuals) do
+			if v.ID == ID then
+				return i
+			end
+		end
+	end
+	function module:ChangeColor(color)
+		local idx = find()
+		visuals[idx].Properties.Color = color
+	end
+	function module:ChangeStartPoint(pos)
+		local idx = find()
+		visuals[idx].Properties.StartPoint = pos
+	end
+	function module:ChangeEndPoint(pos)
+		local idx = find()
+		visuals[idx].Properties.EndPoint = pos
+	end
+	function module:Destroy()
+		local idx = find()
+		visuals[idx] = "nil"
+	end
+	return module
 end
 function AddChams(object,isacharmodel,chamsettings) -- Adds ESP
 	if not chamsettings.Color then
@@ -1488,25 +1518,14 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 						params.FilterDescendantsInstances = ignorelist
 						params.FilterType = Enum.RaycastFilterType.Exclude
 
-						local raycastresult = workspace:Raycast(knife.Position,knife.Velocity * 9999)
+						local raycastresult = workspace:Raycast(knife.Position,knife.Velocity * 9999,params)
 						if raycastresult then
-							local container = Instance.new("Part", workspace)
-							container.Anchored = true
-							container.CanCollide = false
-							container.Transparency = 1
-							container.Position = Vector3.new(0,0,0)
-
-							local att0 = Instance.new("Attachment", knife)
-							att0.Position = Vector3.new(0,0,0)
-							local att1 = Instance.new("Attachment", container)
-							att1.WorldPosition = raycastresult.Position
-
-							local beam = Instance.new("Beam", knife)
-							beam.Attachment0 = att0
-							beam.Attachment1 = att1
-							beam.Color = ColorSequence.new(Color3.new(1,0,0))
-							beam.FaceCamera = true
-							
+							local line = Draw3D({
+								StartPoint = knife.Position;
+								EndPoint = raycastresult.Position; 
+								Color = Color3.new(0,0,1); 
+								LifeTime = 5;
+							})
 							local Spawn = tick()
 							repeat
 								local char = LocalPlayer.Character
@@ -1517,13 +1536,12 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 										if hue > 1 then
 											hue = 1
 										end
-										beam.Color = ColorSequence.new(Color3.fromHSV(hue,0.6,1))
+										line:ChangeColor(Color3.fromHSV(hue,0.6,1))
 									end
 								end
 								task.wait()
 							until not knife.Parent or Spawn + 5 < tick()
-							container:Destroy()
-							att0:Destroy()
+							line:Destroy()
 						end
 					end
 				end
@@ -1697,17 +1715,13 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 		local line = v.Line
 		local spawn = v.Spawn
 
-		local pos1, onscreen1 = camera:WorldToViewportPoint(properties.StartPoint)
-		local pos2, onscreen2 = camera:WorldToViewportPoint(properties.EndPoint)
-		
-		if onscreen1 and onscreen2 then
-			line.From = Vector2.new(pos1.X,pos1.Y)
-			line.To = Vector2.new(pos2.X,pos2.Y)
-			line.Transparency = 1
-		else
-			line.Transparency = 0
-		end
+		local pos1 = camera:WorldToViewportPoint(properties.StartPoint)
+		local pos2 = camera:WorldToViewportPoint(properties.EndPoint)
 
+		line.From = Vector2.new(pos1.X,pos1.Y)
+		line.To = Vector2.new(pos2.X,pos2.Y)
+
+		line.Color = properties.Color
 		if spawn + properties.LifeTime < t then
 			line:Remove()
 			visuals[i] = "nil"
