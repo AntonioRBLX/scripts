@@ -1681,12 +1681,13 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 							local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
 							if not closest or distancetemp < distance then
 								local startpos = lplrchar.Gun.Handle.Position
+								local predictedpos = NPCRoot.Position + NPCRoot.Velocity * configs.GunPrediction.CurrentValue / 1000
 
 								local params = RaycastParams.new()
 								params.FilterDescendantsInstances = {character,lplrchar}
 								params.FilterType = Enum.RaycastFilterType.Exclude
 
-								local raycast = workspace:Raycast(startpos, NPCRoot.Position - startpos, params)
+								local raycast = workspace:Raycast(startpos, predictedpos - startpos, params)
 								if not raycast or not raycast.Position then
 									closest = character
 									distance = distancetemp
