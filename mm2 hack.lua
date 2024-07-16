@@ -111,6 +111,9 @@ function Draw3D(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Col
 	}})
 end
 function AddChams(object,isacharmodel,chamsettings) -- Adds ESP
+	if not chamsettings.Color then
+		chamsettings.Color = Color3.new(0.6,0.6,0.6)
+	end
 	local function AddBoxHandleAdornment(part)
 		local BHA = Instance.new("BoxHandleAdornment", part)
 		BHA.Name = "MM2CHAMS"
