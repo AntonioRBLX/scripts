@@ -23,15 +23,17 @@ end
 getgenv().Loading = true
 notify("Info","Loading",14624193192)
 local globals = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/Globals.lua"))
+local functionsevents = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/Functions&Events.lua"))
 local userinterface = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/UserInterface.lua"))
-local hooks = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/Hooks&Events.lua"))
+local hooks = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/Hooks"))
 local loops = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/Loops.lua"))
 getgenv().Loading = false
-if not globals or not userinterface or not hooks or not loops then
+if not globals or not functionsevents or not userinterface or not hooks or not loops then
     notify("Error","Failed To Load Hub!", 2592670412)
     return
 end
 globals()
+functionsevents()
 userinterface()
 hooks()
 loops()
