@@ -24,7 +24,7 @@ getgenv().Loading = true
 notify("Info","Loading",14624193192)
 local globals = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/Globals.lua"))
 local userinterface = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/UserInterface.lua"))
-local hooks = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/Hooks.lua"))
+local hooks = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/Hooks&Events.lua"))
 local loops = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/The%20Strongest%20Battlegrounds/Scripts/Loops.lua"))
 getgenv().Loading = false
 if not globals or not userinterface or not hooks or not loops then
