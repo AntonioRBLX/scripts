@@ -51,7 +51,6 @@ local prevtarget
 local players = {}
 local visuals = {}
 
-local configs
 local weapons = {
 	Knife = {
 		Role = {"Murderer","Target"};
@@ -246,25 +245,25 @@ function GetClosestPlayer(FOV,maxdist)
 				end
 			end
 			if players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
-				if configs.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
+				if Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
-				elseif configs.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" then
+				elseif Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y),FOV)
-				elseif configs.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToScreenCenter" and camera then
+				elseif Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToScreenCenter" and camera then
 					getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y)/2)
-				elseif configs.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCharacter" then
+				elseif Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCharacter" then
 					closestplayertocharacter()
 				end
 			else
-				if configs.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
+				if Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
-				elseif configs.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" then	
+				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" then	
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y),FOV)
-				elseif configs.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToScreenCenter" and camera then
+				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToScreenCenter" and camera then
 					getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y)/2)
-				elseif configs.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToCharacter" then
+				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToCharacter" then
 					closestplayertocharacter()
-				elseif configs.SheriffAimbotMethod.CurrentOption == "Murderer" then
+				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "Murderer" then
 					for _, player in ipairs(Players:GetPlayers()) do
 						if players[player.Name] and players[player.Name].Role and players[player.Name].Role == weapons.Knife.Role[1] then
 							local character = player.Character
@@ -296,19 +295,19 @@ function ChamPlayers() -- Chams Player Using Colors Based On Their Role
 			if role then
 				if role == weapons.Knife.Role[1] then
 					AddChams(character,true,{
-						Color = configs.MurdererColor.Color;
+						Color = Library.Flags.MurdererColor.Color;
 					})
 				elseif role == weapons.Gun.Role[1] then
 					AddChams(character,true,{
-						Color = configs.SheriffColor.Color;
+						Color = Library.Flags.SheriffColor.Color;
 					})
 				elseif role == weapons.Gun.Role[2] then
 					AddChams(character,true,{
-						Color = configs["Hero/TargetColor"].Color;
+						Color = Library.Flags["Hero/TargetColor"].Color;
 					})
 				elseif role == "Innocent" then
 					AddChams(character,true,{
-						Color = configs.InnocentColor.Color;
+						Color = Library.Flags.InnocentColor.Color;
 					})
 				end
 			end
@@ -338,25 +337,25 @@ function UpdateAllChams()
 			if role then
 				if role == weapons.Knife.Role[1] then
 					UpdateChams(child,true,{
-						Color = configs.MurdererColor.Color;
+						Color = Library.Flags.MurdererColor.Color;
 					})
 				elseif role == weapons.Gun.Role[1] then
 					UpdateChams(child,true,{
-						Color = configs.SheriffColor.Color;
+						Color = Library.Flags.SheriffColor.Color;
 					})
 				elseif role == weapons.Gun.Role[2] then
 					UpdateChams(child,true,{
-						Color = configs["Hero/TargetColor"].Color;
+						Color = Library.Flags["Hero/TargetColor"].Color;
 					})
 				elseif role == "Innocent" then
 					UpdateChams(child,true,{
-						Color = configs.InnocentColor.Color;
+						Color = Library.Flags.InnocentColor.Color;
 					})
 				end
 			end
 		elseif child:IsA("BasePart") and child.Name == "GunDrop" then
 			UpdateChams(child,false,{
-				Color = configs.GunDropColor.Color;
+				Color = Library.Flags.GunDropColor.Color;
 			})
 		end
 	end
@@ -404,12 +403,12 @@ function RemoveLag(character)
 			end
 		end
 	end
-	if configs.IncludeHats.CurrentValue then
+	if Library.Flags.IncludeHats.CurrentValue then
 		if character then
 			RemoveAccessories(character)
 		else
 			for _, plr in ipairs(Players:GetChildren()) do
-				if configs.IncludeLocalPlayer.CurrentValue or plr ~= LocalPlayer then
+				if Library.Flags.IncludeLocalPlayer.CurrentValue or plr ~= LocalPlayer then
 					local char = plr.Character
 					if char then
 						RemoveAccessories(char)
@@ -486,24 +485,24 @@ function eventfunctions.Initialize(player)
 	local function AssignRole(Tool)
 		if Tool.Name == "Knife" then
 			players[player.Name].Role = weapons.Knife.Role[1]
-			if configs.PlayerChams.CurrentValue and player ~= LocalPlayer then
+			if Library.Flags.PlayerChams.CurrentValue and player ~= LocalPlayer then
 				UpdateChams(character,true,{
-					Color = configs.MurdererColor.Color;
+					Color = Library.Flags.MurdererColor.Color;
 				})
 			end
 		elseif Tool.Name == "Gun" then
 			if match.SheriffDied then
 				players[player.Name].Role = weapons.Gun.Role[2]
-				if configs.PlayerChams.CurrentValue and player ~= LocalPlayer then
+				if Library.Flags.PlayerChams.CurrentValue and player ~= LocalPlayer then
 					UpdateChams(character,true,{
-						Color = configs["Hero/TargetColor"].Color;
+						Color = Library.Flags["Hero/TargetColor"].Color;
 					})
 				end
 			else
 				players[player.Name].Role = weapons.Gun.Role[1]
-				if configs.PlayerChams.CurrentValue and player ~= LocalPlayer then
+				if Library.Flags.PlayerChams.CurrentValue and player ~= LocalPlayer then
 					UpdateChams(character,true,{
-						Color = configs.SheriffColor.Color;
+						Color = Library.Flags.SheriffColor.Color;
 					})
 				end
 			end
@@ -518,21 +517,21 @@ function eventfunctions.Initialize(player)
 		local NPCHum = char:WaitForChild("Humanoid")
 		if NPCHum.ClassName == "Humanoid" then
 			if player == LocalPlayer then
-				if configs.ToggleWalkSpeed.CurrentValue then
-					NPCHum.WalkSpeed = configs.WalkSpeed.CurrentValue
+				if Library.Flags.ToggleWalkSpeed.CurrentValue then
+					NPCHum.WalkSpeed = Library.Flags.WalkSpeed.CurrentValue
 				end
-				if configs.ToggleJumpPower.CurrentValue then
-					NPCHum.JumpPower = configs.JumpPower.CurrentValue
+				if Library.Flags.ToggleJumpPower.CurrentValue then
+					NPCHum.JumpPower = Library.Flags.JumpPower.CurrentValue
 				end
 			end
 			HumanoidDiedEvent(NPCHum)
 		end
-		if configs.AutoRemoveLag.CurrentValue and (configs.IncludeLocalPlayer.CurrentValue or player ~= LocalPlayer) then
+		if Library.Flags.AutoRemoveLag.CurrentValue and (Library.Flags.IncludeLocalPlayer.CurrentValue or player ~= LocalPlayer) then
 			coroutine.wrap(RemoveLag)(char)
 		end
-		if configs.PlayerChams.CurrentValue and player ~= LocalPlayer then
+		if Library.Flags.PlayerChams.CurrentValue and player ~= LocalPlayer then
 			AddChams(char,true,{
-				Color = configs.InnocentColor.Color;
+				Color = Library.Flags.InnocentColor.Color;
 			})
 		end
 		if connections[b - 1] then
@@ -544,7 +543,7 @@ function eventfunctions.Initialize(player)
 			end
 		end)
 		connections[b - 3] = char.ChildAdded:Connect(function(child)
-			if child.ClassName == "Tool" and configs.AutoRemoveLag.CurrentValue and player ~= LocalPlayer then
+			if child.ClassName == "Tool" and Library.Flags.AutoRemoveLag.CurrentValue and player ~= LocalPlayer then
 				for _, v in ipairs(child:GetDescendants()) do
 					if v:IsA("Decal") or v:IsA("DataModelMesh") then
 						v:Destroy()
@@ -620,7 +619,7 @@ end
 function GetAimVector(lplrchar,typ)
 	local p = (LocalPlayer:GetNetworkPing() * 2) + 175
 	if typ == 1 then
-		local closest = GetClosestPlayer(configs.FOV.CurrentValue,500)
+		local closest = GetClosestPlayer(Library.Flags.FOV.CurrentValue,500)
 
 		if not closest then return end
 
@@ -628,8 +627,8 @@ function GetAimVector(lplrchar,typ)
 		local attachment = Instance.new("Attachment", lplrhrp)
 		attachment.Position = Vector3.new(1.6, 1.2, -3)
 
-		if not configs.Automatic.CurrentValue then
-			p = configs.GunPrediction.CurrentValue
+		if not Library.Flags.Automatic.CurrentValue then
+			p = Library.Flags.GunPrediction.CurrentValue
 		end
 
 		local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
@@ -638,14 +637,14 @@ function GetAimVector(lplrchar,typ)
 			PredictSpamJump = true;
 			IsAGun = true;
 		})
-		if configs.ShowAimbotVisuals.CurrentValue and aimpos then
+		if Library.Flags.ShowAimbotVisuals.CurrentValue and aimpos then
 			coroutine.wrap(AimbotVisuals)(attachment.WorldPosition,aimpos,path)
 		end
 		attachment:Destroy()
 
 		return aimpos
 	elseif typ == 2 then
-		local closest = GetClosestPlayer(configs.FOV.CurrentValue,500)
+		local closest = GetClosestPlayer(Library.Flags.FOV.CurrentValue,500)
 
 		if not closest then return end
 
@@ -653,8 +652,8 @@ function GetAimVector(lplrchar,typ)
 		local attachment = Instance.new("Attachment", lplrhrp)
 		attachment.Position = Vector3.new(1.5, 1.9, 1)
 
-		if not configs.Automatic.CurrentValue then
-			p = configs.KnifePrediction.CurrentValue
+		if not Library.Flags.Automatic.CurrentValue then
+			p = Library.Flags.KnifePrediction.CurrentValue
 		end
 
 		local path, aimpos
@@ -673,7 +672,7 @@ function GetAimVector(lplrchar,typ)
 				IsAGun = false;
 			})
 		end
-		if configs.ShowAimbotVisuals.CurrentValue and aimpos then
+		if Library.Flags.ShowAimbotVisuals.CurrentValue and aimpos then
 			coroutine.wrap(AimbotVisuals)(attachment.WorldPosition,aimpos,path)
 		end
 
@@ -723,7 +722,7 @@ local Window = Library:CreateWindow({
 	ConfigurationSaving = {
 		Enabled = true;
 		FolderName = "MM2SCRIPTBYCITY512"; -- Create a custom folder for your hub/game
-		FileName = "configs"
+		FileName = "Library.Flags"
 	};
 	Discord = {
 		Enabled = false;
@@ -828,7 +827,7 @@ local FOV = Main:CreateSlider({
 	Flag = "FOV";
 	Callback = function(value)
 		if Drawing1 then
-			Drawing1.Radius = configs.FOV.CurrentValue
+			Drawing1.Radius = Library.Flags.FOV.CurrentValue
 		end
 	end;
 })
@@ -897,7 +896,7 @@ local WalkSpeedToggle = LocalPlayerTab:CreateToggle({
 	CurrentValue = false;
 	Flag = "ToggleWalkSpeed";
 	Callback = function(value)
-		if not configs.ToggleWalkSpeed.CurrentValue and LocalPlayer.Character then
+		if not Library.Flags.ToggleWalkSpeed.CurrentValue and LocalPlayer.Character then
 			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 			if lplrhum then
 				lplrhum.WalkSpeed = 16
@@ -910,7 +909,7 @@ local JumpPowerToggle = LocalPlayerTab:CreateToggle({
 	CurrentValue = false;
 	Flag = "ToggleJumpPower";
 	Callback = function(value)
-		if not configs.ToggleJumpPower.CurrentValue and LocalPlayer.Character then
+		if not Library.Flags.ToggleJumpPower.CurrentValue and LocalPlayer.Character then
 			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 			if lplrhum then
 				lplrhum.JumpPower = 50
@@ -926,10 +925,10 @@ local WalkSpeed = LocalPlayerTab:CreateSlider({
 	CurrentValue = 16;
 	Flag = "WalkSpeed";
 	Callback = function(value)
-		if configs.ToggleWalkSpeed.CurrentValue and LocalPlayer.Character then
+		if Library.Flags.ToggleWalkSpeed.CurrentValue and LocalPlayer.Character then
 			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 			if lplrhum then
-				lplrhum.WalkSpeed = configs.WalkSpeed.CurrentValue
+				lplrhum.WalkSpeed = Library.Flags.WalkSpeed.CurrentValue
 			end
 		end
 	end;
@@ -942,10 +941,10 @@ local JumpPower = LocalPlayerTab:CreateSlider({
 	CurrentValue = 50;
 	Flag = "JumpPower";
 	Callback = function(value)
-		if configs.ToggleJumpPower.CurrentValue and LocalPlayer.Character then
+		if Library.Flags.ToggleJumpPower.CurrentValue and LocalPlayer.Character then
 			local lplrhum = LocalPlayer.Character:FindFirstChildOfClass("Humanoid")
 			if lplrhum then
-				lplrhum.JumpPower = configs.JumpPower.CurrentValue
+				lplrhum.JumpPower = Library.Flags.JumpPower.CurrentValue
 			end
 		end
 	end;
@@ -971,9 +970,9 @@ local ShowGunDrop = Visuals:CreateToggle({
 		if match.Map then
 			local gundrop = match.Map:FindFirstChild("GunDrop")
 			if gundrop then
-				if configs.ShowGunDrop.CurrentValue then
+				if Library.Flags.ShowGunDrop.CurrentValue then
 					AddChams(gundrop,false,{
-						Color = configs.GunDropColor.Color;
+						Color = Library.Flags.GunDropColor.Color;
 					})
 				else
 					RemoveChams(gundrop,false)
@@ -999,9 +998,9 @@ local ShowTraps = Visuals:CreateToggle({
 	Callback = function(value)
 		for _, descendant in ipairs(workspace:GetDescendants()) do
 			if descendant:IsA("BasePart") and descendant.Name == "Trap" then
-				if configs.ShowTraps.CurrentValue then
+				if Library.Flags.ShowTraps.CurrentValue then
 					AddChams(descendant,false,{
-						Color = configs.TrapColor.CurrentValue;
+						Color = Library.Flags.TrapColor.CurrentValue;
 					})
 				else
 					RemoveChams(descendant,false)
@@ -1161,7 +1160,7 @@ local RemoveCoinLagToggle = Visuals:CreateToggle({
 	SectionParent = AntiLagSection;
 	Flag = "RemoveCoinLag";
 	Callback = function(value)
-		if configs.RemoveCoinLag.CurrentValue and match.Map then
+		if Library.Flags.RemoveCoinLag.CurrentValue and match.Map then
 			if match.Map:FindFirstChild("CoinContainer") then
 				for _, coin in ipairs(match.Map.CoinContainer:GetChildren()) do
 					coroutine.wrap(RemoveCoinLag)(coin)
@@ -1339,10 +1338,10 @@ local CoinFarm = AutoFarm:CreateToggle({
 	SectionParent = AutoFarmSection;
 	Flag = "CoinFarm";
 	Callback = function(value)
-		if configs.CoinFarm.CurrentValue then
+		if Library.Flags.CoinFarm.CurrentValue then
 			local lplrhrp
 			while true do
-				if not configs.CoinFarm.CurrentValue then 
+				if not Library.Flags.CoinFarm.CurrentValue then 
 					if lplrhrp then 
 						lplrhrp.Anchored = false 
 					end 
@@ -1371,7 +1370,7 @@ local CoinFarm = AutoFarm:CreateToggle({
 							if closest then
 								lplrhrp.CanCollide = false
 								lplrhrp.Anchored = false
-								local info = TweenInfo.new(configs.AutoFarmSpeed.CurrentValue,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut,0,false)
+								local info = TweenInfo.new(Library.Flags.AutoFarmSpeed.CurrentValue,Enum.EasingStyle.Linear,Enum.EasingDirection.InOut,0,false)
 								local tween = TweenService:Create(lplrhrp,info,{CFrame = CFrame.new(closest.Position - Vector3.new(0,4,0))})
 								tween:Play()
 								tween.Completed:Wait()
@@ -1386,7 +1385,7 @@ local CoinFarm = AutoFarm:CreateToggle({
 						end
 					end
 				end
-				task.wait(configs.AutoFarmDelay.CurrentValue)
+				task.wait(Library.Flags.AutoFarmDelay.CurrentValue)
 			end
 		end
 	end;
@@ -1485,7 +1484,6 @@ local KeepGUI = Others:CreateToggle({
 	end;
 })
 Library:LoadConfiguration()
-configs = Library.Flags
 
 ---------------------------------------------------------------------------
 -- Events
@@ -1494,7 +1492,7 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 	if not instance:FindFirstChildOfClass("Humanoid") then
 		if instance.Name == "ThrowingKnife" and not instance:FindFirstChildOfClass("Humanoid") then
 			task.spawn(function()
-				if configs.ShowKnifeTraces.CurrentValue then
+				if Library.Flags.ShowKnifeTraces.CurrentValue then
 					local knife = instance:WaitForChild("KnifeDisplay", 5)
 					if knife then
 						local Spawn = tick()
@@ -1553,14 +1551,14 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 			eventfunctions.MapChildAdded = match.Map.ChildAdded:Connect(function(child)
 				if child:IsA("BasePart") and child.Name == "GunDrop" then
 					AddChams(child,false,{
-						Color = configs.GunDropColor.Color;
+						Color = Library.Flags.GunDropColor.Color;
 					})
-					if configs.AutoGrabGun.CurrentValue and (not players[LocalPlayer.Name] or not players[LocalPlayer.Name].Role == weapons.Knife.Role[1]) then
+					if Library.Flags.AutoGrabGun.CurrentValue and (not players[LocalPlayer.Name] or not players[LocalPlayer.Name].Role == weapons.Knife.Role[1]) then
 						coroutine.wrap(GrabGunFunction)(child)
 					end
 				end
 			end)
-			if configs.RemoveCoinLag.CurrentValue then
+			if Library.Flags.RemoveCoinLag.CurrentValue then
 				local cc = instance:WaitForChild("CoinContainer")
 				eventfunctions.CoinAdded = cc.ChildAdded:Connect(function(coin)
 					RemoveCoinLag(coin)
@@ -1587,7 +1585,7 @@ eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(desc
 	end
 end)
 eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
-	if not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and configs.KeepGUI then
+	if not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and Library.Flags.KeepGUI then
 		scriptvariables.TPCheck = true
 		scriptvariables.QueueOnTeleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20hack.lua"))()')
 	end
@@ -1615,7 +1613,7 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 	end
 	if Drawing1 then
 		Drawing1.Position = Vector2.new(Mouse.X,Mouse.Y)
-		if configs.ShowFOVCircle.CurrentValue and (players[LocalPlayer.Name] and ((players[LocalPlayer.Name].Role == weapons.Gun.Role[1] or players[LocalPlayer.Name].Role == weapons.Gun.Role[2]) and configs.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" or players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] and configs.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle")) then
+		if Library.Flags.ShowFOVCircle.CurrentValue and (players[LocalPlayer.Name] and ((players[LocalPlayer.Name].Role == weapons.Gun.Role[1] or players[LocalPlayer.Name].Role == weapons.Gun.Role[2]) and Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" or players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] and Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle")) then
 			Drawing1.Visible = true
 		else
 			Drawing1.Visible = false
@@ -1627,7 +1625,7 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
 		local lplrhum = lplrchar:FindFirstChildOfClass("Humanoid")
 		if lplrhum and lplrhrp and lplrhum.Health > 0 and lplrhrp:IsA("BasePart") then
-			if configs.KillAura.CurrentValue then
+			if Library.Flags.KillAura.CurrentValue then
 				local Knife = lplrchar:FindFirstChild("Knife")
 				if Knife and Knife.ClassName == "Tool" then
 					local closest
@@ -1637,7 +1635,7 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 							local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 							if NPCRoot and NPCRoot:IsA("BasePart") then
 								local distance = (NPCRoot.Position - lplrhrp.Position).Magnitude
-								if distance < configs.KillAuraRange.CurrentValue then
+								if distance < Library.Flags.KillAuraRange.CurrentValue then
 									if not closest or distance < closest[2] then
 										closest = {character,distance}
 									end
@@ -1649,17 +1647,17 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 						prevtarget = closest[1]
 
 						local TargetRoot = prevtarget.HumanoidRootPart
-						if configs.FaceTarget then
+						if Library.Flags.FaceTarget then
 							lplrhrp.CFrame = CFrame.new(lplrhrp.Position,TargetRoot.Position * Vector3.new(1,0,1) + lplrhrp.Position * Vector3.new(0,1,0))
 						end
 						TargetRoot.CanCollide = false
-						TargetRoot.Size = Vector3.new(configs.KillAuraRange.CurrentValue,configs.KillAuraRange.CurrentValue,configs.KillAuraRange.CurrentValue)
+						TargetRoot.Size = Vector3.new(Library.Flags.KillAuraRange.CurrentValue,Library.Flags.KillAuraRange.CurrentValue,Library.Flags.KillAuraRange.CurrentValue)
 						Knife:Activate()
 					end
 				end
 			end
 			local Gun = lplrchar:FindFirstChild("Gun")
-			if configs.AutoEquip.CurrentValue and not Gun then
+			if Library.Flags.AutoEquip.CurrentValue and not Gun then
 				local bp = LocalPlayer:FindFirstChild("Backpack")
 				if bp then
 					for _, tool in ipairs(bp:GetChildren()) do
@@ -1669,18 +1667,18 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 					end
 				end
 			end
-			if (not scriptvariables.AutoShootCooldown or scriptvariables.AutoShootCooldown + 3.3 < t) and configs.AutoShoot.CurrentValue and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeLocal") and Gun.KnifeLocal:FindFirstChild("CreateBeam") and Gun.KnifeLocal.CreateBeam:FindFirstChild("RemoteFunction") then
+			if (not scriptvariables.AutoShootCooldown or scriptvariables.AutoShootCooldown + 3.3 < t) and Library.Flags.AutoShoot.CurrentValue and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeLocal") and Gun.KnifeLocal:FindFirstChild("CreateBeam") and Gun.KnifeLocal.CreateBeam:FindFirstChild("RemoteFunction") then
 				local closest
 				local distance
 				for _, player in ipairs(Players:GetPlayers()) do
 					local character = player.Character
-					if character and (not configs.LegitMode.CurrentValue or character:FindFirstChild("Knife")) then
+					if character and (not Library.Flags.LegitMode.CurrentValue or character:FindFirstChild("Knife")) then
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart") 
 						if NPCRoot and NPCRoot:IsA("BasePart") and players[player.Name] and players[player.Name].Role == weapons.Knife.Role[1] then
 							local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
 							if not closest or distancetemp < distance then
 								local startpos = lplrchar.Gun.Handle.Position
-								local predictedpos = NPCRoot.Position + NPCRoot.Velocity * configs.GunPrediction.CurrentValue / 1000
+								local predictedpos = NPCRoot.Position + NPCRoot.Velocity * Library.Flags.GunPrediction.CurrentValue / 1000
 
 								local params = RaycastParams.new()
 								params.FilterDescendantsInstances = {character,lplrchar}
@@ -1744,7 +1742,7 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 
 	if not checkcaller() and LocalPlayer.Character then
 		local lplrchar = LocalPlayer.Character
-		if configs.GunAimbot.CurrentValue and tostring(method) == "InvokeServer" then
+		if Library.Flags.GunAimbot.CurrentValue and tostring(method) == "InvokeServer" then
 			local script = rawget(getfenv(2), "script")
 			local aimpos
 			if script.Name == "KnifeLocal" then
@@ -1752,7 +1750,7 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 				args[2] = aimpos
 			end
 			return aimpos and self.InvokeServer(self,table.unpack(args)) or self.InvokeServer(self,...)
-		elseif configs.KnifeAimbot.CurrentValue and tostring(self) == "Throw" and tostring(method) == "FireServer" then
+		elseif Library.Flags.KnifeAimbot.CurrentValue and tostring(self) == "Throw" and tostring(method) == "FireServer" then
 			local aimpos = GetAimVector(lplrchar,2)
 			if aimpos then
 				args[1] = CFrame.new(aimpos)
@@ -1775,4 +1773,4 @@ for _, v in ipairs(workspace:GetChildren()) do
 		match.Map = v
 	end
 end
-ChamPlayerRoles(configs.PlayerChams.CurrentValue)
+ChamPlayerRoles(Library.Flags.PlayerChams.CurrentValue)
