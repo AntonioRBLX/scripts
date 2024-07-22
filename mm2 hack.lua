@@ -596,6 +596,7 @@ local function RemoveLagFromObject(object)
 	end
 end
 function AimbotVisuals(startpos,endpos,path)
+	task.wait()
 	if Drawing then
 		local prevpos
 		for _, v in path do
