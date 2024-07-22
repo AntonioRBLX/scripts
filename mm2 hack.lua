@@ -974,7 +974,7 @@ local ShowGunDrop = Visuals:CreateToggle({
 			if gundrop then
 				if configs.ShowGunDrop.CurrentValue then
 					AddChams(gundrop,false,{
-						Color = configs.GunDropColor.CurrentValue;
+						Color = configs.GunDropColor.Color;
 					})
 				else
 					RemoveChams(gundrop,false)
@@ -1554,7 +1554,7 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 			eventfunctions.MapChildAdded = match.Map.ChildAdded:Connect(function(child)
 				if child:IsA("BasePart") and child.Name == "GunDrop" then
 					AddChams(child,false,{
-						Color = configs.GunDropColor.CurrentValue;
+						Color = configs.GunDropColor.Color;
 					})
 					if configs.AutoGrabGun.CurrentValue and (not players[LocalPlayer.Name] or not players[LocalPlayer.Name].Role == weapons.Knife.Role[1]) then
 						coroutine.wrap(GrabGunFunction)(child)
