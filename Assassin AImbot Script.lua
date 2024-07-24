@@ -47,13 +47,6 @@ local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/blood
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
 local LocalPlayer = Players.LocalPlayer
 
-local configs = {
-	AimbotEnabled = true;
-	AimbotMethod = "ClosestPlayerToCharacter";
-	PingPrediction = 150;
-	FOV = 1500;
-}
-
 function GetClosestPlayer(FOV,maxdist)
 	if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
 	local lplrchar = LocalPlayer.Character
@@ -83,10 +76,10 @@ function GetClosestPlayer(FOV,maxdist)
 			end
 		end
 	end
-	if configs.AimbotMethod == "ClosestPlayerToCursor" and camera then
+	if shared.AimbotMethod == "ClosestPlayerToCursor" and camera then
 		getclosestplayertoscreenpoint(Vector2.new(mouse.X,mouse.Y))
 		return closest
-	elseif configs.AimbotMethod == "ClosestPlayerToCharacter" then
+	elseif shared.AimbotMethod == "ClosestPlayerToCharacter" then
 		for _, player in pairs(Players:GetPlayers()) do
 			if player ~= LocalPlayer then
 				local character = workspace:FindFirstChild(player.Name)
@@ -99,7 +92,7 @@ function GetClosestPlayer(FOV,maxdist)
 			end
 		end
 		return closest
-	elseif configs.AimbotMethod == "ClosestPlayerToScreenCenter" and camera then
+	elseif shared.AimbotMethod == "ClosestPlayerToScreenCenter" and camera then
 		getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y)/2)
 		return closest
 	end
@@ -109,17 +102,17 @@ end
 local Window = Library:CreateWindow("Aimbot")
 local AimbotFolder = Window:CreateFolder("Aimbot")
 AimbotFolder:Toggle("Aimbot", function(bool)
-    configs.AimbotEnabled = bool
+    shared.AimbotEnabled = bool
 end)
 local AimbotConfigsFolder = Window:CreateFolder("Aimbot Configs")
 AimbotConfigsFolder:Dropdown("Aimbot Method",{"ClosestPlayerToCursor","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter"},true,function(mob)
-    configs.AimbotMethod = mob
+    shared.AimbotMethod = mob
 end)
 AimbotConfigsFolder:Slider("Ping Prediction",{min = 0;max = 500;precise = true},function(value)
-    configs.PingPrediction = value
+    shared.PingPrediction = value
 end)
 AimbotConfigsFolder:Slider("FOV",{min = 50;max = 1000;precise = true},function(value)
-    configs.FOV = value
+    shared.FOV = value
 end)
 
 local namecall
@@ -128,7 +121,7 @@ namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
 		local lplrchar = LocalPlayer.Character
 		if lplrchar then
-			local closest = GetClosestPlayer(configs.FOV,1000)
+			local closest = GetClosestPlayer(shared.FOV,1000)
 			if closest then
 				local args = {...}
 				local lplrhrp = lplrchar.HumanoidRootPart
@@ -138,7 +131,7 @@ namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 
 				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,290,60,{
 					IgnoreList = nil;
-					Ping = configs.PingPrediction;
+					Ping = shared.PingPrediction;
 					PredictSpamJump = true;
 					IsAGun = false;
 				})
@@ -147,7 +140,7 @@ namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 				if aimpos then
 					args[1] = aimpos
 				end
-				return self.FireServer(self,table.unpack(args))
+				return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
 			end
 		end
 	end
