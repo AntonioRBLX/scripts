@@ -13,9 +13,7 @@ function HookFunction(v)
 	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
 		local funcinfo = getinfo(v)
 		local source = funcinfo.source:lower()
-
 		local anticheat = source:find("bac") or source:find("replicatedfirst.animator") or source:find("playerscripts.reeeee")
-
 		if anticheat then
 			hookfunction(funcinfo.func, function() return end)
 			hooked = true
