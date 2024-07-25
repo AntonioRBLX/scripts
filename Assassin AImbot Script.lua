@@ -191,7 +191,7 @@ end
 LocalPlayer.CharacterAdded:Connect(function(char)
 	lplrchar = char
 	lplrhrp = char:WaitForChild("HumanoidRootPart")
-end
+end)
 local namecall
 namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 	local method = getnamecallmethod()
