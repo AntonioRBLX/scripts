@@ -194,29 +194,24 @@ LocalPlayer.CharacterAdded:Connect(function(char)
 end)
 local namecall
 namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
+	local args = {...}
 	local method = getnamecallmethod()
 	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
-		local lplrchar = LocalPlayer.Character
-		if lplrchar then
-			local closest = GetClosestPlayer(configs.FOV,1000)
-			if closest then
-				local args = {...}
-				local lplrhrp = lplrchar.HumanoidRootPart
-				local attachment = Instance.new("Attachment", lplrhrp)
-				attachment.Position = Vector3.new(1.6, 1.2, -3)
-				local _, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,290,60,{
-					IgnoreList = nil;
-					Ping = configs.PingPrediction;
-					PredictSpamJump = true;
-					IsAGun = false;
-				})
-				attachment:Destroy()
-				if aimpos then
-					args[1] = aimpos
-				end
-				return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
-			end
+		local closest = GetClosestPlayer(configs.FOV,1000)
+		local aimpos
+		if closest then
+			local attachment = Instance.new("Attachment", lplrhrp)
+			attachment.Position = Vector3.new(1.6, 1.2, -3)
+			_, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,290,60,{
+				IgnoreList = nil;
+				Ping = configs.Prediction;
+				PredictSpamJump = true;
+				IsAGun = false;
+			})
+			attachment:Destroy()
+			args[1] = aimpos
 		end
+		return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
 	end
 	return namecall(self,...)
 end))
