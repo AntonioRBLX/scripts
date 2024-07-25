@@ -2,11 +2,14 @@ local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 local isexecutorclosure = is_synapse_function or isexecutorclosure
 local hooked
-if not isexecutorclosure or not hookmetamethod or not newcclosure or not getgc or not getreg or not checkcaller then
+function notify(title,description)
 	StarterGui:SetCore("SendNotification", {
-		Title = "Error";
-		Text = "Your Executor Is Not Supported";
+		Title = title;
+		Text = description;
 	})
+end
+if not isexecutorclosure or not hookmetamethod or not newcclosure or not getgc or not getreg or not getnamecallmethod or not checkcaller then
+	notify("Error","Your Executor Is Not Supported")
 	return
 end
 function HookFunction(v)
@@ -28,10 +31,7 @@ for _, v in next, getreg() do
 	HookFunction(v)
 end
 if not hooked then
-	StarterGui:SetCore("SendNotification", {
-		Title = "Error";
-		Text = "Failed to Find Anticheat";
-	})
+	notify("Error","Failed to Find Anticheat")
 end
 if getgenv().AlreadyExecuted then return end
 getgenv().AlreadyExecuted = true
@@ -216,7 +216,4 @@ namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 	end
 	return namecall(self,...)
 end))
-StarterGui:SetCore("SendNotification", {
-	Title = "Notification";
-	Text = "Aimbot Successfully Loaded";
-})
+notify("Info","Aimbot Successfully Loaded")
