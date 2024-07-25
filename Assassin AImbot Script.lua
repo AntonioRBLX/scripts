@@ -39,6 +39,7 @@ local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY51
 local LocalPlayer = Players.LocalPlayer
 local lplrchar = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local lplrhrp = lplrchar.HumanoidRootPart
+local mouse = LocalPlayer:GetMouse()
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local Frame_2 = Instance.new("Frame")
