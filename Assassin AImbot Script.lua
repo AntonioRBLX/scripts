@@ -190,7 +190,7 @@ function GetClosestPlayer(FOV,maxdist)
 	return closest
 end
 local namecall
-namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
+namecall = hookmetamethod(game, "__namecall", function(self,...)
 	local method = getnamecallmethod()
 	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
 		local lplrchar = LocalPlayer.Character
@@ -216,7 +216,7 @@ namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 		end
 	end
 	return namecall(self,...)
-end))
+end)
 StarterGui:SetCore("SendNotification", {
 	Title = "Notification";
 	Text = "Aimbot Successfully Loaded";
