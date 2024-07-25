@@ -197,7 +197,7 @@ local namecall
 namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
-	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
+	if not checkcaller() and configs.AimbotEnabled and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
 		local closest = GetClosestPlayer(configs.FOV,1000)
 		local aimpos
 		if closest then
