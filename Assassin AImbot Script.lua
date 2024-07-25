@@ -9,7 +9,6 @@ if not isexecutorclosure or not hookmetamethod or not newcclosure or not getgc o
 	})
 	return
 end
---[[
 function HookFunction(v)
 	if type(v) == "function" and islclosure(v) and not isexecutorclosure(v) then
 		local funcinfo = getinfo(v)
@@ -33,11 +32,9 @@ end
 if not hooked then
 	StarterGui:SetCore("SendNotification", {
 		Title = "Error";
-		Text = "Failed to Bypass Anticheat";
+		Text = "Failed to Find Anticheat";
 	})
-	return
 end
---]]
 if getgenv().AlreadyExecuted then return end
 getgenv().AlreadyExecuted = true
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
