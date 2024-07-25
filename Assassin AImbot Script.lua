@@ -37,6 +37,8 @@ if getgenv().AlreadyExecuted then return end
 getgenv().AlreadyExecuted = true
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
 local LocalPlayer = Players.LocalPlayer
+local lplrchar = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+local lplrhrp = lplrchar.HumanoidRootPart
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local Frame_2 = Instance.new("Frame")
@@ -164,9 +166,6 @@ textbox(_3,function(value)
 	print("FOV Set To",tostring(value))
 end)
 function GetClosestPlayer(FOV,maxdist)
-	if not LocalPlayer.Character or not LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then return end
-	local lplrchar = LocalPlayer.Character
-	local lplrhrp = lplrchar.HumanoidRootPart
 	local camera = workspace.CurrentCamera
 	local closest
 	local distance = math.huge
@@ -177,7 +176,7 @@ function GetClosestPlayer(FOV,maxdist)
 				local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 				if NPCRoot then
 					local viewportpoint, onscreen = camera:WorldToViewportPoint(NPCRoot.Position)
-					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
+					local distance = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
 					local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 					if onscreen and distance <= FOV and distancetemp < distance and distancefromplayer <= maxdist then
 						closest = character
@@ -189,8 +188,12 @@ function GetClosestPlayer(FOV,maxdist)
 	end
 	return closest
 end
+LocalPlayer.CharacterAdded:Connect(function(char)
+	lplrchar = char
+	lplrhrp = char:WaitForChild("HumanoidRootPart")
+end
 local namecall
-namecall = hookmetamethod(game, "__namecall", function(self,...)
+namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 	local method = getnamecallmethod()
 	if not checkcaller() and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
 		local lplrchar = LocalPlayer.Character
@@ -216,7 +219,7 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 		end
 	end
 	return namecall(self,...)
-end)
+end))
 StarterGui:SetCore("SendNotification", {
 	Title = "Notification";
 	Text = "Aimbot Successfully Loaded";
