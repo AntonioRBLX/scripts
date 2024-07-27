@@ -1194,7 +1194,7 @@ local AnnounceRoles = Blatant:CreateButton({
 		end
 		local args = {
 			[1] = "The murderer is "..murderer.." and the sheriff is "..sheriff;
-			[2] = "normalchat"
+			[2] = LocalPlayer.Team
 		}
 		REPS:WaitForChild("DefaultChatSystemEvents"):WaitForChild("SayMessageRequest"):FireServer(table.unpack(args))
 	end,
