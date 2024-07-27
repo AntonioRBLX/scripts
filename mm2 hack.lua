@@ -1530,9 +1530,9 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 								if char then
 									local hrp = char:FindFirstChild("HumanoidRootPart")
 									if hrp then
-										local hue = (knife.Position - hrp.Position).Magnitude / 15
-										if hue > 1 then
-											hue = 1
+										local hue = 1 - (knife.Position - hrp.Position).Magnitude / 15
+										if hue < 0 then
+											hue = 0
 										end
 										line:ChangeColor(Color3.fromHSV(hue,0.6,1))
 									end
