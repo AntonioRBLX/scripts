@@ -1587,7 +1587,7 @@ eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(desc
 	end
 end)
 eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
-	if not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and Library.Flags.KeepGUI then
+	if not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and Library.Flags.KeepGUI.CurrentValue then
 		scriptvariables.TPCheck = true
 		scriptvariables.QueueOnTeleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20hack.lua"))()')
 	end
