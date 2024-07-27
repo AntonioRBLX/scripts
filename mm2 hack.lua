@@ -36,9 +36,8 @@ getgenv().MM2MAIN = true
 
 -- Modules
 
-local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
+local  = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
-Library:LoadConfiguration()
 
 repeat task.wait() until game.Players.LocalPlayer -- Waits for LocalPlayer to load in.
 -- Variables
@@ -1781,3 +1780,4 @@ for _, v in ipairs(workspace:GetChildren()) do
 	end
 end
 ChamPlayerRoles(Library.Flags.PlayerChams.CurrentValue)
+Library:LoadConfiguration()
