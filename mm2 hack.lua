@@ -1550,9 +1550,11 @@ eventfunctions.WorkspaceChildAdded = workspace.ChildAdded:Connect(function(insta
 			match.Map = instance
 			eventfunctions.MapChildAdded = match.Map.ChildAdded:Connect(function(child)
 				if child:IsA("BasePart") and child.Name == "GunDrop" then
-					AddChams(child,false,{
-						Color = Library.Flags.GunDropColor.Color;
-					})
+					if Library.Flags.ShowGunDrop.CurrentValue then
+						AddChams(child,false,{
+							Color = Library.Flags.GunDropColor.Color;
+						})
+					end
 					if Library.Flags.AutoGrabGun.CurrentValue and (not players[LocalPlayer.Name] or not players[LocalPlayer.Name].Role == weapons.Knife.Role[1]) then
 						coroutine.wrap(GrabGunFunction)(child)
 					end
