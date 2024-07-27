@@ -36,7 +36,7 @@ getgenv().MM2MAIN = true
 
 -- Modules
 
-local  = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
+local Library = loadstring(game:HttpGet('https://raw.githubusercontent.com/UI-Interface/ArrayField/main/Source.lua'))()
 local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
 
 repeat task.wait() until game.Players.LocalPlayer -- Waits for LocalPlayer to load in.
