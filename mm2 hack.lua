@@ -741,6 +741,7 @@ local Window = Library:CreateWindow({
 		Key = {"Hello"} -- List of keys that will be accepted by the system, can be RAW file links (pastebin, github etc) or simple strings ("hello","key22")
 	}
 })
+Library:LoadConfiguration()
 
 local Main = Window:CreateTab("Main", 10814531047) -- Title, Image
 local LocalPlayerTab = Window:CreateTab("LocalPlayer", 4483362458) -- Title, Image
@@ -1782,4 +1783,3 @@ for _, v in ipairs(workspace:GetChildren()) do
 	end
 end
 ChamPlayerRoles(Library.Flags.PlayerChams.CurrentValue)
-Library:LoadConfiguration()
