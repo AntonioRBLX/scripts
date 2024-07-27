@@ -1714,11 +1714,16 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 		local line = v.Line
 		local spawn = v.Spawn
 
-		local pos1 = camera:WorldToViewportPoint(properties.StartPoint)
-		local pos2 = camera:WorldToViewportPoint(properties.EndPoint)
+		local pos1, onscreen1 = camera:WorldToViewportPoint(properties.StartPoint)
+		local pos2, onscreen2 = camera:WorldToViewportPoint(properties.EndPoint)
 
-		line.From = Vector2.new(pos1.X,pos1.Y)
-		line.To = Vector2.new(pos2.X,pos2.Y)
+		if onscreen1 and onscreen2 then
+			line.Transparency = 1
+			line.From = Vector2.new(pos1.X,pos1.Y)
+			line.To = Vector2.new(pos2.X,pos2.Y)
+		else
+			line.Transparency = 0
+		end
 
 		line.Color = properties.Color
 		if spawn + properties.LifeTime < t then
