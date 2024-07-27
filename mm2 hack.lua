@@ -723,7 +723,7 @@ local Window = Library:CreateWindow({
 	ConfigurationSaving = {
 		Enabled = true;
 		FolderName = "MM2SCRIPTBYCITY512"; -- Create a custom folder for your hub/game
-		FileName = "Library.Flags"
+		FileName = "configs"
 	};
 	Discord = {
 		Enabled = false;
@@ -1484,7 +1484,6 @@ local KeepGUI = Others:CreateToggle({
 		end
 	end;
 })
-Library:LoadConfiguration()
 
 ---------------------------------------------------------------------------
 -- Events
@@ -1781,3 +1780,4 @@ for _, v in ipairs(workspace:GetChildren()) do
 	end
 end
 ChamPlayerRoles(Library.Flags.PlayerChams.CurrentValue)
+Library:LoadConfiguration()
