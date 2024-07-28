@@ -632,7 +632,7 @@ function GetAimVector(lplrchar,typ)
 			p = Library.Flags.GunPrediction.CurrentValue
 		end
 
-		local path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,100,0,{
+		local path, aimpos = Aimbot:ComputeAsync(attachment.WorldPosition,closest,100,0,{
 			IgnoreList = nil;
 			Ping = p;
 			PredictSpamJump = true;
@@ -659,14 +659,14 @@ function GetAimVector(lplrchar,typ)
 
 		local path, aimpos
 		if powers.Sleight then
-			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
+			path, aimpos = Aimbot:ComputeAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
 				IgnoreList = nil;
 				Ping = p;
 				PredictSpamJump = true;
 				IsAGun = false;
 			})
 		else
-			path, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
+			path, aimpos = Aimbot:ComputeAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
 				IgnoreList = nil;
 				Ping = p;
 				PredictSpamJump = true;
