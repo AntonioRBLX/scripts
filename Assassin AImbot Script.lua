@@ -194,8 +194,9 @@ LocalPlayer.CharacterAdded:Connect(function(char)
 	lplrhrp = char:WaitForChild("HumanoidRootPart")
 end)
 local namecall
-namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
+namecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
 	local args = {...}
+	local self = args[1]
 	local method = getnamecallmethod()
 	if not checkcaller() and configs.Aimbot and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
 		local closest = GetClosestPlayer(configs.FOV,1000)
@@ -210,10 +211,10 @@ namecall = hookmetamethod(game, "__namecall", newcclosure(function(self,...)
 				IsAGun = false;
 			})
 			attachment:Destroy()
-			args[1] = aimpos
+			args[2] = aimpos
 		end
 		return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
 	end
-	return namecall(self,...)
+	return namecall(...)
 end))
 notify("Info","Aimbot Successfully Loaded")
