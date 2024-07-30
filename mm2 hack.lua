@@ -206,7 +206,7 @@ end
 function GetClosestPlayer(FOV,maxdist)
 	local lplrchar = LocalPlayer.Character
 	local closest
-	local distance
+	local distance = math.huge
 	if lplrchar and players[LocalPlayer.Name] then
 		local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
 		if lplrhrp and lplrhrp:IsA("BasePart") then
@@ -217,12 +217,12 @@ function GetClosestPlayer(FOV,maxdist)
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 						if NPCRoot and NPCRoot:IsA("BasePart") then
 							local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
-							local distancetemp = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
+							local vpdistancetemp = (Vector2.new(viewportpoint.X,viewportpoint.Y) - point).Magnitude
 							local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
-							if onscreen and (not FOV or distancetemp <= FOV) and (not closest or distancetemp < distance) and distancefromplayer <= maxdist then
+							if onscreen and (not FOV or vpdistancetemp <= FOV) and vpdistancetemp < distance and distancefromplayer <= maxdist then
 								closest = character
-								distance = distancetemp
+								distance = vpdistancetemp
 							end
 						end
 					end
@@ -236,7 +236,7 @@ function GetClosestPlayer(FOV,maxdist)
 						if NPCRoot and NPCRoot:IsA("BasePart") then
 							local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
-							if (not closest or distancetemp < distance) and distancetemp <= maxdist then
+							if distancetemp < distance and distancetemp <= maxdist then
 								closest = character
 								distance = distancetemp
 							end
@@ -272,7 +272,7 @@ function GetClosestPlayer(FOV,maxdist)
 								if NPCRoot and NPCRoot:IsA("BasePart") then
 									local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
 
-									if (not closest or distancetemp < distance) and distancetemp <= maxdist then
+									if distancetemp < distance and distancetemp <= maxdist then
 										closest = character
 										distance = distancetemp
 									end
@@ -836,9 +836,6 @@ local FOV = Main:CreateSlider({
 	SectionParent = AimbotSection;
 	Flag = "FOV";
 	Callback = function(value)
-		if Drawing1 then
-			Drawing1.Radius = Library.Flags.FOV.CurrentValue
-		end
 	end;
 })
 
@@ -1366,12 +1363,12 @@ local CoinFarm = AutoFarm:CreateToggle({
 						local coins = match.Map:FindFirstChild("CoinContainer")
 						if coins then
 							local closest
-							local distance
+							local distance = math.huge
 							for _, v in ipairs(coins:GetChildren()) do
 								local TouchInterest = v:FindFirstChildWhichIsA("TouchTransmitter")
 								if TouchInterest and v:IsA("BasePart") and v.Name == "Coin_Server" and v.Transparency ~= 1 then
 									local distancetemp = (v.Position - lplrhrp.Position).Magnitude
-									if not closest or distancetemp < distance then
+									if distancetemp < distance then
 										closest = v
 										distance = distancetemp
 									end
@@ -1617,13 +1614,13 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 	if prevtarget then
 		local PrevTargetRoot = prevtarget:FindFirstChild("HumanoidRootPart")
 		if PrevTargetRoot and PrevTargetRoot:IsA("BasePart") then
-			local PrevTargetRoot = prevtarget.HumanoidRootPart
 			PrevTargetRoot.Size = Vector3.new(2,2,1)
 		end
 		prevtarget = nil
 	end
 	if Drawing1 then
 		Drawing1.Position = Vector2.new(Mouse.X,Mouse.Y)
+		Drawing1.Radius = Library.Flags.FOV.CurrentValue
 		if Library.Flags.ShowFOVCircle.CurrentValue and (players[LocalPlayer.Name] and ((players[LocalPlayer.Name].Role == weapons.Gun.Role[1] or players[LocalPlayer.Name].Role == weapons.Gun.Role[2]) and Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" or players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] and Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle")) then
 			Drawing1.Visible = true
 		else
@@ -1640,25 +1637,23 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 				local Knife = lplrchar:FindFirstChild("Knife")
 				if Knife and Knife.ClassName == "Tool" then
 					local closest
+					local distance = math.huge
 					for _, player in ipairs(Players:GetPlayers()) do
 						local character = player.Character
 						if character and character ~= lplrchar then
 							local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 							if NPCRoot and NPCRoot:IsA("BasePart") then
-								local distance = (NPCRoot.Position - lplrhrp.Position).Magnitude
-								if distance < Library.Flags.KillAuraRange.CurrentValue then
-									if not closest or distance < closest[2] then
-										closest = {character,distance}
-									end
+								local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
+								if distancetemp <= Library.Flags.KillAuraRange.CurrentValue and distancetemp < distance then
+									closest = character
 								end
 							end
 						end
 					end
 					if closest then
-						prevtarget = closest[1]
-
-						local TargetRoot = prevtarget.HumanoidRootPart
-						if Library.Flags.FaceTarget then
+						prevtarget = closest
+						local TargetRoot = closest.HumanoidRootPart
+						if Library.Flags.FaceTarget.CurrentValue then
 							lplrhrp.CFrame = CFrame.new(lplrhrp.Position,TargetRoot.Position * Vector3.new(1,0,1) + lplrhrp.Position * Vector3.new(0,1,0))
 						end
 						TargetRoot.CanCollide = false
@@ -1680,14 +1675,14 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 			end
 			if (not scriptvariables.AutoShootCooldown or scriptvariables.AutoShootCooldown + 3.3 < t) and Library.Flags.AutoShoot.CurrentValue and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeLocal") and Gun.KnifeLocal:FindFirstChild("CreateBeam") and Gun.KnifeLocal.CreateBeam:FindFirstChild("RemoteFunction") then
 				local closest
-				local distance
+				local distance = math.huge
 				for _, player in ipairs(Players:GetPlayers()) do
 					local character = player.Character
 					if character and (not Library.Flags.LegitMode.CurrentValue or character:FindFirstChild("Knife")) then
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart") 
 						if NPCRoot and NPCRoot:IsA("BasePart") and players[player.Name] and players[player.Name].Role == weapons.Knife.Role[1] then
 							local distancetemp = (NPCRoot.Position - lplrhrp.Position).Magnitude
-							if not closest or distancetemp < distance then
+							if distancetemp < distance then
 								local startpos = lplrchar.Gun.Handle.Position
 								local predictedpos = NPCRoot.Position + NPCRoot.Velocity * Library.Flags.GunPrediction.CurrentValue / 1000
 
@@ -1790,5 +1785,5 @@ for _, v in ipairs(workspace:GetChildren()) do
 		match.Map = v
 	end
 end
-ChamPlayerRoles(Library.Flags.PlayerChams.CurrentValue)
 Library:LoadConfiguration()
+ChamPlayerRoles(Library.Flags.PlayerChams.CurrentValue)
