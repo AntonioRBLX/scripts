@@ -242,31 +242,26 @@ function GetClosestPlayer(FOV,maxdist)
 					end
 				end
 			end
-			if typeof(Library.Flags.MurdererAimbotMethod.CurrentOption) == "table" then
-				print("table: {"..unpack(Library.Flags.MurdererAimbotMethod.CurrentOption).."}")
-			else
-				print(Library.Flags.MurdererAimbotMethod.CurrentOption)
-			end
 			if players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
-				if Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
+				if MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
-				elseif Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" then
+				elseif MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y),FOV)
-				elseif Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToScreenCenter" and camera then
+				elseif MurdererAimbotMethod.CurrentOption == "ClosestPlayerToScreenCenter" and camera then
 					getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y)/2)
-				elseif Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCharacter" then
+				elseif MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCharacter" then
 					closestplayertocharacter()
 				end
 			else
-				if Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
+				if SheriffAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
-				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" then	
+				elseif SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" then	
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y),FOV)
-				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToScreenCenter" and camera then
+				elseif SheriffAimbotMethod.CurrentOption == "ClosestPlayerToScreenCenter" and camera then
 					getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y)/2)
-				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToCharacter" then
+				elseif SheriffAimbotMethod.CurrentOption == "ClosestPlayerToCharacter" then
 					closestplayertocharacter()
-				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "Murderer" then
+				elseif SheriffAimbotMethod.CurrentOption == "Murderer" then
 					for _, player in ipairs(Players:GetPlayers()) do
 						if players[player.Name] and players[player.Name].Role and players[player.Name].Role == weapons.Knife.Role[1] then
 							local character = player.Character
@@ -822,7 +817,7 @@ local KnifeAimbot = Main:CreateToggle({
 	Callback = function(value)
 	end;
 })
-local Dropdown = Main:CreateDropdown({
+local SheriffAimbotMethod = Main:CreateDropdown({
 	Name = "Sheriff Aimbot Method";
 	Options = {"ClosestPlayerToCursor","ClosestPlayerToFOVCircle","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter","Murderer"};
 	CurrentOption = "Murderer";
@@ -832,7 +827,7 @@ local Dropdown = Main:CreateDropdown({
 	Callback = function(option)
 	end,
 })
-local Dropdown = Main:CreateDropdown({
+local MurdererAimbotMethod = Main:CreateDropdown({
 	Name = "Murderer Aimbot Method";
 	Options = {"ClosestPlayerToCursor","ClosestPlayerToFOVCircle","ClosestPlayerToCharacter","ClosestPlayerToScreenCenter"};
 	CurrentOption = "ClosestPlayerToCursor";
@@ -1636,7 +1631,7 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 	if Drawing1 then
 		Drawing1.Position = Vector2.new(Mouse.X,Mouse.Y)
 		Drawing1.Radius = Library.Flags.FOV.CurrentValue
-		if Library.Flags.ShowFOVCircle.CurrentValue and (players[LocalPlayer.Name] and ((players[LocalPlayer.Name].Role == weapons.Gun.Role[1] or players[LocalPlayer.Name].Role == weapons.Gun.Role[2]) and Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" or players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] and Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle")) then
+		if Library.Flags.ShowFOVCircle.CurrentValue and (players[LocalPlayer.Name] and ((players[LocalPlayer.Name].Role == weapons.Gun.Role[1] or players[LocalPlayer.Name].Role == weapons.Gun.Role[2]) and SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" or players[LocalPlayer.Name] and players[LocalPlayer.Name].Role == weapons.Knife.Role[1] and MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle")) then
 			Drawing1.Visible = true
 		else
 			Drawing1.Visible = false
