@@ -1708,7 +1708,7 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 					end
 				end
 				if closest then
-					local suc, aimpos = pcall(GetAimVector,lplrchar,1)
+					local suc, _, aimpos = pcall(GetAimVector,lplrchar,1)
 					AutoShootCooldown = t
 					if suc and aimpos then
 						local args = {
