@@ -618,7 +618,7 @@ function AimbotVisuals(startpos,endpos,path)
 	end
 end
 function GetAimVector(lplrchar,typ)
-	local p = (LocalPlayer:GetNetworkPing() * 2) + 175
+	local p = (LocalPlayer:GetNetworkPing() * 2) + 180
 	if typ == 1 then
 		local closest = GetClosestPlayer(Library.Flags.FOV.CurrentValue,500)
 
@@ -635,7 +635,8 @@ function GetAimVector(lplrchar,typ)
 		local path, aimpos = Aimbot:ComputeAsync(attachment.WorldPosition,closest,100,0,{
 			IgnoreList = nil;
 			Ping = p;
-			PredictSpamJump = true;
+			PredictJump = true;
+			AlwaysJumping = Library.Flags.AlwaysJumping.CurrentValue
 			IsAGun = true;
 		})
 		if Library.Flags.ShowAimbotVisuals.CurrentValue and aimpos then
@@ -795,6 +796,14 @@ local Automatic = Main:CreateToggle({
 	CurrentValue = false;
 	Flag = "Automatic";
 	SectionParent = AimbotSection;
+	Callback = function(value)
+	end;
+})
+local KnifeAimbot = Main:CreateToggle({
+	Name = "Always Jumping";
+	CurrentValue = false;
+	SectionParent = AimbotSection;
+	Flag = "AlwaysJumping";
 	Callback = function(value)
 	end;
 })
