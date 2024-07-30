@@ -636,7 +636,7 @@ function GetAimVector(lplrchar,typ)
 			IgnoreList = nil;
 			Ping = p;
 			PredictJump = true;
-			AlwaysJumping = Library.Flags.AlwaysJumping.CurrentValue
+			AlwaysJumping = Library.Flags.AlwaysJumping.CurrentValue;
 			IsAGun = true;
 		})
 		if Library.Flags.ShowAimbotVisuals.CurrentValue and aimpos then
