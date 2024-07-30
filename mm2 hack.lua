@@ -70,16 +70,14 @@ local match = {
 local powers = {
 	Sleight = false;
 }
-local eventfunctions = {}
-local scriptvariables = {
-	IsFlinging = false;
-	AntiLagAlreadyExecuted = false;
-	TPCheck = false;
-	QueueOnTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport;
-	AutoShootCooldown = nil;
-	AutoShootDelay = nil;
-}
 local connections = {}
+local eventfunctions = {}
+local IsFlinging = false
+local AntiLagAlreadyExecuted = false
+local TPCheck = false
+local QueueOnTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
+local AutoShootCooldown = nil
+local AutoShootDelay = nil
 local a = 0
 local ID = 0
 
@@ -117,7 +115,7 @@ function Draw3D(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Col
 	}})
 	local function find()
 		for i, v in ipairs(visuals) do
-			if v.ID == ID then
+			if v.ID == CurrentID then
 				return i
 			end
 		end
@@ -799,11 +797,19 @@ local Automatic = Main:CreateToggle({
 	Callback = function(value)
 	end;
 })
-local KnifeAimbot = Main:CreateToggle({
+local AlwaysJumping = Main:CreateToggle({
 	Name = "Always Jumping";
 	CurrentValue = false;
 	SectionParent = AimbotSection;
 	Flag = "AlwaysJumping";
+	Callback = function(value)
+	end;
+})
+local KnifeAimbot = Main:CreateToggle({
+	Name = "Knife Always Hit";
+	CurrentValue = false;
+	SectionParent = AimbotSection;
+	Flag = "KnifeAlwaysHit";
 	Callback = function(value)
 	end;
 })
@@ -1104,8 +1110,8 @@ local RemoveMapLag = Visuals:CreateButton({
 	Name = "Remove Map Lag";
 	SectionParent = AntiLagSection;
 	Callback = function()
-		if not scriptvariables.AntiLagAlreadyExecuted then
-			scriptvariables.AntiLagAlreadyExecuted = true
+		if not AntiLagAlreadyExecuted then
+			AntiLagAlreadyExecuted = true
 
 			local Terrain = workspace.Terrain
 			Terrain.WaterWaveSize = 0
@@ -1256,7 +1262,7 @@ local FlingPlayer = Blatant:CreateButton({
 		end
 
 		local lplrchar = LocalPlayer.Character
-		if not scriptvariables.IsFlinging and FlingPlayerType.CurrentOption and lplrchar then
+		if not IsFlinging and FlingPlayerType.CurrentOption and lplrchar then
 			local lplrhrp = lplrchar:FindFirstChild("HumanoidRootPart")
 			if lplrhrp then
 				local player = Players:FindFirstChild(FlingPlayerType.CurrentOption)
@@ -1266,13 +1272,13 @@ local FlingPlayer = Blatant:CreateButton({
 						local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 						if NPCRoot then
 							local prevCFrame = lplrhrp.CFrame
-							scriptvariables.IsFlinging = true
+							IsFlinging = true
 
 							AddBodyFling(lplrhrp)
 
 							while true do
-								if not scriptvariables.IsFlinging or not Players:FindFirstChild(FlingPlayerType.CurrentOption) then 
-									scriptvariables.IsFlinging = false
+								if not IsFlinging or not Players:FindFirstChild(FlingPlayerType.CurrentOption) then 
+									IsFlinging = false
 									for _, v in ipairs(lplrchar:GetChildren()) do
 										if v:IsA("BasePart") then
 											v.CanCollide = true
@@ -1333,7 +1339,7 @@ local StopFlinging = Blatant:CreateButton({
 	Name = "Stop Flinging";
 	SectionParent = FlingSection;
 	Callback = function()
-		scriptvariables.IsFlinging = false
+		IsFlinging = false
 	end;
 })
 ---------------------------------------------------------------------------
@@ -1479,7 +1485,7 @@ local KeepGUI = Others:CreateToggle({
 	CurrentValue = false;
 	Flag = "KeepGUI";
 	Callback = function(value)
-		if not scriptvariables.QueueOnTeleport then
+		if not QueueOnTeleport then
 			Library:Notify({
 				Title = "Error";
 				Content = 'The function "queue_on_teleport" is not supported on this executor';
@@ -1588,14 +1594,14 @@ eventfunctions.WorkspaceChildRemoved = workspace.ChildRemoved:Connect(function(i
 	end
 end)
 eventfunctions.DescendantAdded = workspace.DescendantAdded:Connect(function(descendant)
-	if scriptvariables.AntiLagAlreadyExecuted then
+	if AntiLagAlreadyExecuted then
 		RemoveLagFromObject(descendant)
 	end
 end)
 eventfunctions.OnTeleport = LocalPlayer.OnTeleport:Connect(function()
-	if not scriptvariables.TPCheck and scriptvariables.QueueOnTeleport and Library.Flags.KeepGUI.CurrentValue then
-		scriptvariables.TPCheck = true
-		scriptvariables.QueueOnTeleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20hack.lua"))()')
+	if not TPCheck and QueueOnTeleport and Library.Flags.KeepGUI.CurrentValue then
+		TPCheck = true
+		QueueOnTeleport('loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/scripts/main/mm2%20hack.lua"))()')
 	end
 end)
 eventfunctions.PlayerAdded = Players.PlayerAdded:Connect(function(player)
@@ -1673,7 +1679,7 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 					end
 				end
 			end
-			if (not scriptvariables.AutoShootCooldown or scriptvariables.AutoShootCooldown + 3.3 < t) and Library.Flags.AutoShoot.CurrentValue and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeLocal") and Gun.KnifeLocal:FindFirstChild("CreateBeam") and Gun.KnifeLocal.CreateBeam:FindFirstChild("RemoteFunction") then
+			if (not AutoShootCooldown or AutoShootCooldown + 3.3 < t) and Library.Flags.AutoShoot.CurrentValue and Gun and Gun.ClassName == "Tool" and Gun:FindFirstChild("Handle") and Gun:FindFirstChild("KnifeLocal") and Gun.KnifeLocal:FindFirstChild("CreateBeam") and Gun.KnifeLocal.CreateBeam:FindFirstChild("RemoteFunction") then
 				local closest
 				local distance = math.huge
 				for _, player in ipairs(Players:GetPlayers()) do
@@ -1701,7 +1707,7 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 				end
 				if closest then
 					local suc, aimpos = pcall(GetAimVector,lplrchar,1)
-					scriptvariables.AutoShootCooldown = t
+					AutoShootCooldown = t
 					if suc and aimpos then
 						local args = {
 							[1] = 1;
@@ -1772,6 +1778,13 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 	end
 	return namecall(self,...)
 end)
+--local index
+--index = hookmetamethod(game, "__index", function(obj,idx)
+	--if Library.Flags.KnifeAlwaysHit.CurrentValue and tostring(obj) == "HumanoidRootPart" and tostring(idx) == "Position" then
+		--return
+	--end
+	--return index(obj,idx)
+--end)
 
 ---------------------------------------------------------------------------
 -- Loops
@@ -1785,5 +1798,5 @@ for _, v in ipairs(workspace:GetChildren()) do
 		match.Map = v
 	end
 end
-Library:LoadConfiguration()
 ChamPlayerRoles(Library.Flags.PlayerChams.CurrentValue)
+Library:LoadConfiguration()
