@@ -1798,5 +1798,5 @@ for _, v in ipairs(workspace:GetChildren()) do
 		match.Map = v
 	end
 end
-ChamPlayerRoles(Library.Flags.PlayerChams.CurrentValue)
 Library:LoadConfiguration()
+ChamPlayerRoles(Library.Flags.PlayerChams.CurrentValue)
