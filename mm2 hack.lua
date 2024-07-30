@@ -201,7 +201,7 @@ function RemoveChams(object,isacharmodel) -- Destroys ESP
 		end
 	end
 end
-function GetClosestPlayer(FOV,maxdist,MurdererAimbotMethod,SheriffAimbotMethod)
+function GetClosestPlayer(FOV,maxdist)
 	local lplrchar = LocalPlayer.Character
 	local closest
 	local distance = math.huge
@@ -243,25 +243,25 @@ function GetClosestPlayer(FOV,maxdist,MurdererAimbotMethod,SheriffAimbotMethod)
 				end
 			end
 			if players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
-				if MurdererAimbotMethod == "ClosestPlayerToCursor" then
+				if Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
-				elseif MurdererAimbotMethod == "ClosestPlayerToFOVCircle" then
+				elseif Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y),FOV)
-				elseif MurdererAimbotMethod == "ClosestPlayerToScreenCenter" and camera then
+				elseif Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToScreenCenter" and camera then
 					getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y)/2)
-				elseif MurdererAimbotMethod == "ClosestPlayerToCharacter" then
+				elseif Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCharacter" then
 					closestplayertocharacter()
 				end
 			else
-				if SheriffAimbotMethod == "ClosestPlayerToCursor" then
+				if Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
-				elseif SheriffAimbotMethod == "ClosestPlayerToFOVCircle" then	
+				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToFOVCircle" then	
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y),FOV)
-				elseif SheriffAimbotMethod == "ClosestPlayerToScreenCenter" and camera then
+				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToScreenCenter" and camera then
 					getclosestplayertoscreenpoint(Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y)/2)
-				elseif SheriffAimbotMethod == "ClosestPlayerToCharacter" then
+				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "ClosestPlayerToCharacter" then
 					closestplayertocharacter()
-				elseif SheriffAimbotMethod == "Murderer" then
+				elseif Library.Flags.SheriffAimbotMethod.CurrentOption == "Murderer" then
 					for _, player in ipairs(Players:GetPlayers()) do
 						if players[player.Name] and players[player.Name].Role and players[player.Name].Role == weapons.Knife.Role[1] then
 							local character = player.Character
@@ -615,10 +615,10 @@ function AimbotVisuals(startpos,endpos,path)
 		})
 	end
 end
-function GetAimVector(lplrchar,typ,MurdererAimbotMethod,SheriffAimbotMethod)
+function GetAimVector(lplrchar,typ)
 	local p = (LocalPlayer:GetNetworkPing() * 2) + 180
 	if typ == 1 then
-		local closest = GetClosestPlayer(Library.Flags.FOV.CurrentValue,500,MurdererAimbotMethod,SheriffAimbotMethod)
+		local closest = GetClosestPlayer(Library.Flags.FOV.CurrentValue,500)
 
 		if not closest then return end
 
@@ -644,7 +644,7 @@ function GetAimVector(lplrchar,typ,MurdererAimbotMethod,SheriffAimbotMethod)
 
 		return nil, aimpos
 	elseif typ == 2 then
-		local closest = GetClosestPlayer(Library.Flags.FOV.CurrentValue,500,MurdererAimbotMethod,SheriffAimbotMethod)
+		local closest = GetClosestPlayer(Library.Flags.FOV.CurrentValue,500)
 
 		if not closest then return end
 
@@ -1277,9 +1277,7 @@ local FlingPlayer = Blatant:CreateButton({
 						if NPCRoot then
 							local prevCFrame = lplrhrp.CFrame
 							IsFlinging = true
-
 							AddBodyFling(lplrhrp)
-
 							while true do
 								if not IsFlinging or not Players:FindFirstChild(FlingPlayerType.CurrentOption) then 
 									IsFlinging = false
@@ -1767,12 +1765,12 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 		if Library.Flags.GunAimbot.CurrentValue and tostring(method) == "InvokeServer" then
 			local script = rawget(getfenv(2), "script")
 			if script.Name == "KnifeLocal" then
-				local _, aimpos = GetAimVector(lplrchar,1,MurdererAimbotMethod.CurrentOption,SheriffAimbotMethod.CurrentOption)
+				local _, aimpos = GetAimVector(lplrchar,1)
 				args[2] = aimpos or args[2]
 			end
 			return self.InvokeServer(self,table.unpack(args))
 		elseif Library.Flags.KnifeAimbot.CurrentValue and tostring(self) == "Throw" and tostring(method) == "FireServer" then
-			local pos, aimpos = GetAimVector(lplrchar,2,MurdererAimbotMethod.CurrentOption,SheriffAimbotMethod.CurrentOption)
+			local pos, aimpos = GetAimVector(lplrchar,2)
 			args[1] = aimpos and CFrame.new(aimpos) or args[1]
 			args[2] = pos and CFrame.new(pos) or args[2]
 			return self.FireServer(self,table.unpack(args))
