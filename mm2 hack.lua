@@ -242,6 +242,11 @@ function GetClosestPlayer(FOV,maxdist)
 					end
 				end
 			end
+			if typeof(Library.Flags.MurdererAimbotMethod.CurrentOption) == "table" then
+				print("table: {"..unpack(Library.Flags.MurdererAimbotMethod.CurrentOption).."}")
+			else
+				print(Library.Flags.MurdererAimbotMethod.CurrentOption)
+			end
 			if players[LocalPlayer.Name].Role == weapons.Knife.Role[1] then
 				if Library.Flags.MurdererAimbotMethod.CurrentOption == "ClosestPlayerToCursor" then
 					getclosestplayertoscreenpoint(Vector2.new(Mouse.X,Mouse.Y))
