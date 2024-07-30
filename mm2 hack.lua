@@ -642,7 +642,7 @@ function GetAimVector(lplrchar,typ)
 		end
 		attachment:Destroy()
 
-		return aimpos
+		return nil, aimpos
 	elseif typ == 2 then
 		local closest = GetClosestPlayer(Library.Flags.FOV.CurrentValue,500)
 
@@ -652,6 +652,8 @@ function GetAimVector(lplrchar,typ)
 		local attachment = Instance.new("Attachment", lplrhrp)
 		attachment.Position = Vector3.new(1.5, 1.9, 1)
 
+		local pos = Library.Flags.KnifeAlwaysHit.CurrentValue and lplrhrp.Position or attachment.WorldPosition
+		
 		if not Library.Flags.Automatic.CurrentValue then
 			p = Library.Flags.KnifePrediction.CurrentValue
 		end
@@ -679,7 +681,7 @@ function GetAimVector(lplrchar,typ)
 		powers.Sleight = false
 		attachment:Destroy()
 
-		return aimpos
+		return pos, aimpos
 	end
 end
 
@@ -1762,18 +1764,16 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 		local lplrchar = LocalPlayer.Character
 		if Library.Flags.GunAimbot.CurrentValue and tostring(method) == "InvokeServer" then
 			local script = rawget(getfenv(2), "script")
-			local aimpos
 			if script.Name == "KnifeLocal" then
-				aimpos = GetAimVector(lplrchar,1)
-				args[2] = aimpos
+				local _, aimpos = GetAimVector(lplrchar,1)
+				args[2] = aimpos or args[2]
 			end
-			return aimpos and self.InvokeServer(self,table.unpack(args)) or self.InvokeServer(self,...)
+			return self.InvokeServer(self,table.unpack(args))
 		elseif Library.Flags.KnifeAimbot.CurrentValue and tostring(self) == "Throw" and tostring(method) == "FireServer" then
-			local aimpos = GetAimVector(lplrchar,2)
-			if aimpos then
-				args[1] = CFrame.new(aimpos)
-			end
-			return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
+			local pos, aimpos = GetAimVector(lplrchar,2)
+			args[1] = aimpos and CFrame.new(aimpos) or args[1]
+			args[2] = pos and CFrame.new(pos) or args[1]
+			return self.FireServer(self,table.unpack(args))
 		end
 	end
 	return namecall(self,...)
