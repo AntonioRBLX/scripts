@@ -653,26 +653,28 @@ function GetAimVector(lplrchar,typ)
 		attachment.Position = Vector3.new(1.5, 1.9, 1)
 
 		local pos = Library.Flags.KnifeAlwaysHit.CurrentValue and lplrhrp.Position or attachment.WorldPosition
-		
 		if not Library.Flags.Automatic.CurrentValue then
 			p = Library.Flags.KnifePrediction.CurrentValue
 		end
 
 		local path, aimpos
 		if powers.Sleight then
-			path, aimpos = Aimbot:ComputeAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Normal,0,{
+			path, aimpos = Aimbot:ComputeAsync(pos,closest,weapons.Knife.Speed.Normal,0,{
 				IgnoreList = nil;
 				Ping = p;
 				PredictSpamJump = true;
 				IsAGun = false;
 			})
 		else
-			path, aimpos = Aimbot:ComputeAsync(attachment.WorldPosition,closest,weapons.Knife.Speed.Sleight,0,{
+			path, aimpos = Aimbot:ComputeAsync(pos,closest,weapons.Knife.Speed.Sleight,0,{
 				IgnoreList = nil;
 				Ping = p;
 				PredictSpamJump = true;
 				IsAGun = false;
 			})
+		end
+		if not Library.Flags.KnifeAlwaysHit.CurrentValue then
+			pos = nil
 		end
 		if Library.Flags.ShowAimbotVisuals.CurrentValue and aimpos then
 			coroutine.wrap(AimbotVisuals)(attachment.WorldPosition,aimpos,path)
