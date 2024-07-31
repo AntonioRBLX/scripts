@@ -358,7 +358,29 @@ function UpdateAllChams()
 		end
 	end
 end
-function RemoveLag(character)
+function RemoveWeaponLag()
+	local weapondisplays = workspace:FindFirstChild("WeaponDisplays")
+	if weapondisplays then
+		for i, v in ipairs(weapondisplays:GetChildren()) do
+			v:Destroy()
+		end
+		eventfunctions.WeaponDisplayAdded = weapondisplays.ChildAdded:Connect(function(weapon)
+			weapon:Destroy()
+		end)
+	end
+end
+function RemovePetLag()
+	local petcontainer = workspace:FindFirstChild("PetContainer")
+	if petcontainer then
+		for i, v in ipairs(petcontainer:GetChildren()) do
+			v:Destroy()
+		end
+		eventfunctions.PetAdded = petcontainer.ChildAdded:Connect(function(pet)
+			pet:Destroy()
+		end)
+	end
+end
+function RemoveAccessoryLag(character)
 	local function RemoveAccessories(char)
 		for _, child in ipairs(char:GetChildren()) do
 			if child:IsA("Accessory") or child.Name == "Radio" or child.Name == "Pet" then
@@ -366,51 +388,14 @@ function RemoveLag(character)
 			end
 		end
 	end
-	local weapondisplays = workspace:FindFirstChild("WeaponDisplays")
-	if weapondisplays and weapondisplays.ClassName == "Folder" then
-		if character then
-			local uppertorso = character:FindFirstChild("UpperTorso")
-			local lowertorso = character:FindFirstChild("LowerTorso")
-			if uppertorso and lowertorso then
-				local knifebelt = uppertorso:FindFirstChild("KnifeBack") or lowertorso:FindFirstChild("KnifeBelt")
-				local gunbelt = lowertorso:FindFirstChild("GunBelt")
-				if knifebelt and gunbelt then
-					local knifefound
-					local gunfound
-					local spawn = tick()
-					repeat
-						for _, v in ipairs(weapondisplays:GetChildren()) do
-							local rconst = v:FindFirstChildOfClass("RigidConstraint")
-							if rconst then
-								if rconst.Attachment0 == gunbelt or rconst.Attachment1 == gunbelt then
-									v:Destroy()
-									gunfound = true
-								elseif rconst.Attachment0 == knifebelt or rconst.Attachment1 == knifebelt then
-									v:Destroy()
-									knifefound = true
-								end
-							end
-						end
-						task.wait()
-					until knifefound and gunfound or spawn + 5 < tick()
-				end
-			end
-		else
-			for _, v in ipairs(weapondisplays:GetChildren()) do
-				v:Destroy()
-			end
-		end
-	end
-	if Library.Flags.IncludeHats.CurrentValue then
-		if character then
-			RemoveAccessories(character)
-		else
-			for _, plr in ipairs(Players:GetChildren()) do
-				if Library.Flags.IncludeLocalPlayer.CurrentValue or plr ~= LocalPlayer then
-					local char = plr.Character
-					if char then
-						RemoveAccessories(char)
-					end
+	if character then
+		RemoveAccessories(character)
+	else
+		for _, plr in ipairs(Players:GetChildren()) do
+			if Library.Flags.IncludeLocalPlayer.CurrentValue or plr ~= LocalPlayer then
+				local char = plr.Character
+				if char then
+					RemoveAccessories(char)
 				end
 			end
 		end
@@ -524,8 +509,8 @@ function eventfunctions.Initialize(player)
 			end
 			HumanoidDiedEvent(NPCHum)
 		end
-		if Library.Flags.AutoRemoveLag.CurrentValue and (Library.Flags.IncludeLocalPlayer.CurrentValue or player ~= LocalPlayer) then
-			coroutine.wrap(RemoveLag)(char)
+		if Library.Flags.RemoveAccessoryLag.CurrentValue and (Library.Flags.IncludeLocalPlayer.CurrentValue or player ~= LocalPlayer) then
+			coroutine.wrap(RemoveAccessoryLag)(char)
 		end
 		if Library.Flags.PlayerChams.CurrentValue and player ~= LocalPlayer then
 			AddChams(char,true,{
@@ -541,7 +526,7 @@ function eventfunctions.Initialize(player)
 			end
 		end)
 		connections[b - 3] = char.ChildAdded:Connect(function(child)
-			if child.ClassName == "Tool" and Library.Flags.AutoRemoveLag.CurrentValue and player ~= LocalPlayer then
+			if child.ClassName == "Tool" and Library.Flags.RemoveWeaponLag.CurrentValue and player ~= LocalPlayer then
 				for _, v in ipairs(child:GetDescendants()) do
 					if v:IsA("Decal") or v:IsA("DataModelMesh") then
 						v:Destroy()
@@ -1139,28 +1124,43 @@ local RemoveMapLag = Visuals:CreateButton({
 		end
 	end
 })
-local RemoveAccessoryLag = Visuals:CreateButton({
+local RemoveWeaponLag = Visuals:CreateToggle({
+	Name = "Remove Weapon Lag";
+	CurrentValue = false;
+	SectionParent = AntiLagSection;
+	Flag = "RemoveWeaponLag";
+	Callback = function(value)
+		if value then
+			RemoveWeaponLag()
+		else
+			if eventfunctions.WeaponDisplayAdded then
+				eventfunctions.WeaponDisplayAdded:Disconnect()
+			end
+		end
+	end;
+})
+local RemoveWeaponLag = Visuals:CreateToggle({
+	Name = "Remove Pet Lag";
+	CurrentValue = false;
+	SectionParent = AntiLagSection;
+	Flag = "RemovePetLag";
+	Callback = function(value)
+		if value then
+			RemovePetLag()
+		else
+			if eventfunctions.PetAdded then
+				eventfunctions.PetAdded:Disconnect()
+			end
+		end
+	end;
+})
+local RemoveAccessoryLag = Visuals:CreateToggle({
 	Name = "Remove Accessory Lag";
-	SectionParent = AntiLagSection;
-	Callback = function()
-		local lplrchar = LocalPlayer.Character
-		RemoveLag()
-	end;
-})
-local AutoRemoveLag = Visuals:CreateToggle({
-	Name = "Auto Remove Lag";
 	CurrentValue = false;
 	SectionParent = AntiLagSection;
-	Flag = "AutoRemoveLag";
+	Flag = "RemoveAccessoryLag";
 	Callback = function(value)
-	end;
-})
-local IncludeHats = Visuals:CreateToggle({
-	Name = "Include Hats";
-	CurrentValue = false;
-	SectionParent = AntiLagSection;
-	Flag = "IncludeHats";
-	Callback = function(value)
+		RemoveAccessoryLag()
 	end;
 })
 local IncludeLocalPlayer = Visuals:CreateToggle({
