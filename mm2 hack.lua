@@ -1755,7 +1755,6 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 	end
 	local tablefind = table.find(visuals,"nil")
 	while tablefind do
-		visuals[tablefind].Line:Remove()
 		table.remove(visuals,tablefind)
 		tablefind = table.find(visuals,"nil")
 	end
