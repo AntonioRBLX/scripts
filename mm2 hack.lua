@@ -76,8 +76,9 @@ local IsFlinging = false
 local AntiLagAlreadyExecuted = false
 local TPCheck = false
 local QueueOnTeleport = syn and syn.queue_on_teleport or queue_on_teleport or fluxus and fluxus.queue_on_teleport
-local AutoShootCooldown = nil
-local AutoShootDelay = nil
+local AutoShootCooldown
+local AutoShootDelay
+local FakeHRPPosition
 local a = 0
 local ID = 0
 
@@ -1781,18 +1782,19 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 			local pos, aimpos = GetAimVector(lplrchar,2)
 			args[1] = aimpos and CFrame.new(aimpos) or args[1]
 			args[2] = pos and CFrame.new(pos) or args[2]
+			FakeHRPPosition = aimpos
 			return self.FireServer(self,table.unpack(args))
 		end
 	end
 	return namecall(self,...)
 end)
---local index
---index = hookmetamethod(game, "__index", function(obj,idx)
-	--if Library.Flags.KnifeAlwaysHit.CurrentValue and tostring(obj) == "HumanoidRootPart" and tostring(idx) == "Position" then
-		--return
-	--end
-	--return index(obj,idx)
---end)
+local index
+index = hookmetamethod(game, "__index", function(obj,idx)
+	if FakeHRPPosition and Library.Flags.KnifeAlwaysHit.CurrentValue and tostring(obj) == "HumanoidRootPart" and tostring(idx) == "Position" then
+		return FakeHRPPosition
+	end
+	return index(obj,idx)
+end)
 
 ---------------------------------------------------------------------------
 -- Loops
