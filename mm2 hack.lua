@@ -122,19 +122,28 @@ function Draw3D(dictionary) -- dictionary = {StartPoint = (), EndPoint = (), Col
 	end
 	function module:ChangeColor(color)
 		local idx = find()
-		visuals[idx].Properties.Color = color
+		if idx then
+			visuals[idx].Properties.Color = color
+		end
 	end
 	function module:ChangeStartPoint(pos)
 		local idx = find()
-		visuals[idx].Properties.StartPoint = pos
+		if idx then
+			visuals[idx].Properties.StartPoint = pos
+		end
 	end
 	function module:ChangeEndPoint(pos)
 		local idx = find()
-		visuals[idx].Properties.EndPoint = pos
+		if idx then
+			visuals[idx].Properties.EndPoint = pos
+		end
 	end
 	function module:Destroy()
+		line:Remove()
 		local idx = find()
-		visuals[idx] = "nil"
+		if idx then
+			visuals[idx] = "nil"
+		end
 	end
 	return module
 end
@@ -1746,7 +1755,7 @@ eventfunctions.Stepped = RS.Stepped:Connect(function()
 	end
 	local tablefind = table.find(visuals,"nil")
 	while tablefind do
-		visuals[tablefind].Line:Destroy()
+		visuals[tablefind].Line:Remove()
 		table.remove(visuals,tablefind)
 		tablefind = table.find(visuals,"nil")
 	end
