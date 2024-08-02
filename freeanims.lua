@@ -1,3 +1,6 @@
+if FREEANIMMAINALREADYEXECUTED then return end
+getgenv().FREEANIMMAINALREADYEXECUTED = true
+
 local MarketplaceService = game:GetService("MarketplaceService")
 local UserInputService = game:GetService("UserInputService")
 local RunService = game:GetService("RunService")
