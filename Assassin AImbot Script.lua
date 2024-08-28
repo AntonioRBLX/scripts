@@ -144,7 +144,7 @@ function textbox(textbox,callback)
 		local text = textbox.Text
 		if tonumber(text) then
 			textbox.Text = name.Value..": "..tonumber(text)
-			callback(text)
+			callback(tonumber(text))
 		else
 			textbox.Text = ""
 			textbox.PlaceholderText = "Not A Number"
