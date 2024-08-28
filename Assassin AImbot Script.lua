@@ -170,7 +170,7 @@ function GetClosestPlayer(FOV,maxdist)
 	local camera = workspace.CurrentCamera
 	local closest
 	local distance = math.huge
-	for _, player in pairs(Players:GetPlayers()) do
+	for _, player in Players:GetPlayers() do
 		if player ~= LocalPlayer then
 			local character = workspace:FindFirstChild(player.Name)
 			if character then
@@ -194,12 +194,10 @@ LocalPlayer.CharacterAdded:Connect(function(char)
 	lplrhrp = char:WaitForChild("HumanoidRootPart")
 end)
 local namecall
-namecall = hookmetamethod(game, "__namecall", function(...)
+namecall = hookmetamethod(game, "__namecall", function(self,...)
 	local args = {...}
-	local self = args[1]
 	local method = getnamecallmethod()
 	if not checkcaller() and configs.Aimbot and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
-		table.remove(args,1)
 		local closest = GetClosestPlayer(configs.FOV,1000)
 		local aimpos
 		if closest then
@@ -216,6 +214,6 @@ namecall = hookmetamethod(game, "__namecall", function(...)
 		end
 		return self.FireServer(self,table.unpack(args))
 	end
-	return namecall(...)
+	return namecall(self,...)
 end)
 notify("Info","Aimbot Successfully Loaded")
