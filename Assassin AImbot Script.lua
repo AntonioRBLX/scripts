@@ -35,7 +35,7 @@ if not hooked then
 end
 if getgenv().AlreadyExecuted then return end
 getgenv().AlreadyExecuted = true
-local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot.lua"))()
+local Aimbot = loadstring(game:HttpGet("https://raw.githubusercontent.com/CITY512/modules/main/Projectile%20Aimbot/Projectile%20Aimbot.lua"))()
 local LocalPlayer = Players.LocalPlayer
 local lplrchar = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local lplrhrp = lplrchar.HumanoidRootPart
