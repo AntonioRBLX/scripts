@@ -194,7 +194,7 @@ LocalPlayer.CharacterAdded:Connect(function(char)
 	lplrhrp = char:WaitForChild("HumanoidRootPart")
 end)
 local namecall
-namecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
+namecall = hookmetamethod(game, "__namecall", function(...)
 	local args = {...}
 	local self = args[1]
 	local method = getnamecallmethod()
@@ -216,5 +216,5 @@ namecall = hookmetamethod(game, "__namecall", newcclosure(function(...)
 		return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
 	end
 	return namecall(...)
-end))
+end)
 notify("Info","Aimbot Successfully Loaded")
