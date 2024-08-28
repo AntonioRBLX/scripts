@@ -195,7 +195,6 @@ LocalPlayer.CharacterAdded:Connect(function(char)
 end)
 local namecall
 namecall = hookmetamethod(game, "__namecall", function(self,...)
-	local self2 = self
 	local args = {...}
 	local method = getnamecallmethod()
 	if not checkcaller() and configs.Aimbot and method == "FireServer" and tostring(self) == "ThrowKnife" then
@@ -215,6 +214,6 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 		end
 		return self.FireServer(self,table.unpack(args))
 	end
-	return self[method](self2,table.unpack(args))
+	return namecall(self,...)
 end)
 notify("Info","Aimbot Successfully Loaded")
