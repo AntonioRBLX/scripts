@@ -204,7 +204,7 @@ namecall = hookmetamethod(game, "__namecall", function(...)
 		if closest then
 			local attachment = Instance.new("Attachment", lplrhrp)
 			attachment.Position = Vector3.new(1.6, 1.2, -3)
-			_, aimpos = Aimbot:ComputePathAsync(attachment.WorldPosition,closest,290,60,{
+			_, aimpos = Aimbot:Compute(attachment.WorldPosition,closest,290,60,{
 				IgnoreList = nil;
 				Ping = configs.Prediction;
 				PredictSpamJump = true;
