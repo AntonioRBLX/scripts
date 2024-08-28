@@ -199,6 +199,7 @@ namecall = hookmetamethod(game, "__namecall", function(...)
 	local self = args[1]
 	local method = getnamecallmethod()
 	if not checkcaller() and configs.Aimbot and tostring(method) == "FireServer" and tostring(self) == "ThrowKnife" then
+		table.remove(args,1)
 		local closest = GetClosestPlayer(configs.FOV,1000)
 		local aimpos
 		if closest then
@@ -211,9 +212,9 @@ namecall = hookmetamethod(game, "__namecall", function(...)
 				IsAGun = false;
 			})
 			attachment:Destroy()
-			args[2] = aimpos
+			args[1] = aimpos or args[1]
 		end
-		return aimpos and self.FireServer(self,table.unpack(args)) or self.FireServer(self,...)
+		return self.FireServer(self,table.unpack(args))
 	end
 	return namecall(...)
 end)
