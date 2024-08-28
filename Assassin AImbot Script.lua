@@ -214,6 +214,6 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 		end
 		return self.FireServer(self,table.unpack(args))
 	end
-	return self[method](self,...)
+	return self[method](self,unpack(args))
 end)
 notify("Info","Aimbot Successfully Loaded")
