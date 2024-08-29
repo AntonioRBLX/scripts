@@ -40,6 +40,7 @@ local LocalPlayer = Players.LocalPlayer
 local lplrchar = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
 local lplrhrp = lplrchar.HumanoidRootPart
 local mouse = LocalPlayer:GetMouse()
+local camera = workspace.CurrentCamera
 local ScreenGui = Instance.new("ScreenGui")
 local Frame = Instance.new("Frame")
 local Frame_2 = Instance.new("Frame")
@@ -177,7 +178,7 @@ function GetClosestPlayer(FOV,maxdist)
 				local NPCRoot = character:FindFirstChild("HumanoidRootPart")
 				if NPCRoot then
 					local viewportpoint, onscreen = camera:WorldToScreenPoint(NPCRoot.Position)
-					local distancetemp = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(mouse.X,mouse.Y)).Magnitude
+					local distancetemp = (Vector2.new(viewportpoint.X,viewportpoint.Y) - Vector2.new(camera.ViewportSize.X,camera.ViewportSize.Y)/2).Magnitude -- Vector2.new(mouse.X,mouse.Y)
 					local distancefromplayer = (NPCRoot.Position - lplrhrp.Position).Magnitude
 					if onscreen and distancefromplayer <= maxdist and distancetemp <= FOV and distancetemp < distance then
 						closest = character
