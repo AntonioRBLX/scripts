@@ -1,5 +1,7 @@
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
+local TCS = game:GetService("TextChatService")
+local togglemenucommand = "/togglemenu"
 local isexecutorclosure = is_synapse_function or isexecutorclosure
 local hooked
 function notify(title,description)
@@ -117,6 +119,13 @@ local configs = {
 	Prediction = 100;
 	FOV = 500;
 }
+function togglegui()
+	if ScreenGui.Enabled then
+		ScreenGui.Enabled = false
+	else
+		ScreenGui.Enabled = true
+	end
+end
 function toggle(toggle,callback)
 	if not toggle then return end
 	local name = toggle:FindFirstChild("Name")
@@ -155,19 +164,7 @@ function textbox(textbox,callback)
 		textbox.Interactable = true
 	end)
 end
-toggle(_1,function(value)
-	configs.Aimbot = value
-	print("Aimbot Set To",tostring(value))
-end)
-textbox(_2,function(value)
-	configs.Prediction = value
-	print("Prediction Set To",tostring(value))
-end)
-textbox(_3,function(value)
-	configs.FOV = value
-	print("FOV Set To",tostring(value))
-end)
-function GetClosestPlayer(FOV,maxdist)
+function getclosestplayer(FOV,maxdist)
 	local camera = workspace.CurrentCamera
 	local closest
 	local distance = math.huge
@@ -190,16 +187,44 @@ function GetClosestPlayer(FOV,maxdist)
 	end
 	return closest
 end
+toggle(_1,function(value)
+	configs.Aimbot = value
+	print("Aimbot Set To",tostring(value))
+end)
+textbox(_2,function(value)
+	configs.Prediction = value
+	print("Prediction Set To",tostring(value))
+end)
+textbox(_3,function(value)
+	configs.FOV = value
+	print("FOV Set To",tostring(value))
+end)
 LocalPlayer.CharacterAdded:Connect(function(char)
 	lplrchar = char
 	lplrhrp = char:WaitForChild("HumanoidRootPart")
 end)
+if TCS.ChatVersion == Enum.ChatVersion.LegacyChatService then
+	game.Players.LocalPlayer.Chatted:Connect(function(message)
+		print(message)
+		if message == togglemenucommand then
+			togglegui()
+		end
+	end)
+else
+	TCS.OnIncomingMessage = function(message)
+		if message.Status == Enum.TextChatMessageStatus.Success and message.TextSource and message.TextSource.UserId == game.Players.LocalPlayer.UserId then
+			if message.Text == togglemenucommand then
+				togglegui()
+			end
+		end
+	end
+end
 local namecall
 namecall = hookmetamethod(game, "__namecall", function(self,...)
 	local args = {...}
 	local method = getnamecallmethod()
 	if not checkcaller() and configs.Aimbot and method == "FireServer" and tostring(self) == "ThrowKnife" then
-		local closest = GetClosestPlayer(configs.FOV,1000)
+		local closest = getclosestplayer(configs.FOV,1000)
 		local aimpos
 		if closest then
 			local attachment = Instance.new("Attachment", lplrhrp)
