@@ -1,3 +1,4 @@
+local RS = game:GetService("RunService")
 local StarterGui = game:GetService("StarterGui")
 local Players = game:GetService("Players")
 local TCS = game:GetService("TextChatService")
@@ -114,6 +115,9 @@ _3.TextWrapped = true
 Name3.Parent = _3
 Name3.Name = "Name"
 Name3.Value = "FOV"
+local client = {
+
+}
 local configs = {
 	Aimbot = false;
 	Prediction = 100;
@@ -219,6 +223,7 @@ else
 		end
 	end
 end
+--[[
 local namecall
 namecall = hookmetamethod(game, "__namecall", function(self,...)
 	local args = {...}
@@ -241,6 +246,30 @@ namecall = hookmetamethod(game, "__namecall", function(self,...)
 		return self.FireServer(self,table.unpack(args))
 	end
 	return namecall(self,...)
+end)
+]]
+local index
+index = hookmetamethod(game, '__index', function(obj, idx)
+	if idx:lower() == 'unitray' and client.Target then
+		local attachment = Instance.new("Attachment", lplrhrp)
+		local _, aimpos = Aimbot:Compute(attachment.WorldPosition,client.Target,290,60,{
+			IgnoreList = nil;
+			Ping = configs.Prediction;
+			PredictSpamJump = true;
+			IsAGun = false;
+		})
+		attachment:Destroy()
+		local origin = index(obj, idx)
+		return {
+			Origin = origin.Origin,
+			Direction = CFrame.new(origin.Origin, aimpos).LookVector
+		}
+	end
+ 
+	return index(obj, idx)
+end)
+RS.Stepped:Connect(function()
+	client.Target = getclosestplayer(configs.FOV,1000)
 end)
 notify("Info","Aimbot Successfully Loaded")
 task.wait(1)
