@@ -250,7 +250,8 @@ end)
 ]]
 local index
 index = hookmetamethod(game, '__index', function(obj, idx)
-	if idx:lower() == 'unitray' and client.Target then
+	if configs.Aimbot and idx:lower() == 'unitray' and client.Target then
+		print("hooked unitray index")
 		local attachment = Instance.new("Attachment", lplrhrp)
 		local _, aimpos = Aimbot:Compute(attachment.WorldPosition,client.Target,290,60,{
 			IgnoreList = nil;
