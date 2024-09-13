@@ -80,6 +80,10 @@ local Pirate = Instance.new("TextButton")
 local PirateUICorner = Instance.new("UICorner")
 local PirateOutline = Instance.new("Frame")
 local PirateOutlineUICorner = Instance.new("UICorner")
+local Adidas = Instance.new("TextButton")
+local AdidasUICorner = Instance.new("UICorner")
+local AdidasOutline = Instance.new("Frame")
+local AdidasOutlineUICorner = Instance.new("UICorner")
 local Knight = Instance.new("TextButton")
 local KnightUICorner = Instance.new("UICorner")
 local KnightOutline = Instance.new("Frame")
@@ -689,6 +693,39 @@ PirateOutline.ZIndex = 4
 PirateOutlineUICorner.CornerRadius = UDim.new(0, 4)
 PirateOutlineUICorner.Name = "Pirate Outline UICorner"
 PirateOutlineUICorner.Parent = PirateOutline
+
+Adidas.Name = "Pirate"
+Adidas.Parent = Container
+Adidas.BackgroundColor3 = Color3.fromRGB(97, 97, 97)
+Adidas.BorderColor3 = Color3.fromRGB(31, 31, 31)
+Adidas.LayoutOrder = 14
+Adidas.Position = UDim2.new(0, 0, 0.0903614461, 0)
+Adidas.Size = UDim2.new(1, 0, 0, 12)
+Adidas.ZIndex = 5
+Adidas.AutoButtonColor = false
+Adidas.Font = Enum.Font.SourceSansBold
+Adidas.Text = "Adidas"
+Adidas.TextColor3 = Color3.fromRGB(255, 255, 255)
+Adidas.TextScaled = true
+Adidas.TextSize = 13.000
+Adidas.TextStrokeTransparency = 0.000
+Adidas.TextWrapped = true
+
+AdidasUICorner.CornerRadius = UDim.new(0, 4)
+AdidasUICorner.Name = "Adidas UICorner"
+AdidasUICorner.Parent = Adidas
+
+AdidasOutline.Name = "Adidas Outline"
+AdidasOutline.Parent = Adidas
+AdidasOutline.AnchorPoint = Vector2.new(0.5, 0.5)
+AdidasOutline.BackgroundColor3 = Color3.fromRGB(31, 31, 31)
+AdidasOutline.Position = UDim2.new(0.5, 0, 0.5, 0)
+AdidasOutline.Size = UDim2.new(1, 2, 1, 2)
+AdidasOutline.ZIndex = 4
+
+AdidasOutlineUICorner.CornerRadius = UDim.new(0, 4)
+AdidasOutlineUICorner.Name = "Adidas Outline UICorner"
+AdidasOutlineUICorner.Parent = AdidasOutline
 
 Knight.Name = "Knight"
 Knight.Parent = Container
@@ -1639,9 +1676,21 @@ local anims = {
 		Run = "rbxassetid://616163682";
 		Fall = "rbxassetid://616157476";
 		Jump = "rbxassetid://616161997";
-		Climb = "rbxassetid://616156119";
+		Climb = "rbxassetid://18537363391";
 		Swim = "rbxassetid://616165109";
 		SwimIdle = "rbxassetid://616166655"
+	};
+	adidas = {
+		Button = Adidas;
+		Idle1 = "rbxassetid://18537376492";
+		Idle2 = "rbxassetid://18537371272";
+		Walk = "rbxassetid://18537392113";
+		Run = "rbxassetid://18537384940";
+		Fall = "rbxassetid://18537367238";
+		Jump = "rbxassetid://18537380791";
+		Climb = "rbxassetid://18537363391";
+		Swim = "rbxassetid://18537389531";
+		SwimIdle = "rbxassetid://18537387180"
 	};
 	faker6 = {
 		Button = FakeR6;
