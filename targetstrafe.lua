@@ -27,14 +27,16 @@ local prevt = tick()
 function getClosest()
 	local closest
 	local dist = math.huge
-	for _, child in pairs(workspace:GetChildren()) do
-		local NPCHum = child:FindFirstChildOfClass("Humanoid")
-		local NPCHrp = child:FindFirstChild("HumanoidRootPart")
-		if child ~= killerChar and NPCHum and NPCHum.Health > 0 and not NPCHum:FindFirstChild("JeffTheKiller") and NPCHrp and NPCHrp:IsA("BasePart") then
-			local dist2 = (NPCHrp.Position - killerHrp.Position).Magnitude
-			if dist2 < dist and dist2 <= MaxDist then
-				closest = child
-				dist = dist2
+	for _, child in pairs(Players:GetPlayers()) do
+		if child ~= LocalPlayer and child.Character then
+			local NPCHum = child.Character:FindFirstChildOfClass("Humanoid")
+			local NPCHrp = child.Character:FindFirstChild("HumanoidRootPart")
+			if NPCHum and NPCHum.Health > 0 and not NPCHum:FindFirstChild("JeffTheKiller") and NPCHrp and NPCHrp:IsA("BasePart") then
+				local dist2 = (NPCHrp.Position - killerHrp.Position).Magnitude
+				if dist2 < dist and dist2 <= MaxDist then
+					closest = child.Character
+					dist = dist2
+				end
 			end
 		end
 	end
