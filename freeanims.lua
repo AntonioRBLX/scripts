@@ -1,11 +1,12 @@
 if FREEANIMMAINALREADYEXECUTED then return end
 getgenv().FREEANIMMAINALREADYEXECUTED = true
+local cloneref = cloneref or function(o) return o end
 
-local MarketplaceService = game:GetService("MarketplaceService")
-local UserInputService = game:GetService("UserInputService")
-local RunService = game:GetService("RunService")
-local TweenService = game:GetService("TweenService")
-local Players = game:GetService("Players")
+local MarketplaceService = cloneref(game:GetService("MarketplaceService"))
+local UserInputService = cloneref(game:GetService("UserInputService"))
+local RunService = cloneref(game:GetService("RunService"))
+local TweenService = cloneref(game:GetService("TweenService"))
+local Players = cloneref(game:GetService("Players"))
 
 repeat task.wait() until Players.LocalPlayer
 
