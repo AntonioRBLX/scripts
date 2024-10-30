@@ -1,3 +1,5 @@
+if FEFREEANIMATIONSBYCITY512ALREADYEXECUTED then return end
+getgenv().FEFREEANIMATIONSBYCITY512ALREADYEXECUTED = true
 local cloneref = cloneref or function(o) return o end
 
 local MarketplaceService = cloneref(game:GetService("MarketplaceService"))
