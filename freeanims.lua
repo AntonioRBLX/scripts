@@ -1,5 +1,3 @@
-if FREEANIMMAINALREADYEXECUTED then return end
-getgenv().FREEANIMMAINALREADYEXECUTED = true
 local cloneref = cloneref or function(o) return o end
 
 local MarketplaceService = cloneref(game:GetService("MarketplaceService"))
@@ -1697,8 +1695,8 @@ local anims = {
 		Button = FakeR6;
 		Idle1 = "rbxassetid://12521158637";
 		Idle2 = "rbxassetid://12521162526";
-		Walk = "rbxassetid://18293792314";
-		Run = "rbxassetid://18293792314";
+		Walk = "rbxassetid://126997486407971";
+		Run = "rbxassetid://126997486407971";
 		Fall = "rbxassetid://12520972571";
 		Jump = "rbxassetid://12520880485";
 		Climb = "rbxassetid://12520982150";
@@ -1850,7 +1848,7 @@ function assignButtonFunctions(button,callback)
 
 	button.MouseButton1Down:Connect(function()
 		spawn(callback)
-		
+
 		a += 1
 		local b = a
 
@@ -1886,7 +1884,7 @@ function setAnimations()
 	for i, v in pairs(lplrchar:WaitForChild("Humanoid"):WaitForChild("Animator"):GetPlayingAnimationTracks()) do
 		v:Stop()
 	end
-	
+
 	local idle = animatescript:WaitForChild("idle")
 	local walk = animatescript:WaitForChild("walk")
 	local run = animatescript:WaitForChild("run")
@@ -1895,7 +1893,7 @@ function setAnimations()
 	local jump = animatescript:WaitForChild("jump")
 	local fall = animatescript:WaitForChild("fall")
 	local climb = animatescript:WaitForChild("climb")
-	
+
 	local IdleAnim1 = idle:WaitForChild("Animation1")
 	if currentanims.Idle1 then
 		IdleAnim1.AnimationId = currentanims.Idle1
@@ -1932,7 +1930,7 @@ function setAnimations()
 	if currentanims.Climb then
 		ClimbAnim.AnimationId = currentanims.Climb
 	end
-	
+
 	animatescript.Enabled = true
 end
 function changeAnimations(anims)
@@ -2017,7 +2015,7 @@ Title.InputBegan:Connect(function(input)
 		dragstart = input.Position
 		startpos = Title.Position
 		lastmousepos = UserInputService:GetMouseLocation()
-		
+
 		input.Changed:Connect(function()
 			if input.UserInputState == Enum.UserInputState.End then
 				dragging = false
