@@ -1,5 +1,5 @@
-if FEFREEANIMATIONSBYCITY512ALREADYEXECUTED then return end
-getgenv().FEFREEANIMATIONSBYCITY512ALREADYEXECUTED = true
+if FEFREEANIMATIONSBYANTONIORBLXALREADYEXECUTED then return end
+getgenv().FEFREEANIMATIONSBYANTONIORBLXALREADYEXECUTED = true
 local cloneref = cloneref or function(o) return o end
 
 local MarketplaceService = cloneref(game:GetService("MarketplaceService"))
@@ -185,7 +185,7 @@ Title.BorderSizePixel = 0
 Title.Position = UDim2.new(0, 15, 0, 15)
 Title.Size = UDim2.new(0, 100, 0, 25)
 Title.Font = Enum.Font.SourceSansBold
-Title.Text = "FE Free Animations <stroke color=\"#1F1F1F\"><font color=\"rgb(171,171,171)\">By CITY512</font></stroke>"
+Title.Text = "FE Free Animations <stroke color=\"#1F1F1F\"><font color=\"rgb(171,171,171)\">By AntonioRBLX</font></stroke>"
 Title.TextColor3 = Color3.fromRGB(255, 255, 255)
 Title.TextSize = 13.000
 Title.TextStrokeTransparency = 0.000
