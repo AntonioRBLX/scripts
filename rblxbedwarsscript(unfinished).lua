@@ -22,7 +22,9 @@ local blocks = {"","Wool","Obsidian","Ceramic","Wood Planks"}
 -- Functions --
 
 function getbeddefblockcount(layers)
-	return (layers + 1)^2 * 2
+    local n = layers + 2
+    local v = n * (n - 1) * (2 * n - 1) / 3 - 2
+	return v
 end
 function placeblock(blocktype,pos)
 	
