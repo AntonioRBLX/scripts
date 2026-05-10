@@ -22,13 +22,7 @@ local blocks = {"","Wool","Obsidian","Ceramic","Wood Planks"}
 -- Functions --
 
 function getbeddeflayers(layers)
-	local count = 2 + 4 * layers
-	local blocks = 0
-	repeat
-		blocks += count
-		count -= 4
-	until count < 2
-	return blocks
+	return (layers + 1)^2 * 2
 end
 function placeblock(blocktype,pos)
 	
